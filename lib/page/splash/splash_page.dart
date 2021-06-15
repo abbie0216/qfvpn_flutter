@@ -7,6 +7,8 @@ import 'package:qfvpn/bloc/splash/splash_bloc.dart';
 import 'package:qfvpn/bloc/splash/splash_event.dart';
 import 'package:qfvpn/bloc/splash/splash_state.dart';
 
+import 'login_page.dart';
+
 class SplashPage extends StatefulWidget {
   SplashPage({Key? key}) : super(key: key);
 
@@ -32,7 +34,10 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     _splashBloc = BlocProvider.of<SplashBloc>(context);
-    _splashBloc.add(SplashFetchEvent());
+    Future.delayed(const Duration(seconds: 2), () {
+      _splashBloc.add(SplashFetchEvent());
+    });
+
     getFreeSpace();
   }
 
@@ -41,12 +46,32 @@ class _SplashPageState extends State<SplashPage> {
     return BlocListener<SplashBloc, SplashState>(
       listener: (context, state) {
         if (state is SplashLoadedState) {
-
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext pageContext) => LoginPage()));
         }
       },
       child: BlocBuilder<SplashBloc, SplashState>(builder: (context, state) {
-        return Center(
-          child: Text('SplashPage', style: TextStyle(color: Colors.white)),
+        return Scaffold(
+          backgroundColor: Color(0xff6569ee),
+          body: Stack(
+            children: <Widget>[
+              Positioned.fill(
+                child: Image.asset(
+                  'images/img_login_bg.png',
+                  fit: BoxFit.fitWidth,
+                  alignment: Alignment.bottomCenter,
+                ),
+              ),
+              Align(
+                  alignment: FractionalOffset(0.5, 0.3),
+                  child: FlutterLogo(
+                    size: 60,
+                  ),
+                )
+            ],
+          ),
         );
       }),);
   }

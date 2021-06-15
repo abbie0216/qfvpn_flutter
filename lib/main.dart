@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'bloc/login/login_bloc.dart';
 import 'bloc/splash/splash_bloc.dart';
 import 'model/api/api_repository.dart';
 import 'model/config/config_data.dart';
@@ -32,6 +33,11 @@ class App extends StatelessWidget {
                   create: (context) => SplashBloc(
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
+                  create: (context) => LoginBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+
             ],
             child: MaterialApp(
               theme: ThemeData(
