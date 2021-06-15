@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/model/api/api_repository.dart';
 import 'package:qfvpn/model/api/api_result.dart';
-import 'package:qfvpn/model/api/bean/login/login.req.dart';
+import 'package:qfvpn/model/api/bean/login/login_req.dart';
 
 import 'splash_event.dart';
 import 'splash_state.dart';

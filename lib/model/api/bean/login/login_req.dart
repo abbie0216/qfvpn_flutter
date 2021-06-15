@@ -2,7 +2,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'login.req.g.dart';
+part 'login_req.g.dart';
 
 // {
 //   "email": "sion.wang@silkrode.com.tw",
@@ -22,7 +22,7 @@ part 'login.req.g.dart';
 //   "password": "aa123456"
 // }
 
-///run "flutter pub run build_runner build" to generate login.req.g.dart
+///run "flutter pub run build_runner build" to generate login_req.g.dart
 
 @JsonSerializable()
 class LoginReq extends Equatable {

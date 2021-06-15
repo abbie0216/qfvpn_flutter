@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:qfvpn/model/api/bean/login/login.req.dart';
+import 'package:qfvpn/model/api/bean/login/login_req.dart';
+import 'package:qfvpn/model/api/bean/login/login_resp.dart';
 
 import 'api_result.dart';
 import 'logging_interceptor.dart';
@@ -15,7 +16,7 @@ class ApiRepository {
 
   ApiRepository({required this.baseUrl});
 
-  Future<ApiResult<String>> login(LoginReq loginReq) async {
+  Future<ApiResult<LoginResp>> login(LoginReq loginReq) async {
     try {
       final response = await httpClient.post(
         Uri.https(baseUrl, "/api/user/login"),
@@ -25,8 +26,8 @@ class ApiRepository {
         },
         body: json.encode(loginReq.toJson())
       );
-      if (response.statusCode == 200) {
-        return ApiResult.success(response.body);
+      if (response.statusCode == 201) {
+        return ApiResult.success(LoginResp.fromJson(json.decode(response.body)['data']));
       } else {
         return ApiResult.error(Exception(response.body));
       }
