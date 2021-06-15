@@ -30,6 +30,8 @@ dependencies:
 
   json_annotation: ^4.0.0
 
+  flutter_svg: ^0.22.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -40,4 +42,97 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
+  assets:
+    - images/img_animation_red.svg
+    - images/ico_warning_white.svg
+    - images/ico_emoji_2.svg
+    - images/ico_my_n.svg
+    - images/btn_history_n.svg
+    - images/ico_ailpay_seleted_2.svg
+    - images/ico_shieldcheck.svg
+    - images/btn_sogood_n.svg
+    - images/ico_emoji_1.svg
+    - images/btn_share_n.svg
+    - images/ico_power.svg
+    - images/ico_mail_1.svg
+    - images/img_empty.svg
+    - images/icon_help.svg
+    - images/btn_back_white_n.svg
+    - images/ico_mail_2.svg
+    - images/btn_close_n.svg
+    - images/btn_setting_p.svg
+    - images/btn_camera_p.svg
+    - images/btn_dropdown_n.svg
+    - images/ico_ailpay_seleted.svg
+    - images/ico_home_n.svg
+    - images/ico_warning_red.svg
+    - images/ico_mail.svg
+    - images/btn_copy_p.svg
+    - images/icon_about.svg
+    - images/btn_imgdelete_p.svg
+    - images/ico_eyeslash_1.svg
+    - images/ico_lock.svg
+    - images/icon_opinion.svg
+    - images/btn_back_n.svg
+    - images/btn_next_white_p.svg
+    - images/btn_notgood_n.svg
+    - images/img_service.svg
+    - images/btn_soso_n.svg
+    - images/ico_eye.svg
+    - images/btn_next_n.svg
+    - images/ico_vip_n.svg
+    - images/btn_radio_n.svg
+    - images/img_login_bg.svg
+    - images/ico_success.svg
+    - images/btn_dropdown_p.svg
+    - images/ico_lock_1.svg
+    - images/ico_signal_2.svg
+    - images/ico_home_p.svg
+    - images/icon_link.svg
+    - images/ico_signal_3.svg
+    - images/btn_copy_n.svg
+    - images/btn_imgdelete_n.svg
+    - images/ico_eye_1.svg
+    - images/ico_handshake.svg
+    - images/ico_close.svg
+    - images/ico_lock_2.svg
+    - images/ico_signal_1.svg
+    - images/img_fill.svg
+    - images/icon_linked.svg
+    - images/img_coupon_use.svg
+    - images/btn_back_p.svg
+    - images/img_success.svg
+    - images/btn_next_white_n.svg
+    - images/btn_notgood_p.svg
+    - images/ico_wechatpay_selected.svg
+    - images/img_gift.svg
+    - images/ico_deferment.svg
+    - images/ico_ailpay.svg
+    - images/btn_soso_p.svg
+    - images/ico_step_gift.svg
+    - images/eye_slash.svg
+    - images/img_animation_blue.svg
+    - images/btn_next_p.svg
+    - images/btn_radio_p.svg
+    - images/ico_vip_p.svg
+    - images/ico_power_big.svg
+    - images/ico_invite_friends.svg
+    - images/eye.svg
+    - images/ico_invite_gift.svg
+    - images/ico_my_p.svg
+    - images/btn_history_p.svg
+    - images/img_coupon_used.svg
+    - images/ico_wechatpay.svg
+    - images/btn_sogood_p.svg
+    - images/ico_broadcast.svg
+    - images/btn_share_p.svg
+    - images/ico_eyeslash.svg
+    - images/btn_back_white_p.svg
+    - images/img_earnpoint.svg
+    - images/btn_close_p.svg
+    - images/ellipse_11.svg
+    - images/ico_handshake_1.svg
+    - images/btn_setting_n.svg
+    - images/img_animation_circle.svg
+    - images/btn_camera_n.svg
+    - images/icon_notice.svg
