@@ -1,5 +1,7 @@
 {
   "@@locale": "en",
 
-  "hello_world": "Hello World!"
+  "login_title": "嗨, 欢迎回来",
+  "login_register_hint": "还不是会员?",
+  "login_register_btn": "注册"
 }
