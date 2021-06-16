@@ -7,6 +7,7 @@ import 'model/api/api_repository.dart';
 import 'model/config/config_data.dart';
 import 'model/config/config_provider.dart';
 import 'page/splash/splash_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 Future<void> main() async {
@@ -43,6 +44,8 @@ class App extends StatelessWidget {
               theme: ThemeData(
                 primaryColor: Colors.black,
               ),
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
               debugShowCheckedModeBanner: false,
               home: Material(
                 type: MaterialType.transparency,
