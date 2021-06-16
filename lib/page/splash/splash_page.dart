@@ -8,7 +8,7 @@ import 'package:qfvpn/bloc/splash/splash_state.dart';
 import 'package:qfvpn/page/home/home_page.dart';
 
 import '../../r.dart';
-import 'login_page.dart';
+import '../login/login_page.dart';
 
 class SplashPage extends StatefulWidget {
   SplashPage({Key? key}) : super(key: key);
@@ -57,7 +57,7 @@ class _SplashPageState extends State<SplashPage> {
       },
       child: BlocBuilder<SplashBloc, SplashState>(builder: (context, state) {
         return Scaffold(
-          backgroundColor: Color(0xff6569ee),
+          backgroundColor: R.color.login_bg_color(),
           body: Stack(
             children: <Widget>[
               Positioned.fill(
@@ -69,10 +69,17 @@ class _SplashPageState extends State<SplashPage> {
               ),
               Align(
                 alignment: FractionalOffset(0.5, 0.3),
-                child: FlutterLogo(
+                child: Container(
+                  width: 105,
+                  height: 105,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle, color: Color(0xFFCFD1FF)),
+                  child: Center(
+                      child: FlutterLogo(
                   size: 60,
-                ),
-              )
+                )),
+              ),
+              ),
             ],
           ),
         );

@@ -32,6 +32,8 @@ class R {
 class _R_Color {
   const _R_Color();
 
+  Color login_bg_color() => Color(0xff6569ee);
+
   Color home_logo_text() => Color(0xff6569ee);
   Color home_announce_text() => Color(0x66000000);
   Color home_announce_bg_shadow() => Color(0x80ffffff);
