@@ -7,6 +7,7 @@ import 'package:qfvpn/bloc/splash/splash_bloc.dart';
 import 'package:qfvpn/bloc/splash/splash_event.dart';
 import 'package:qfvpn/bloc/splash/splash_state.dart';
 
+import '../../r.dart';
 import 'login_page.dart';
 
 class SplashPage extends StatefulWidget {
@@ -58,8 +59,8 @@ class _SplashPageState extends State<SplashPage> {
           body: Stack(
             children: <Widget>[
               Positioned.fill(
-                child: Image.asset(
-                  'images/img_login_bg.png',
+                child: Image(
+                  image: R.image.img_login_bg(),
                   fit: BoxFit.fitWidth,
                   alignment: Alignment.bottomCenter,
                 ),

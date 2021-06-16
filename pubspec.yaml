@@ -1,143 +1,240 @@
 name: qfvpn
 description: A vpn application.
-
-publish_to: 'none'
-
+publish_to: none
 version: 1.0.0+1
-
 environment:
-  sdk: ">=2.12.0 <3.0.0"
-
+  sdk: '>=2.12.0 <3.0.0'
 dependencies:
   flutter:
     sdk: flutter
-
   cupertino_icons: ^1.0.2
-
   provider: ^5.0.0
-
   flutter_bloc: ^7.0.0
-
   http: ^0.13.0
-
   http_interceptor: ^0.4.0
-
   equatable: ^2.0.0
-
   rxdart: ^0.26.0
-
   infinite_scroll_pagination: ^3.0.1
-
   json_annotation: ^4.0.0
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   build_runner: ^1.0.0
-
   json_serializable: ^4.0.0
-
 flutter:
   uses-material-design: true
-
-  # use plugin [FlutterImageSync] https://github.com/Leo0618/flutter-img-sync
   assets:
-    - images/img_login_bg.png
-    - images/btn_radio_n.png
-    - images/ico_vip_n.png
-    - images/btn_next_n.png
-    - images/btn_soso_n.png
-    - images/ico_eye.png
-    - images/btn_notgood_n.png
-    - images/btn_next_white_p.png
-    - images/img_service.png
-    - images/btn_back_n.png
-    - images/icon_opinion.png
-    - images/ico_lock.png
-    - images/ico_eyeslash_1.png
-    - images/btn_copy_p.png
-    - images/ico_mail.png
-    - images/btn_imgdelete_p.png
-    - images/icon_about.png
-    - images/ico_warning_red.png
-    - images/ico_ailpay_seleted.png
-    - images/ico_home_n.png
-    - images/img_rocket.png
-    - images/btn_dropdown_n.png
-    - images/btn_camera_p.png
-    - images/btn_setting_p.png
-    - images/ico_mail_2.png
-    - images/btn_close_n.png
-    - images/icon_help.png
-    - images/img_speed.png
-    - images/btn_back_white_n.png
-    - images/ico_mail_1.png
-    - images/ico_power.png
-    - images/img_empty.png
-    - images/btn_share_n.png
-    - images/btn_sogood_n.png
-    - images/ico_emoji_1.png
-    - images/ico_shieldcheck.png
-    - images/ico_ailpay_seleted_2.png
-    - images/btn_history_n.png
-    - images/ico_my_n.png
-    - images/ico_emoji_2.png
-    - images/ico_warning_white.png
-    - images/img_animation_red.png
-    - images/icon_notice.png
-    - images/btn_camera_n.png
-    - images/img_animation_circle.png
-    - images/ico_handshake_1.png
-    - images/btn_setting_n.png
-    - images/img_earnpoint.png
-    - images/ellipse_11.png
-    - images/btn_close_p.png
-    - images/ico_eyeslash.png
-    - images/btn_back_white_p.png
-    - images/img_vip.png
-    - images/btn_share_p.png
-    - images/btn_sogood_p.png
-    - images/ico_broadcast.png
-    - images/ico_wechatpay.png
-    - images/ico_invite_gift.png
-    - images/img_coupon_used.png
-    - images/btn_history_p.png
-    - images/ico_my_p.png
-    - images/eye.png
-    - images/ico_invite_friends.png
-    - images/ico_power_big.png
-    - images/ico_vip_p.png
-    - images/btn_radio_p.png
-    - images/btn_next_p.png
-    - images/img_safety.png
-    - images/btn_soso_p.png
-    - images/ico_step_gift.png
-    - images/img_animation_blue.png
-    - images/eye_slash.png
-    - images/img_special.png
-    - images/ico_ailpay.png
-    - images/img_gift.png
-    - images/ico_deferment.png
-    - images/ico_wechatpay_selected.png
-    - images/btn_notgood_p.png
-    - images/btn_next_white_n.png
-    - images/btn_back_p.png
-    - images/img_coupon_use.png
-    - images/img_success.png
-    - images/icon_linked.png
-    - images/ico_lock_2.png
-    - images/img_fill.png
-    - images/ico_signal_1.png
-    - images/ico_handshake.png
-    - images/ico_eye_1.png
-    - images/ico_close.png
-    - images/btn_copy_n.png
-    - images/btn_imgdelete_n.png
-    - images/ico_signal_3.png
-    - images/ico_lock_1.png
-    - images/ico_home_p.png
-    - images/icon_link.png
-    - images/ico_signal_2.png
-    - images/btn_dropdown_p.png
-    - images/ico_success.png
+  - assets/images/btn_back_n.png
+  - assets/images/btn_back_p.png
+  - assets/images/btn_back_white_n.png
+  - assets/images/btn_back_white_p.png
+  - assets/images/btn_camera_n.png
+  - assets/images/btn_camera_p.png
+  - assets/images/btn_close_n.png
+  - assets/images/btn_close_p.png
+  - assets/images/btn_copy_n.png
+  - assets/images/btn_copy_p.png
+  - assets/images/btn_dropdown_n.png
+  - assets/images/btn_dropdown_p.png
+  - assets/images/btn_history_n.png
+  - assets/images/btn_history_p.png
+  - assets/images/btn_imgdelete_n.png
+  - assets/images/btn_imgdelete_p.png
+  - assets/images/btn_next_n.png
+  - assets/images/btn_next_p.png
+  - assets/images/btn_next_white_n.png
+  - assets/images/btn_next_white_p.png
+  - assets/images/btn_notgood_n.png
+  - assets/images/btn_notgood_p.png
+  - assets/images/btn_radio_n.png
+  - assets/images/btn_radio_p.png
+  - assets/images/btn_setting_n.png
+  - assets/images/btn_setting_p.png
+  - assets/images/btn_share_n.png
+  - assets/images/btn_share_p.png
+  - assets/images/btn_sogood_n.png
+  - assets/images/btn_sogood_p.png
+  - assets/images/btn_soso_n.png
+  - assets/images/btn_soso_p.png
+  - assets/images/ellipse_11.png
+  - assets/images/eye.png
+  - assets/images/eye_slash.png
+  - assets/images/flag_albania.png
+  - assets/images/flag_america.png
+  - assets/images/flag_american_samoa.png
+  - assets/images/flag_andorra.png
+  - assets/images/flag_argentina.png
+  - assets/images/flag_aruba.png
+  - assets/images/flag_austria.png
+  - assets/images/flag_auto.png
+  - assets/images/flag_bahamas.png
+  - assets/images/flag_belarus.png
+  - assets/images/flag_belgium.png
+  - assets/images/flag_bermuda.png
+  - assets/images/flag_bolivia.png
+  - assets/images/flag_brazil.png
+  - assets/images/flag_bulgaria.png
+  - assets/images/flag_cambodia.png
+  - assets/images/flag_canada.png
+  - assets/images/flag_cayman_islands.png
+  - assets/images/flag_chile.png
+  - assets/images/flag_china.png
+  - assets/images/flag_colombia.png
+  - assets/images/flag_costa_rica.png
+  - assets/images/flag_cuba.png
+  - assets/images/flag_czech_republic.png
+  - assets/images/flag_denmark.png
+  - assets/images/flag_dominican_republic.png
+  - assets/images/flag_ecuador.png
+  - assets/images/flag_egypt.png
+  - assets/images/flag_estonia.png
+  - assets/images/flag_falkland_islands.png
+  - assets/images/flag_faroe_islands.png
+  - assets/images/flag_finland.png
+  - assets/images/flag_france.png
+  - assets/images/flag_germany.png
+  - assets/images/flag_gibraltar.png
+  - assets/images/flag_greece.png
+  - assets/images/flag_greenland.png
+  - assets/images/flag_grenada.png
+  - assets/images/flag_guatemala.png
+  - assets/images/flag_guernsey.png
+  - assets/images/flag_guyana.png
+  - assets/images/flag_haiti.png
+  - assets/images/flag_hawaii.png
+  - assets/images/flag_honduras.png
+  - assets/images/flag_hong_kong.png
+  - assets/images/flag_hungary.png
+  - assets/images/flag_iceland.png
+  - assets/images/flag_india.png
+  - assets/images/flag_indonesia.png
+  - assets/images/flag_iran.png
+  - assets/images/flag_iraq.png
+  - assets/images/flag_ireland.png
+  - assets/images/flag_israel.png
+  - assets/images/flag_italy.png
+  - assets/images/flag_jamaica.png
+  - assets/images/flag_japan.png
+  - assets/images/flag_jordan.png
+  - assets/images/flag_kazakhstan.png
+  - assets/images/flag_kosovo.png
+  - assets/images/flag_kuwait.png
+  - assets/images/flag_laos.png
+  - assets/images/flag_latvia.png
+  - assets/images/flag_lebanon.png
+  - assets/images/flag_liechtenstein.png
+  - assets/images/flag_lithuania.png
+  - assets/images/flag_luxembourg.png
+  - assets/images/flag_macao.png
+  - assets/images/flag_macedonia.png
+  - assets/images/flag_malaysia.png
+  - assets/images/flag_maldives.png
+  - assets/images/flag_martinique.png
+  - assets/images/flag_mexico.png
+  - assets/images/flag_monaco.png
+  - assets/images/flag_mongolia.png
+  - assets/images/flag_myanmar.png
+  - assets/images/flag_nepal.png
+  - assets/images/flag_netherlands.png
+  - assets/images/flag_nicaragua.png
+  - assets/images/flag_north_korea.png
+  - assets/images/flag_norway.png
+  - assets/images/flag_oman.png
+  - assets/images/flag_pakistan.png
+  - assets/images/flag_palestine.png
+  - assets/images/flag_panama.png
+  - assets/images/flag_paraguay.png
+  - assets/images/flag_peru.png
+  - assets/images/flag_philippines.png
+  - assets/images/flag_poland.png
+  - assets/images/flag_portugal.png
+  - assets/images/flag_puerto_rico.png
+  - assets/images/flag_romania.png
+  - assets/images/flag_russia.png
+  - assets/images/flag_saint_kitts_and_nevis.png
+  - assets/images/flag_salvador.png
+  - assets/images/flag_saudi_arabia.png
+  - assets/images/flag_serbia.png
+  - assets/images/flag_singapore.png
+  - assets/images/flag_sint_maarten.png
+  - assets/images/flag_slovakia.png
+  - assets/images/flag_south_korea.png
+  - assets/images/flag_spain.png
+  - assets/images/flag_sri_lanka.png
+  - assets/images/flag_st_vincent_and_the_grenadines.png
+  - assets/images/flag_sweden.png
+  - assets/images/flag_switzerland.png
+  - assets/images/flag_syria.png
+  - assets/images/flag_taiwan.png
+  - assets/images/flag_thailand.png
+  - assets/images/flag_trinidad_and_tobago.png
+  - assets/images/flag_turkey.png
+  - assets/images/flag_turkmenistan.png
+  - assets/images/flag_ukraine.png
+  - assets/images/flag_uruguay.png
+  - assets/images/flag_uzbekistn.png
+  - assets/images/flag_venezuela.png
+  - assets/images/flag_vietnam.png
+  - assets/images/ico_ailpay.png
+  - assets/images/ico_ailpay_seleted.png
+  - assets/images/ico_ailpay_seleted_2.png
+  - assets/images/ico_broadcast.png
+  - assets/images/ico_close.png
+  - assets/images/ico_deferment.png
+  - assets/images/ico_emoji_1.png
+  - assets/images/ico_emoji_2.png
+  - assets/images/ico_eye.png
+  - assets/images/ico_eye_1.png
+  - assets/images/ico_eyeslash.png
+  - assets/images/ico_eyeslash_1.png
+  - assets/images/ico_handshake.png
+  - assets/images/ico_handshake_1.png
+  - assets/images/ico_home_n.png
+  - assets/images/ico_home_p.png
+  - assets/images/ico_invite_friends.png
+  - assets/images/ico_invite_gift.png
+  - assets/images/ico_lock.png
+  - assets/images/ico_lock_1.png
+  - assets/images/ico_lock_2.png
+  - assets/images/ico_mail.png
+  - assets/images/ico_mail_1.png
+  - assets/images/ico_mail_2.png
+  - assets/images/ico_my_n.png
+  - assets/images/ico_my_p.png
+  - assets/images/ico_power.png
+  - assets/images/ico_power_big.png
+  - assets/images/ico_shieldcheck.png
+  - assets/images/ico_signal_1.png
+  - assets/images/ico_signal_2.png
+  - assets/images/ico_signal_3.png
+  - assets/images/ico_step_gift.png
+  - assets/images/ico_success.png
+  - assets/images/ico_vip_n.png
+  - assets/images/ico_vip_p.png
+  - assets/images/ico_warning_red.png
+  - assets/images/ico_warning_white.png
+  - assets/images/ico_wechatpay.png
+  - assets/images/ico_wechatpay_selected.png
+  - assets/images/icon_about.png
+  - assets/images/icon_help.png
+  - assets/images/icon_link.png
+  - assets/images/icon_linked.png
+  - assets/images/icon_notice.png
+  - assets/images/icon_opinion.png
+  - assets/images/img_animation_blue.png
+  - assets/images/img_animation_circle.png
+  - assets/images/img_animation_red.png
+  - assets/images/img_coupon_use.png
+  - assets/images/img_coupon_used.png
+  - assets/images/img_earnpoint.png
+  - assets/images/img_empty.png
+  - assets/images/img_fill.png
+  - assets/images/img_gift.png
+  - assets/images/img_login_bg.png
+  - assets/images/img_rocket.png
+  - assets/images/img_safety.png
+  - assets/images/img_service.png
+  - assets/images/img_special.png
+  - assets/images/img_speed.png
+  - assets/images/img_success.png
+  - assets/images/img_vip.png
