@@ -1,0 +1,7 @@
+include: package:pedantic/analysis_options.yaml
+
+linter:
+  rules:
+    non_constant_identifier_names: false
+    camel_case_types: false
+    slash_for_doc_comments: false
