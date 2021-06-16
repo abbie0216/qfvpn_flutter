@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'bloc/home/home_bloc.dart';
 import 'bloc/login/login_bloc.dart';
 import 'bloc/splash/splash_bloc.dart';
 import 'model/api/api_repository.dart';
@@ -20,12 +21,12 @@ Future<void> main() async {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    ConfigData? _configData = ConfigProvider.of(context)?.data;
+    var _configData = ConfigProvider.of(context)?.data;
 
     return MultiRepositoryProvider(
         providers: [
           RepositoryProvider(
-              create: (context) => ApiRepository(baseUrl: _configData?.apiBaseUrl ?? "")),
+              create: (context) => ApiRepository(baseUrl: _configData?.apiBaseUrl ?? '')),
         ],
         child: MultiBlocProvider(
             providers: [
@@ -37,7 +38,10 @@ class App extends StatelessWidget {
                   create: (context) => LoginBloc(
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
-
+              BlocProvider(
+                  create: (context) => HomeBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
             ],
             child: MaterialApp(
               theme: ThemeData(
