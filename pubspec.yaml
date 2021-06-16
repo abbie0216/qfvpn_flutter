@@ -7,6 +7,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # Internationalization support.
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.17.0
   cupertino_icons: ^1.0.2
   provider: ^5.0.0
   flutter_bloc: ^7.0.0
@@ -23,6 +27,7 @@ dev_dependencies:
   json_serializable: ^4.0.0
 flutter:
   uses-material-design: true
+  generate: true
   assets:
   - assets/images/btn_back_n.png
   - assets/images/btn_back_p.png

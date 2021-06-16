@@ -4,6 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/bloc/login/login_bloc.dart';
 import 'package:qfvpn/bloc/splash/splash_event.dart';
 
+import '../../r.dart';
+import '../../s.dart';
+
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
 
@@ -26,16 +29,32 @@ class _LoginPageState extends State<LoginPage> {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state is LoginFetchEvent) {
-            // Navigator.pushReplacement(
-            // context,
-            // MaterialPageRoute(
-            //   builder: (BuildContext pageContext) => HomePage()));
+          // Navigator.pushReplacement(
+          // context,
+          // MaterialPageRoute(
+          //   builder: (BuildContext pageContext) => HomePage()));
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-        return Center(
-          child: Text('LoginPage', style: TextStyle(color: Colors.white)),
+        return Scaffold(
+          backgroundColor: Color(R.color.login_bg_color),
+          body: Stack(
+            children: <Widget>[
+              Positioned.fill(
+                child: Image(
+                  image: R.image.img_login_bg(),
+                  fit: BoxFit.fitWidth,
+                  alignment: Alignment.bottomCenter,
+                ),
+              ),
+              Center(
+                child: Text(S.of(context).hello_world,
+                    style: TextStyle(color: Colors.white)),
+              ),
+            ],
+          ),
         );
-      }),);
+      }),
+    );
   }
 }

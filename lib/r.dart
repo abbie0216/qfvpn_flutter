@@ -35,10 +35,15 @@ class _R_Color {
   const _R_Color();
 
   // ignore: non_constant_identifier_names
+  final login_bg_color = 0xff6569ee;
+
+  // ignore: non_constant_identifier_names
   final home_logo_text = 0xff6569ee;
 
   // ignore: non_constant_identifier_names
   final home_announce_text = 0xff000000;
+
+
 }
 
 // ignore: camel_case_types
