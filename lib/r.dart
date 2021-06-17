@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class R {
@@ -34,9 +35,20 @@ class _R_Color {
 
   Color login_bg_color() => Color(0xff6569ee);
 
-  Color home_logo_text() => Color(0xff6569ee);
+  Color home_primary_text() => Color(0xff6569ee);
+  Color home_bg_1_start() => Color(0xffe2ecf5);
+  Color home_bg_1_end() => Color(0xffe8f1fa);
+  Color home_bg_2() => Color(0xfff4f6f9);
+  Color home_bg_2_border() => Color(0xfff6faff);
   Color home_announce_text() => Color(0x66000000);
-  Color home_announce_bg_shadow() => Color(0x80ffffff);
+  Color home_card_shadow() => Color(0x40ffffff);
+  Color home_vpn_option_title_text() => Color(0x4d000000);
+  Color home_vpn_option_value_text() => home_primary_text();
+  Color home_vpn_option_divider() => Color(0xfff4f6f9);
+  Color home_bottom_nav_bar_select_text() => home_primary_text();
+  Color home_bottom_nav_bar_un_select_text() => Color(0xffdddeec);
+  Color home_bottom_nav_bar_bg() => Colors.white;
+  Color home_bottom_nav_bar_bg_border() => Color(0xffe2ecf5);
 
 }
 

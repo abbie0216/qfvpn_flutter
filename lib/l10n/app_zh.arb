@@ -1,5 +1,11 @@
 {
   "@@locale": "zh",
 
-  "hello_world": "你好，世界"
+  "hello_world": "你好，世界",
+
+  "home_bottom_nav_bar_home": "首页",
+  "home_bottom_nav_bar_vip": "VIP",
+  "home_bottom_nav_bar_me": "我的",
+  "home_option_title_mode": "加速模式",
+  "home_option_title_line": "当前线路"
 }

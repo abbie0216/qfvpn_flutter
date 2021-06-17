@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/bloc/splash/splash_bloc.dart';
 import 'package:qfvpn/bloc/splash/splash_event.dart';
 import 'package:qfvpn/bloc/splash/splash_state.dart';
-import 'package:qfvpn/page/home/home_page.dart';
+import 'package:qfvpn/page/main/main_page.dart';
 
 import '../../r.dart';
 import '../login/login_page.dart';
@@ -51,8 +51,7 @@ class _SplashPageState extends State<SplashPage> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (BuildContext pageContext) => LoginPage()));
-              // MaterialPageRoute(
-              //     builder: (BuildContext pageContext) => HomePage()));
+              // MaterialPageRoute(builder: (BuildContext pageContext) => MainPage()));
         }
       },
       child: BlocBuilder<SplashBloc, SplashState>(builder: (context, state) {

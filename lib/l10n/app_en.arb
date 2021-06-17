@@ -1,5 +1,11 @@
 {
   "@@locale": "en",
 
-  "hello_world": "Hello World!"
+  "hello_world": "Hello World!",
+
+  "home_bottom_nav_bar_home": "HOME",
+  "home_bottom_nav_bar_vip": "VIP",
+  "home_bottom_nav_bar_me": "MEMBER",
+  "home_option_title_mode": "MODE",
+  "home_option_title_line": "LINE"
 }
