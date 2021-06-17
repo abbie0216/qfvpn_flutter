@@ -3,5 +3,11 @@
 
   "login_title": "嗨, 欢迎回来",
   "login_register_hint": "还不是会员?",
-  "login_register_btn": "注册"
+  "login_register_btn": "注册",
+
+  "login_email_label": "邮箱帐号",
+  "login_email_hint": "请输入邮箱帐号",
+  "login_email_error": "邮箱帐号格式错误",
+  "login_pw_label": "密码",
+  "login_pw_hint": "请输入密码"
 }

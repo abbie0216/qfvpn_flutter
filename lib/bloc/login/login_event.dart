@@ -8,4 +8,16 @@ abstract class LoginEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoginFetchEvent extends LoginEvent {}
+// class LoginFetchEvent extends LoginEvent {}
+
+class EmailChanged extends LoginEvent {
+  final String email;
+
+  EmailChanged({required this.email}) : super();
+
+  @override
+  String toString() => 'EmailChanged { email :$email }';
+}
+
+class ShowPasswordChanged extends LoginEvent {
+}
