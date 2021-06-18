@@ -16,21 +16,27 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final ApiRepository apiRepository;
 
   LoginBloc({required this.apiRepository})
-      : super(LoginState(
-            isEmailValid: false, isPasswordValid: false, showPassword: false));
+      : super(LoginInitState());
 
   @override
   Stream<LoginState> mapEventToState(
     LoginEvent event,
   ) async* {
-    if (event is EmailChanged) {
-      yield* _mapEmailChangedToState(event.email);
-    } else if (event is ShowPasswordChanged) {
-      yield state.copyWith(showPassword: !state.showPassword);
+    debugPrint('get SubmitEvent');
+    if (event is SubmitEvent) {
+      yield* checkIsValidAndSubmit(event.email, event.password);
     } else {}
   }
 
-  Stream<LoginState> _mapEmailChangedToState(String email) async* {
-    yield state.copyWith(isEmailValid: Validators.isValidEmail(email));
+  Stream<LoginState> checkIsValidAndSubmit(String email, String password) async* {
+    if (email.isEmpty || !Validators.isValidEmail(email)) {
+      yield LoginEmailInvalidState();
+    } else if (password.isEmpty) {
+      yield LoginPWInvalidState();
+    } else {
+      //ToDo:  login
+      // yield LoginFailedState(DateTime.now().millisecondsSinceEpoch);
+      yield LoginSuccessState();
+    }
   }
 }

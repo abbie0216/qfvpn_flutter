@@ -16,5 +16,8 @@
   "login_email_hint": "请输入邮箱帐号",
   "login_email_error": "邮箱帐号格式错误",
   "login_pw_label": "密码",
-  "login_pw_hint": "请输入密码"
+  "login_pw_hint": "请输入密码",
+  "login_pw_error": "密码格式错误",
+
+  "login_failed": "帐号或密码错误"
 }

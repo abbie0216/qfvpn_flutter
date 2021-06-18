@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/bloc/login/login_bloc.dart';
-import 'package:qfvpn/bloc/splash/splash_event.dart';
 import 'package:qfvpn/page/login/forgot_pw_page.dart';
 import 'package:qfvpn/page/login/register_page.dart';
 
@@ -21,39 +20,45 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  bool showPassword = false;
+
   @override
   void initState() {
     super.initState();
     _loginBloc = BlocProvider.of<LoginBloc>(context);
     // _loginBloc.add(LoginFetchEvent());
 
-    _emailController.addListener(_onEmailChanged);
-    // _passwordController.addListener(_onPasswordChanged);
+    // _emailController.addListener(_onEmailChanged);
   }
 
-  void _onEmailChanged() {
-    _loginBloc.add(EmailChanged(email: _emailController.text));
-  }
-
-  // void _onPasswordChanged() {
-  //   _loginBloc.add(PasswordChanged(password: _passwordController.text));
+  // void _onEmailChanged() {
+  //   _loginBloc.add(SubmitEvent(email: _emailController.text));
   // }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
-        // if (state is LoginFetchEvent) {
-        // Navigator.pushReplacement(
-        // context,
-        // MaterialPageRoute(
-        //   builder: (BuildContext pageContext) => HomePage()));
-        // }
+        if (state is LoginSuccessState) {
+          debugPrint('login success');
+
+        } else if (state is LoginFailedState) {
+          debugPrint('login failed');
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBar(
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(S.of(context).login_failed),
+                  ],
+                )));
+        }
       },
       child: BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
         return Scaffold(
           backgroundColor: R.color.login_bg_color(),
-          resizeToAvoidBottomInset:false,
+          resizeToAvoidBottomInset: false,
           body: Stack(
             fit: StackFit.expand,
             children: <Widget>[
@@ -91,12 +96,14 @@ class _LoginPageState extends State<LoginPage> {
               shape: BoxShape.circle, color: R.color.logo_bg_color()),
           child: Center(
               child: FlutterLogo(
-            size: 30,
-          )),
+                size: 30,
+              )),
         ),
         Container(
             margin: EdgeInsets.symmetric(vertical: 20.0),
-            child: Text(S.of(context).login_title,
+            child: Text(S
+                .of(context)
+                .login_title,
                 style: TextStyle(color: Colors.white, fontSize: 24))),
       ],
     );
@@ -107,151 +114,167 @@ class _LoginPageState extends State<LoginPage> {
       listener: (BuildContext context, LoginState state) {},
       child: BlocBuilder<LoginBloc, LoginState>(
           builder: (BuildContext context, LoginState state) {
-        return Positioned.fill(
-            top: 150,
-            child: Form(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        S.of(context).login_email_label,
-                        style: TextStyle(color: Colors.white, fontSize: 14),
-                        textAlign: TextAlign.left,
-                      )),
-                  TextFormField(
-                    controller: _emailController,
-                    maxLength: 20,
-                    maxLines: 1,
-                    decoration: InputDecoration(
-                      counterText: '',
-                      prefixIcon: Padding(
-                          padding: EdgeInsets.only(right: 12),
-                          child: Image(image: R.image.ico_mail())),
-                      prefixIconConstraints:
-                          BoxConstraints(minWidth: 24, maxHeight: 24),
-                      hintStyle: TextStyle(
-                          color: R.color.login_hint_color(), fontSize: 14),
-                      hintText: S.of(context).login_email_hint,
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: R.color.text_field_border_color()),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: R.color.text_field_border_color()),
-                      ),
-                    ),
-                    autovalidateMode: AutovalidateMode.always,
-                    autocorrect: false,
-                    style: TextStyle(color: Colors.white),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return null;
-                      }
-                      return !state.isEmailValid
-                          ? S.of(context).login_email_error
-                          : null;
-                    },
-                  ),
-                  SizedBox(height: 30),
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        S.of(context).login_pw_label,
-                        style: TextStyle(color: Colors.white, fontSize: 14),
-                        textAlign: TextAlign.left,
-                      )),
-                  TextFormField(
-                    controller: _passwordController,
-                    maxLength: 20,
-                    maxLines: 1,
-                    decoration: InputDecoration(
-                      counterText: '',
-                      prefixIcon: Padding(
-                          padding: EdgeInsets.only(right: 12),
-                          child: Image(image: R.image.ico_lock())),
-                      prefixIconConstraints:
-                          BoxConstraints(minWidth: 24, maxHeight: 24),
-                      suffixIcon: Padding(
-                          padding: EdgeInsets.only(right: 12),
-                          child: IconButton(
-                            icon: Image(
-                                image: state.showPassword
-                                    ? R.image.ico_eye()
-                                    : R.image.ico_eyeslash()),
-                            onPressed: () {
-                              _loginBloc.add(ShowPasswordChanged());
-                            },
+            return Positioned.fill(
+                top: 150,
+                child: Form(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            S
+                                .of(context)
+                                .login_email_label,
+                            style: TextStyle(color: Colors.white, fontSize: 14),
+                            textAlign: TextAlign.left,
                           )),
-                      hintStyle: TextStyle(
-                          color: R.color.login_hint_color(), fontSize: 14),
-                      hintText: S.of(context).login_pw_hint,
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: R.color.text_field_border_color()),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: R.color.text_field_border_color()),
-                      ),
-                    ),
-                    obscureText: !state.showPassword,
-                    autovalidateMode: AutovalidateMode.always,
-                    autocorrect: false,
-                    style: TextStyle(color: Colors.white),
-                    validator: (_) {
-                      // return !state.isPasswordValid ? 'Invalid Password' : null;
-                    },
-                  ),
-                  Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                          style: TextButton.styleFrom(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              alignment: Alignment.centerRight),
-                          onPressed: () {
-                            Navigator.of(context).pushNamed((ForgotPwPage).toString());
-                          },
-                          child: Text(S.of(context).login_forget_pw,
-                              style: TextStyle(
-                                  color: R.color.login_hint_color(),
-                                  fontSize: 14)))),
-                  SizedBox(height: 20),
-                  Align(
-                      alignment: Alignment.center,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          minimumSize: Size(double.infinity, 44),
-                          primary: R.color.btn_white_color(),
-                          backgroundColor: R.color.btn_white_color(),
-                          elevation: 5.0,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(22)),
+                      TextFormField(
+                        controller: _emailController,
+                        maxLength: 20,
+                        maxLines: 1,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          counterText: '',
+                          prefixIcon: Padding(
+                              padding: EdgeInsets.only(right: 12),
+                              child: Image(image: R.image.ico_mail())),
+                          prefixIconConstraints:
+                          BoxConstraints(minWidth: 24, maxHeight: 24),
+                          hintStyle: TextStyle(
+                              color: R.color.login_hint_color(), fontSize: 14),
+                          hintText: S
+                              .of(context)
+                              .login_email_hint,
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: R.color.text_field_border_color()),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: R.color.text_field_border_color()),
                           ),
                         ),
-                        onPressed: () {},
-                        child: Text(S.of(context).login,
-                            style: TextStyle(
-                                color: R.color.text_blue_color(),
-                                fontSize: 16)),
-                      )),
-                  Align(
-                      alignment: Alignment.center,
-                      child: TextButton(
-                          onPressed: () {
-                            // Navigator.pushNamed(context, "YourRoute");
-                          },
-                          child: Text(S.of(context).login_by_visitor,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14)))),
-                ],
-              ),
-            ));
-      }),
+                        autovalidateMode: AutovalidateMode.always,
+                        autocorrect: false,
+                        style: TextStyle(color: Colors.white),
+                        validator: (value) {
+                          return state is LoginEmailInvalidState
+                              ? S.of(context).login_email_error : null;
+                        },
+                      ),
+                      SizedBox(height: 30),
+                      Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(S.of(context).login_pw_label,
+                            style: TextStyle(color: Colors.white, fontSize: 14),
+                            textAlign: TextAlign.left,
+                          )),
+                      TextFormField(
+                        controller: _passwordController,
+                        maxLength: 20,
+                        maxLines: 1,
+                        keyboardType: TextInputType.visiblePassword,
+                        decoration: InputDecoration(
+                          counterText: '',
+                          prefixIcon: Padding(
+                              padding: EdgeInsets.only(right: 12),
+                              child: Image(image: R.image.ico_lock())),
+                          prefixIconConstraints:
+                          BoxConstraints(minWidth: 24, maxHeight: 24),
+                          suffixIcon: Padding(
+                              padding: EdgeInsets.only(right: 12),
+                              child: IconButton(
+                                icon: Image(
+                                    image: showPassword
+                                        ? R.image.ico_eye()
+                                        : R.image.ico_eyeslash()),
+                                onPressed: () {
+                                  showPassword = !showPassword;
+                                  setState(() {});
+                                },
+                              )),
+                          hintStyle: TextStyle(
+                              color: R.color.login_hint_color(), fontSize: 14),
+                          hintText: S
+                              .of(context)
+                              .login_pw_hint,
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: R.color.text_field_border_color()),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: R.color.text_field_border_color()),
+                          ),
+                        ),
+                        obscureText: !showPassword,
+                        autovalidateMode: AutovalidateMode.always,
+                        autocorrect: false,
+                        style: TextStyle(color: Colors.white),
+                        validator: (_) {
+                          return state is LoginPWInvalidState
+                              ? S.of(context).login_pw_error : null;
+                        },
+                      ),
+                      Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                              style: TextButton.styleFrom(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  alignment: Alignment.centerRight),
+                              onPressed: () {
+                                Navigator.of(context).pushNamed((ForgotPwPage)
+                                    .toString());
+                              },
+                              child: Text(S.of(context).login_forget_pw,
+                                  style: TextStyle(
+                                      color: R.color.login_hint_color(),
+                                      fontSize: 14)))),
+                      SizedBox(height: 20),
+                      Align(
+                          alignment: Alignment.center,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              minimumSize: Size(double.infinity, 44),
+                              primary: R.color.btn_white_color(),
+                              backgroundColor: R.color.btn_white_color(),
+                              elevation: 5.0,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(22)),
+                              ),
+                            ),
+                            onPressed: () {
+                              debugPrint('SubmitEvent');
+                              _loginBloc.add(SubmitEvent(
+                                  email: _emailController.text,
+                                  password: _passwordController.text));
+                            },
+                            child: Text(S
+                                .of(context)
+                                .login,
+                                style: TextStyle(
+                                    color: R.color.text_blue_color(),
+                                    fontSize: 16)),
+                          )),
+                      Align(
+                          alignment: Alignment.center,
+                          child: TextButton(
+                              onPressed: () {
+                                // Navigator.pushNamed(context, "YourRoute");
+                              },
+                              child: Text(S
+                                  .of(context)
+                                  .login_by_visitor,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14)))),
+                    ],
+                  ),
+                ));
+          }),
     );
   }
 
@@ -261,17 +284,22 @@ class _LoginPageState extends State<LoginPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(S.of(context).login_register_hint,
+            Text(S
+                .of(context)
+                .login_register_hint,
                 style:
-                    TextStyle(color: R.color.login_hint_color(), fontSize: 14)),
+                TextStyle(color: R.color.login_hint_color(), fontSize: 14)),
             TextButton(
                 style: TextButton.styleFrom(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     alignment: Alignment.centerLeft),
                 onPressed: () {
-                  Navigator.of(context).pushReplacementNamed((RegisterPage).toString());
+                  Navigator.of(context).pushReplacementNamed(
+                      (RegisterPage).toString());
                 },
-                child: Text(S.of(context).login_register_btn,
+                child: Text(S
+                    .of(context)
+                    .login_register_btn,
                     style: TextStyle(color: Colors.white, fontSize: 14)))
           ],
         ));
