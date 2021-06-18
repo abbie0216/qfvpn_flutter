@@ -51,6 +51,7 @@ class _LoginPageState extends State<LoginPage> {
       child: BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
         return Scaffold(
           backgroundColor: R.color.login_bg_color(),
+          resizeToAvoidBottomInset:false,
           body: Stack(
             fit: StackFit.expand,
             children: <Widget>[
@@ -153,9 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                           : null;
                     },
                   ),
-
                   SizedBox(height: 30),
-
                   Align(
                       alignment: Alignment.topLeft,
                       child: Text(
@@ -163,7 +162,6 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextStyle(color: Colors.white, fontSize: 14),
                         textAlign: TextAlign.left,
                       )),
-
                   TextFormField(
                     controller: _passwordController,
                     maxLength: 20,
@@ -218,26 +216,36 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text(S.of(context).login_forget_pw_btn,
                               style: TextStyle(
                                   color: R.color.login_hint_color(),
-                                  fontSize: 14))))
-
-                  // Padding(
-                  //   padding: EdgeInsets.symmetric(vertical: 20.0),
-                  //   child: Column(
-                  //     crossAxisAlignment: CrossAxisAlignment.stretch,
-                  //     children: <Widget>[
-                  //       LoginButton(
-                  //           onPressed: isLoginButtonEnabled(state)
-                  //               ? _onFormSubmitted
-                  //               : null),
-                  //
-                  //       GoogleSignInButton(
-                  //         onPressed: () =>
-                  //             _loginBloc.dispatch(LoginWithGooglePressed()),
-                  //       ),
-                  //       CreateAccountButton(userRepository: _userRepository)
-                  //     ],
-                  //   ),
-                  // )
+                                  fontSize: 14)))),
+                  SizedBox(height: 20),
+                  Align(
+                      alignment: Alignment.center,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          minimumSize: Size(double.infinity, 44),
+                          primary: R.color.btn_white_color(),
+                          backgroundColor: R.color.btn_white_color(),
+                          elevation: 5.0,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(22)),
+                          ),
+                        ),
+                        onPressed: () {},
+                        child: Text(S.of(context).login,
+                            style: TextStyle(
+                                color: R.color.text_blue_color(),
+                                fontSize: 16)),
+                      )),
+                  Align(
+                      alignment: Alignment.center,
+                      child: TextButton(
+                          onPressed: () {
+                            // Navigator.pushNamed(context, "YourRoute");
+                          },
+                          child: Text(S.of(context).login_by_visitor,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14)))),
                 ],
               ),
             ));

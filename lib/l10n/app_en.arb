@@ -1,6 +1,12 @@
 {
   "@@locale": "en",
 
+  "login": "登录",
+  "login_by_visitor": "游客登录",
+  "register_and_login": "注册并登录",
+  "register_policy_msg": "注册即代表您同意 XXX 加速器",
+  "policy": "《用户隐私及协议》",
+
   "login_title": "嗨, 欢迎回来",
   "login_register_hint": "还不是会员?",
   "login_register_btn": "注册",

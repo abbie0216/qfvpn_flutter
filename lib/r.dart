@@ -32,6 +32,10 @@ class R {
 class _R_Color {
   const _R_Color();
 
+  Color btn_white_color() => Color(0xFFf4f6f9);
+  Color btn_blue_color() => Color(0xFF6569ee);
+  Color text_blue_color() => Color(0xff6569ee);
+
   Color text_field_border_color() => Color(0xffdddeec);
 
   Color login_bg_color() => Color(0xff6569ee);
