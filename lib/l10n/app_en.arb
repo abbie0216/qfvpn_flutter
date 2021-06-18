@@ -10,7 +10,7 @@
   "login_title": "嗨, 欢迎回来",
   "login_register_hint": "还不是会员?",
   "login_register_btn": "注册",
-  "login_forget_pw_btn": "找回密码",
+  "login_forget_pw": "找回密码",
 
   "login_email_label": "邮箱帐号",
   "login_email_hint": "请输入邮箱帐号",

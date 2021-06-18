@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/bloc/login/login_bloc.dart';
 import 'package:qfvpn/bloc/splash/splash_event.dart';
+import 'package:qfvpn/page/login/forgot_pw_page.dart';
+import 'package:qfvpn/page/login/register_page.dart';
 
 import '../../r.dart';
 import '../../s.dart';
@@ -211,9 +213,9 @@ class _LoginPageState extends State<LoginPage> {
                               padding: EdgeInsets.symmetric(horizontal: 10),
                               alignment: Alignment.centerRight),
                           onPressed: () {
-                            // Navigator.pushNamed(context, "YourRoute");
+                            Navigator.of(context).pushNamed((ForgotPwPage).toString());
                           },
-                          child: Text(S.of(context).login_forget_pw_btn,
+                          child: Text(S.of(context).login_forget_pw,
                               style: TextStyle(
                                   color: R.color.login_hint_color(),
                                   fontSize: 14)))),
@@ -267,7 +269,7 @@ class _LoginPageState extends State<LoginPage> {
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     alignment: Alignment.centerLeft),
                 onPressed: () {
-                  // Navigator.pushNamed(context, "YourRoute");
+                  Navigator.of(context).pushReplacementNamed((RegisterPage).toString());
                 },
                 child: Text(S.of(context).login_register_btn,
                     style: TextStyle(color: Colors.white, fontSize: 14)))

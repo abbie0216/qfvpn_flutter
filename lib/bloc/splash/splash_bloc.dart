@@ -17,6 +17,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
       //   LoginResp resp = (result.data as BaseResp).data;
       //   debugPrint("resp: $resp");
       // }
+      await Future.delayed(const Duration(seconds: 2), (){});
       yield SplashLoadedState();
     } else {
 

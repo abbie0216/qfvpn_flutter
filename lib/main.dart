@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qfvpn/bloc/login/register_bloc.dart';
+import 'package:qfvpn/page/login/register_page.dart';
+import 'package:qfvpn/routes.dart';
 
+import 'bloc/login/forgot_pw_bloc.dart';
 import 'bloc/login/login_bloc.dart';
 import 'bloc/splash/splash_bloc.dart';
 import 'model/api/api_repository.dart';
@@ -39,6 +43,15 @@ class App extends StatelessWidget {
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
 
+              BlocProvider(
+                  create: (context) => RegisterBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+
+              BlocProvider(
+                  create: (context) => ForgotPwBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
             ],
             child: MaterialApp(
               theme: ThemeData(
@@ -47,10 +60,9 @@ class App extends StatelessWidget {
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
               debugShowCheckedModeBanner: false,
-              home: Material(
-                type: MaterialType.transparency,
-                child: SplashPage(),
-              ),
+              initialRoute: (SplashPage).toString(),
+              routes: routes,
+
             )));
   }
 }

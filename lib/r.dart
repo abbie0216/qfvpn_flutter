@@ -38,6 +38,8 @@ class _R_Color {
 
   Color text_field_border_color() => Color(0xffdddeec);
 
+  Color background_color() => Color(0xfff4f6f9);
+
   Color login_bg_color() => Color(0xff6569ee);
   Color login_hint_color() => Color(0x66FFFFFF);
   Color logo_bg_color() => Color(0xFFCFD1FF);
