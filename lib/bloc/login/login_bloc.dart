@@ -22,7 +22,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> mapEventToState(
     LoginEvent event,
   ) async* {
-    debugPrint('get SubmitEvent');
     if (event is SubmitEvent) {
       yield* checkIsValidAndSubmit(event.email, event.password);
     } else {}
