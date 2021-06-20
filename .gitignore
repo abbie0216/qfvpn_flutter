@@ -56,6 +56,9 @@ app.*.map.json
 **/android/**/GeneratedPluginRegistrant.java
 **/android/.idea
 android/.idea
+android/core/.cxx
+android/core/src/main/golang/clash/go.sum
+android/buildSrc/.gradle
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
