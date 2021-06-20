@@ -54,6 +54,7 @@ app.*.map.json
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
 **/android/.idea
+android/.idea
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
