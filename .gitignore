@@ -8,6 +8,7 @@
 .buildlog/
 .history
 .svn/
+*/**/build
 
 # IntelliJ related
 *.iml
@@ -53,7 +54,7 @@ app.*.map.json
 **/android/gradlew.bat
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
-**/android/.idea
+**/android/.idea/*
 android/.idea
 
 # iOS/XCode related
