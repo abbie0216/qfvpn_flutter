@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:qfvpn/model/api/api_repository.dart';
 
-import '../../validator.dart';
+import '../../widgets/validator.dart';
 
 part 'register_event.dart';
 part 'register_state.dart';

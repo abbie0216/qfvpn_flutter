@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/bloc/login/register_bloc.dart';
+import 'package:qfvpn/widgets/MailField.dart';
+import 'package:qfvpn/widgets/PasswordField.dart';
 
 import '../../r.dart';
 import '../../s.dart';
@@ -118,39 +120,16 @@ class _RegisterPageState extends State<RegisterPage> {
                             style: TextStyle(color: Colors.white, fontSize: 14),
                             textAlign: TextAlign.left,
                           )),
-                      TextFormField(
-                        controller: _emailController,
-                        maxLength: 20,
-                        maxLines: 1,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          counterText: '',
+                      MailField(
                           prefixIcon: Padding(
                               padding: EdgeInsets.only(right: 12),
                               child: Image(image: R.image.ico_mail())),
-                          prefixIconConstraints:
-                          BoxConstraints(minWidth: 24, maxHeight: 24),
-                          hintStyle: TextStyle(
-                              color: R.color.login_hint_color(), fontSize: 14),
-                          hintText: S.of(context).login_email_hint,
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: R.color.text_field_border_color()),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: R.color.text_field_border_color()),
-                          ),
-                        ),
-                        autovalidateMode: AutovalidateMode.always,
-                        autocorrect: false,
-                        style: TextStyle(color: Colors.white),
-                        validator: (value) {
-                          return state is RegisterEmailInvalidState
-                              ? S.of(context).login_email_error
-                              : null;
-                        },
-                      ),
+                          controller: _emailController,
+                          validator: (value) {
+                            return state is RegisterEmailInvalidState
+                                ? S.of(context).login_email_error
+                                : null;
+                          }),
                       SizedBox(height: 30),
                       Align(
                           alignment: Alignment.topLeft,
@@ -159,46 +138,24 @@ class _RegisterPageState extends State<RegisterPage> {
                             style: TextStyle(color: Colors.white, fontSize: 14),
                             textAlign: TextAlign.left,
                           )),
-                      TextFormField(
-                        controller: _passwordController,
-                        maxLength: 20,
-                        maxLines: 1,
-                        keyboardType: TextInputType.visiblePassword,
-                        decoration: InputDecoration(
-                          counterText: '',
-                          prefixIcon: Padding(
-                              padding: EdgeInsets.only(right: 12),
-                              child: Image(image: R.image.ico_lock())),
-                          prefixIconConstraints:
-                          BoxConstraints(minWidth: 24, maxHeight: 24),
-                          suffixIcon: Padding(
-                              padding: EdgeInsets.only(right: 12),
-                              child: IconButton(
-                                icon: Image(
-                                    image: showPassword
-                                        ? R.image.ico_eye()
-                                        : R.image.ico_eyeslash()),
-                                onPressed: () {
-                                  showPassword = !showPassword;
-                                  setState(() {});
-                                },
-                              )),
-                          hintStyle: TextStyle(
-                              color: R.color.login_hint_color(), fontSize: 14),
-                          hintText: S.of(context).login_pw_hint,
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: R.color.text_field_border_color()),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: R.color.text_field_border_color()),
-                          ),
-                        ),
+                      PasswordField(
+                        prefixIcon: Padding(
+                            padding: EdgeInsets.only(right: 12),
+                            child: Image(image: R.image.ico_lock())),
+                        suffixIcon: Padding(
+                            padding: EdgeInsets.only(right: 12),
+                            child: IconButton(
+                              icon: Image(
+                                  image: showPassword
+                                      ? R.image.ico_eye()
+                                      : R.image.ico_eyeslash()),
+                              onPressed: () {
+                                showPassword = !showPassword;
+                                setState(() {});
+                              },
+                            )),
                         obscureText: !showPassword,
-                        autovalidateMode: AutovalidateMode.always,
-                        autocorrect: false,
-                        style: TextStyle(color: Colors.white),
+                        controller: _passwordController,
                         validator: (_) {
                           return state is RegisterPWInvalidState
                               ? S.of(context).login_pw_error
@@ -213,34 +170,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             style: TextStyle(color: Colors.white, fontSize: 14),
                             textAlign: TextAlign.left,
                           )),
-                      TextFormField(
-                        controller: _invitationCodeController,
-                        maxLength: 20,
-                        maxLines: 1,
-                        keyboardType: TextInputType.visiblePassword,
-                        decoration: InputDecoration(
-                          counterText: '',
-                          prefixIcon: Padding(
-                              padding: EdgeInsets.only(right: 12),
-                              child: Image(image: R.image.ico_handshake())),
-                          prefixIconConstraints: BoxConstraints(minWidth: 24, maxHeight: 24),
-                          hintStyle: TextStyle(
-                              color: R.color.login_hint_color(), fontSize: 14),
-                          hintText: S.of(context).register_invitation_code_hint,
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: R.color.text_field_border_color()),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: R.color.text_field_border_color()),
-                          ),
-                        ),
-                        autovalidateMode: AutovalidateMode.always,
-                        autocorrect: false,
-                        style: TextStyle(color: Colors.white),
-                        validator: (_) {},
-                      ),
+
+                      _buildInvitationCodeField(),
+
                       SizedBox(height: 20),
                       Align(
                           alignment: Alignment.center,
@@ -271,6 +203,37 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ));
           }),
+    );
+  }
+
+  Widget _buildInvitationCodeField() {
+    return  TextFormField(
+      controller: _invitationCodeController,
+      maxLength: 20,
+      maxLines: 1,
+      keyboardType: TextInputType.visiblePassword,
+      decoration: InputDecoration(
+        counterText: '',
+        prefixIcon: Padding(
+            padding: EdgeInsets.only(right: 12),
+            child: Image(image: R.image.ico_handshake())),
+        prefixIconConstraints: BoxConstraints(minWidth: 24, maxHeight: 24),
+        hintStyle: TextStyle(
+            color: R.color.login_hint_color(), fontSize: 14),
+        hintText: S.of(context).register_invitation_code_hint,
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+              color: R.color.text_field_border_color()),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+              color: R.color.text_field_border_color()),
+        ),
+      ),
+      autovalidateMode: AutovalidateMode.always,
+      autocorrect: false,
+      style: TextStyle(color: Colors.white),
+      validator: (_) {},
     );
   }
 
