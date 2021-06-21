@@ -1,7 +1,31 @@
 {
   "@@locale": "zh",
 
-  "hello_world": "你好，世界",
+  "login_title": "嗨, 欢迎回来",
+  "login_register_hint": "还不是会员?",
+  "login_register_btn": "注册",
+  "login_forget_pw": "找回密码",
+
+  "login_email_label": "邮箱帐号",
+  "login_email_hint": "请输入邮箱帐号",
+  "login_email_error": "邮箱帐号格式错误",
+  "login_pw_label": "密码",
+  "login_pw_hint": "请输入密码",
+  "login_pw_error": "密码格式错误",
+
+  "login_failed": "帐号或密码错误",
+
+  "register_title": "嗨, 欢迎注册",
+  "register_hint": "已经是会员??",
+  "register_invitation_code_label": "邀请码",
+  "register_invitation_code_hint": "请输入邀请码 (可选填)",
+
+
+  "login": "登录",
+  "login_by_visitor": "游客登录",
+  "register_and_login": "注册并登录",
+  "register_policy_msg": "注册即代表您同意 XXX 加速器",
+  "policy": "《用户隐私及协议》",
 
   "home_bottom_nav_bar_home": "首页",
   "home_bottom_nav_bar_vip": "VIP",

@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/bloc/splash/splash_bloc.dart';
 import 'package:qfvpn/bloc/splash/splash_event.dart';
 import 'package:qfvpn/bloc/splash/splash_state.dart';
-import 'package:qfvpn/page/main/main_page.dart';
 
 import '../../r.dart';
 import '../login/login_page.dart';
@@ -20,12 +19,12 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   late SplashBloc _splashBloc;
 
-  static const platform = MethodChannel('com.example.flutter_demo/app');
+  static const platform = const MethodChannel('com.example.flutter_demo/app');
 
   Future<void> getFreeSpace() async {
     try {
       final int result =
-          await platform.invokeMethod('getFreeSpace', {'packagename': 'test'});
+          await platform.invokeMethod('getFreeSpace', {"packagename": "test"});
       debugPrint('getFreeSpace: $result');
     } on PlatformException catch (e) {
       debugPrint('getFreeSpace error: ${e.message}');
@@ -36,9 +35,7 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     _splashBloc = BlocProvider.of<SplashBloc>(context);
-    Future.delayed(const Duration(seconds: 2), () {
-      _splashBloc.add(SplashFetchEvent());
-    });
+    _splashBloc.add(SplashFetchEvent());
 
     getFreeSpace();
   }
@@ -48,9 +45,7 @@ class _SplashPageState extends State<SplashPage> {
     return BlocListener<SplashBloc, SplashState>(
       listener: (context, state) {
         if (state is SplashLoadedState) {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (BuildContext pageContext) => LoginPage()));
+          Navigator.of(context).pushReplacementNamed((LoginPage).toString());
         }
       },
       child: BlocBuilder<SplashBloc, SplashState>(builder: (context, state) {
@@ -74,9 +69,9 @@ class _SplashPageState extends State<SplashPage> {
                       shape: BoxShape.circle, color: Color(0xFFCFD1FF)),
                   child: Center(
                       child: FlutterLogo(
-                  size: 60,
-                )),
-              ),
+                    size: 60,
+                  )),
+                ),
               ),
             ],
           ),
