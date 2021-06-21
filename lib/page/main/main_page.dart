@@ -59,8 +59,8 @@ class _MainPageState extends State<MainPage> {
                     activeIcon: Image(image: R.image.ico_my_p()),
                     label: S.of(context).home_bottom_nav_bar_me)
               ],
-              fixedColor: R.color.home_bottom_nav_bar_select_text(),
-              unselectedItemColor: R.color.home_bottom_nav_bar_un_select_text(),
+              fixedColor: R.color.home_bottom_nav_bar_selected_text(),
+              unselectedItemColor: R.color.home_bottom_nav_bar_unselected_text(),
               unselectedLabelStyle: TextStyle(fontSize: 12),
               selectedLabelStyle:
                   TextStyle(fontSize: 12, fontWeight: FontWeight.bold),

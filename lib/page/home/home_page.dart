@@ -3,11 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qfvpn/bloc/home/home_bloc.dart';
 import 'package:qfvpn/bloc/home/home_state.dart';
+import 'package:qfvpn/page/home/option_line_bottom_sheet.dart';
 import 'package:qfvpn/r.dart';
 import 'package:qfvpn/s.dart';
 import 'package:qfvpn/widget/ink_wrapper.dart';
 import 'package:qfvpn/widget/stateful_image.dart';
 import 'package:qfvpn/widget/vertical_marquee.dart';
+
+import 'option_mode_bottom_sheet.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -61,25 +64,26 @@ class _HomePageState extends State<HomePage> {
                 Column(
                   children: [
                     /** logo and share **/
-                    Row(
-                      children: [
-                        Expanded(
-                            child: ListTile(
-                          leading: Image(image: R.image.ico_eye_1()),
-                          title: Text(
+                    Padding(
+                        padding: EdgeInsets.only(left: 19, right: 10),
+                        child: Row(children: [
+                          Padding(
+                              padding: EdgeInsets.only(right: 5),
+                              child: Image(image: R.image.ico_eye_1())),
+                          Expanded(
+                              child: Text(
                             'XXX VPN',
                             style: TextStyle(
                                 color: R.color.home_primary_text(),
-                                fontSize: 14),
-                          ),
-                        )), //
-                        StatefulImage(
-                          image: Image(image: R.image.btn_share_n()),
-                          pressedImage: Image(image: R.image.btn_share_p()),
-                          onPressed: () {},
-                        )
-                      ],
-                    ),
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold),
+                          )), //
+                          StatefulImage(
+                            image: Image(image: R.image.btn_share_n()),
+                            pressedImage: Image(image: R.image.btn_share_p()),
+                            onPressed: () {},
+                          )
+                        ])),
                     /** announcement **/
                     Padding(
                       padding: EdgeInsets.only(left: 20, right: 20),
@@ -134,18 +138,7 @@ class _HomePageState extends State<HomePage> {
                         child: Column(
                           children: [
                             InkWrapper(
-                              onTap: () => showMaterialModalBottomSheet(
-                                backgroundColor: Colors.transparent,
-                                  expand: false,
-                                  context: context,
-                                  builder: (context) => Container(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.5,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.vertical(
-                                              top: Radius.circular(22))))),
+                              onTap: showOptionModeBottomSheet,
                               radius: BorderRadius.only(
                                   topLeft: Radius.circular(12),
                                   topRight: Radius.circular(12)),
@@ -178,19 +171,7 @@ class _HomePageState extends State<HomePage> {
                                 height: 1,
                                 width: double.infinity),
                             InkWrapper(
-                              onTap: () => showMaterialModalBottomSheet(
-                                  expand: false,
-                                  context: context,
-                                  backgroundColor: Colors.transparent,
-                                  builder: (context) => Container(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.9,
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.vertical(
-                                                top: Radius.circular(22))),
-                                      )),
+                              onTap: showOptionLineBottomSheet,
                               radius: BorderRadius.only(
                                   bottomLeft: Radius.circular(12),
                                   bottomRight: Radius.circular(12)),
@@ -231,5 +212,21 @@ class _HomePageState extends State<HomePage> {
         );
       }),
     );
+  }
+
+  void showOptionModeBottomSheet() {
+    showMaterialModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        expand: false,
+        context: context,
+        builder: (context) => OptionModeBottomSheet());
+  }
+
+  void showOptionLineBottomSheet() {
+    showMaterialModalBottomSheet(
+        enableDrag: false,
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (context) => OptionLineBottomSheet());
   }
 }

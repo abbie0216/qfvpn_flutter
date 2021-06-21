@@ -23,6 +23,7 @@ dependencies:
   carousel_slider: ^4.0.0-nullsafety.0
   pedantic: ^1.11.0
   modal_bottom_sheet: ^2.0.0
+  shared_preferences: ^2.0.6
 dev_dependencies:
   flutter_test:
     sdk: flutter

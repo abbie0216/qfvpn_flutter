@@ -51,7 +51,6 @@ class _SplashPageState extends State<SplashPage> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (BuildContext pageContext) => LoginPage()));
-              // MaterialPageRoute(builder: (BuildContext pageContext) => MainPage()));
         }
       },
       child: BlocBuilder<SplashBloc, SplashState>(builder: (context, state) {
