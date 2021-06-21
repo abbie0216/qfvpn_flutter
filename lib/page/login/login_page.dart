@@ -4,8 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/bloc/login/login_bloc.dart';
 import 'package:qfvpn/page/login/forgot_pw_page.dart';
 import 'package:qfvpn/page/login/register_page.dart';
-import 'package:qfvpn/widgets/MailField.dart';
-import 'package:qfvpn/widgets/PasswordField.dart';
+import 'package:qfvpn/page/main/main_page.dart';
+import 'package:qfvpn/widget/MailField.dart';
+import 'package:qfvpn/widget/PasswordField.dart';
 
 import '../../r.dart';
 import '../../s.dart';
@@ -213,7 +214,8 @@ class _LoginPageState extends State<LoginPage> {
                       alignment: Alignment.center,
                       child: TextButton(
                           onPressed: () {
-                            // Navigator.pushNamed(context, "YourRoute");
+                            //todo test main page
+                            Navigator.of(context).pushReplacementNamed((MainPage).toString());
                           },
                           child: Text(S.of(context).login_by_visitor,
                               style: TextStyle(

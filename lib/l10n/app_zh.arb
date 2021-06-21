@@ -25,5 +25,17 @@
   "login_by_visitor": "游客登录",
   "register_and_login": "注册并登录",
   "register_policy_msg": "注册即代表您同意 XXX 加速器",
-  "policy": "《用户隐私及协议》"
+  "policy": "《用户隐私及协议》",
+
+  "home_bottom_nav_bar_home": "首页",
+  "home_bottom_nav_bar_vip": "VIP",
+  "home_bottom_nav_bar_me": "我的",
+  "home_option_title_mode": "加速模式",
+  "home_option_title_line": "当前线路",
+  "home_option_mode_list_title": "加速模式",
+  "home_option_line_list_title": "选择线路",
+  "home_option_mode_list_item_title_1": "智能加速",
+  "home_option_mode_list_item_title_2": "全局加速",
+  "home_option_mode_list_item_desc_1": "自动根据当前的线路选择解锁和加速策略。大多情况下用这个模式就可以工作。在不同地方可能会出现不同策略导致识别不准确，可以尝试全局模式。",
+  "home_option_mode_list_item_desc_2": "所有流量都走当前的所选线路，可能会影响某些网站的访问，一般用于智能模式依然无法解锁的问题。"
 }

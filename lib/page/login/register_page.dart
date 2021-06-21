@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/bloc/login/register_bloc.dart';
-import 'package:qfvpn/widgets/MailField.dart';
-import 'package:qfvpn/widgets/PasswordField.dart';
+import 'package:qfvpn/widget/MailField.dart';
+import 'package:qfvpn/widget/PasswordField.dart';
 
 import '../../r.dart';
 import '../../s.dart';

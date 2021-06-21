@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:qfvpn/model/api/api_repository.dart';
-import 'package:qfvpn/widgets/validator.dart';
+import 'package:qfvpn/widget/validator.dart';
 
 part 'forgot_pw_event.dart';
 part 'forgot_pw_state.dart';

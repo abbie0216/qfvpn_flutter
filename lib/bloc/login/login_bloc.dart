@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:qfvpn/model/api/api_repository.dart';
 
-import '../../widgets/validator.dart';
+import '../../widget/validator.dart';
 
 part 'login_event.dart';
 
