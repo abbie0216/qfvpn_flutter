@@ -27,6 +27,7 @@
   "forgot_pw_send_verification_code": "发送验证码",
 
   "verification_code_error": "验证码格式错误",
+  "verification_code_sent": "验证码已发送",
 
   "submit": "提交",
   "login": "登录",

@@ -35,7 +35,17 @@ class _ForgotPwPageState extends State<ForgotPwPage> {
   Widget build(BuildContext context) {
     return BlocListener<ForgotPwBloc, ForgotPwState>(
       listener: (context, state) {
-        if (state is ForgotPwSuccessState) {
+        if (state is CodeCountDownState && state.time == 60) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBar(
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(S.of(context).verification_code_sent),
+                  ],
+                )));
+        } else if(state is ForgotPwSuccessState) {
           debugPrint('success');
         } else if (state is ForgotPwFailedState) {
           debugPrint('failed');
