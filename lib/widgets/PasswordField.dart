@@ -5,7 +5,7 @@ import '../r.dart';
 import '../s.dart';
 
 class PasswordField extends StatefulWidget {
-  const PasswordField({this.prefixIcon, this.suffixIcon
+  const PasswordField({this.prefixIcon, this.suffixIcon, this.hintColor, this.textColor
     , this.obscureText = false, this.controller, this.validator});
 
   final Widget? prefixIcon;
@@ -13,6 +13,8 @@ class PasswordField extends StatefulWidget {
   final bool obscureText;
   final TextEditingController? controller;
   final FormFieldValidator<String>? validator;
+  final Color? hintColor;
+  final Color? textColor;
 
   @override
   State<StatefulWidget> createState() => _PasswordFieldState();
@@ -34,7 +36,7 @@ class _PasswordFieldState extends State<PasswordField> {
         BoxConstraints(minWidth: 24, maxHeight: 24),
         suffixIcon: widget.suffixIcon,
         hintStyle: TextStyle(
-            color: R.color.login_hint_color(), fontSize: 14),
+            color: widget.hintColor, fontSize: 14),
         hintText: S
             .of(context)
             .login_pw_hint,
@@ -50,7 +52,7 @@ class _PasswordFieldState extends State<PasswordField> {
       obscureText: widget.obscureText,
       autovalidateMode: AutovalidateMode.always,
       autocorrect: false,
-      style: TextStyle(color: Colors.white),
+      style: TextStyle(color: widget.textColor),
       validator: widget.validator
     );
   }

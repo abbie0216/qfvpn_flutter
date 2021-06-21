@@ -132,6 +132,8 @@ class _LoginPageState extends State<LoginPage> {
                           padding: EdgeInsets.only(right: 12),
                           child: Image(image: R.image.ico_mail())),
                       controller: _emailController,
+                      hintColor: R.color.login_hint_color(),
+                      textColor: Colors.white,
                       validator: (value) {
                         return state is LoginEmailInvalidState
                             ? S.of(context).login_email_error
@@ -163,6 +165,8 @@ class _LoginPageState extends State<LoginPage> {
                         )),
                     obscureText: !showPassword,
                     controller: _passwordController,
+                    hintColor: R.color.login_hint_color(),
+                    textColor: Colors.white,
                     validator: (_) {
                       return state is LoginPWInvalidState
                           ? S.of(context).login_pw_error
@@ -183,13 +187,12 @@ class _LoginPageState extends State<LoginPage> {
                               style: TextStyle(
                                   color: R.color.login_hint_color(),
                                   fontSize: 14)))),
-                  SizedBox(height: 20),
+                  SizedBox(height: 30),
                   Align(
                       alignment: Alignment.center,
                       child: TextButton(
                         style: TextButton.styleFrom(
                           minimumSize: Size(double.infinity, 44),
-                          primary: R.color.btn_white_color(),
                           backgroundColor: R.color.btn_white_color(),
                           elevation: 5.0,
                           shape: const RoundedRectangleBorder(

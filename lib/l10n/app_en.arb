@@ -20,7 +20,15 @@
   "register_invitation_code_label": "邀请码",
   "register_invitation_code_hint": "请输入邀请码 (可选填)",
 
+  "verification_code": "验证码",
+  "verification_code_hint": "请输入验证码",
+  "forgot_email_label": "输入绑定的邮箱",
+  "forgot_pw_label": "新的密码",
+  "forgot_pw_send_verification_code": "发送验证码",
 
+  "verification_code_error": "验证码格式错误",
+
+  "submit": "提交",
   "login": "登录",
   "login_by_visitor": "游客登录",
   "register_and_login": "注册并登录",

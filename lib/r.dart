@@ -48,6 +48,8 @@ class _R_Color {
   Color home_announce_text() => Color(0x66000000);
   Color home_announce_bg_shadow() => Color(0x80ffffff);
 
+  Color forgot_hint_color() => Color(0x33000000);
+
 }
 
 class _R_Image {
