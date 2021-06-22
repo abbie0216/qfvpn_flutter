@@ -36,6 +36,7 @@ class _R_Color {
   Color btn_white_color() => Color(0xFFf4f6f9);
   Color btn_blue_color() => Color(0xFF6569ee);
   Color text_blue_color() => Color(0xff6569ee);
+  Color text_gray_color() => Color(0x4c000000);
 
   Color text_field_border_color() => Color(0xffdddeec);
 
@@ -69,6 +70,8 @@ class _R_Color {
   Color home_vpn_option_sheet_item_line_title() => Color(0xcc000000);
 
   Color forgot_hint_color() => Color(0x33000000);
+
+  Color me_title_block_bg_color() => Color(0xffdddeec);
 
 }
 
