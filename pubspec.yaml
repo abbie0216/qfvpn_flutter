@@ -24,6 +24,8 @@ dependencies:
   pedantic: ^1.11.0
   modal_bottom_sheet: ^2.0.0
   shared_preferences: ^2.0.6
+  animations: ^2.0.0
+  sprintf: ^6.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

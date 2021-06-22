@@ -42,7 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
           //       content: Row(
           //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
           //         children: <Widget>[
-          //           Text(S.of(context).login_failed),
+          //           Text(Str.of(context).login_failed),
           //         ],
           //       )));
         }

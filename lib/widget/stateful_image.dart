@@ -14,16 +14,16 @@ class StatefulImage extends StatefulWidget {
 }
 
 class _StatefulImageState extends State<StatefulImage> {
-  bool _changeColor = false;
+  bool _isChange = false;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: (_) => setState(() => _changeColor = !_changeColor),
-      onTapUp: (_) => setState(() => _changeColor = !_changeColor),
-      onTapCancel: () => setState(() => _changeColor = !_changeColor),
+      onTapDown: (_) => setState(() => _isChange = !_isChange),
+      onTapUp: (_) => setState(() => _isChange = !_isChange),
+      onTapCancel: () => setState(() => _isChange = !_isChange),
       child:IconButton(
-        icon: _changeColor ? Image(image:widget.pressedImage.image) : Image(image:widget.image.image),
+        icon: _isChange ? Image(image:widget.pressedImage.image) : Image(image:widget.image.image),
         onPressed: widget.onPressed,
       ),
     );

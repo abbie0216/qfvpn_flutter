@@ -67,6 +67,22 @@ class _R_Color {
   Color home_vpn_option_sheet_item_mode_title() => home_primary_text();
   Color home_vpn_option_sheet_item_mode_desc() => Color(0x66000000);
   Color home_vpn_option_sheet_item_line_title() => Color(0xcc000000);
+  Color home_vpn_connect_btn_bg_start() => Color(0xffffffff);
+  Color home_vpn_connect_btn_bg_end() => Color(0xffecf2ff);
+  Color home_vpn_connect_btn_click_text() => Color(0x33000000);
+  Color home_vpn_connect_btn_inner_bg_border() => Color(0xffdddeec);
+  Color home_vpn_connect_btn_inner_bg_start() => Color(0xff9ba5ff);
+  Color home_vpn_connect_btn_inner_bg_end() => Color(0xff595de9);
+  Color home_vpn_connect_btn_connecting_hint_text() => Colors.white;
+  Color home_vpn_connect_btn_connecting_time_text() => Colors.white;
+  Color home_vpn_connect_btn_connected_hint_text() => Color(0xff98e733);
+  Color home_vpn_connect_btn_connected_time_text() => Colors.white;
+  Color home_vpn_connect_btn_anim_top_dot_1() => Color(0x44a1f9ff);
+  Color home_vpn_connect_btn_anim_top_dot_2() => Color(0x00a1f9ff);
+  Color home_vpn_connect_btn_anim_bottom_dot_1() => Color(0x44ffc9c9);
+  Color home_vpn_connect_btn_anim_bottom_dot_2() => Color(0x00ffc9c9);
+  Color home_vpn_connect_btn_anim_progress_start() => Color(0xcc8488ff);
+  Color home_vpn_connect_btn_anim_progress_end() => Color(0x0d8488ff);
 
 }
 

@@ -4,6 +4,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qfvpn/bloc/home/home_bloc.dart';
 import 'package:qfvpn/bloc/home/home_state.dart';
 import 'package:qfvpn/page/home/option_line_bottom_sheet.dart';
+import 'package:qfvpn/page/home/vpn_btn.dart';
 import 'package:qfvpn/r.dart';
 import 'package:qfvpn/s.dart';
 import 'package:qfvpn/widget/ink_wrapper.dart';
@@ -119,10 +120,7 @@ class _HomePageState extends State<HomePage> {
                           alignment: FractionalOffset(0.5, 0.42),
                           child: AspectRatio(
                             aspectRatio: 1 / 1,
-                            child: ClipOval(
-                                child: Container(
-                              color: R.color.home_primary_text(),
-                            )),
+                            child: VpnBtn(),
                           )),
                     ),
                     Expanded(flex: 3, child: Container()),
