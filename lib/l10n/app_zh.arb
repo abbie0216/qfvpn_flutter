@@ -1,6 +1,8 @@
 {
   "@@locale": "zh",
 
+  "news": "new",
+  "go": "Go",
   "login_title": "嗨, 欢迎回来",
   "login_register_hint": "还不是会员?",
   "login_register_btn": "注册",
@@ -20,12 +22,32 @@
   "register_invitation_code_label": "邀请码",
   "register_invitation_code_hint": "请输入邀请码 (可选填)",
 
+  "verification_code": "验证码",
+  "verification_code_hint": "请输入验证码",
+  "forgot_email_label": "输入绑定的邮箱",
+  "forgot_pw_label": "新的密码",
+  "forgot_pw_send_verification_code": "发送验证码",
 
+  "verification_code_error": "验证码格式错误",
+  "verification_code_sent": "验证码已发送",
+
+  "submit": "提交",
   "login": "登录",
   "login_by_visitor": "游客登录",
   "register_and_login": "注册并登录",
   "register_policy_msg": "注册即代表您同意 XXX 加速器",
   "policy": "《用户隐私及协议》",
+
+  "me_page_title": "我的中心",
+  "me_bind_mail": "绑定邮箱",
+  "me_coupon": "我的优惠券",
+  "me_vip_time_label": "VIP 有效期限至：",
+  "me_id_label": "ID：",
+  "me_item_my_info": "我的消息",
+  "me_item_help": "帮助中心",
+  "me_item_feedback": "意见反馈",
+  "me_item_about": "关于赤兔加速器",
+  "me_get_vip": "免费领取 VIP",
 
   "home_bottom_nav_bar_home": "首页",
   "home_bottom_nav_bar_vip": "VIP",

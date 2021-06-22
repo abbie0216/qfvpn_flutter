@@ -36,6 +36,7 @@ class _R_Color {
   Color btn_white_color() => Color(0xFFf4f6f9);
   Color btn_blue_color() => Color(0xFF6569ee);
   Color text_blue_color() => Color(0xff6569ee);
+  Color text_gray_color() => Color(0x4c000000);
 
   Color text_field_border_color() => Color(0xffdddeec);
 
@@ -83,6 +84,10 @@ class _R_Color {
   Color home_vpn_connect_btn_anim_bottom_dot_2() => Color(0x00ffc9c9);
   Color home_vpn_connect_btn_anim_progress_start() => Color(0xcc8488ff);
   Color home_vpn_connect_btn_anim_progress_end() => Color(0x0d8488ff);
+
+  Color forgot_hint_color() => Color(0x33000000);
+
+  Color me_title_block_bg_color() => Color(0xffdddeec);
 
 }
 

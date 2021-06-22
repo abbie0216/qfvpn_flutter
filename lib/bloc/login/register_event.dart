@@ -10,5 +10,5 @@ class SubmitEvent extends RegisterEvent {
   SubmitEvent({required this.email, required this.password, this.invitationCode}) : super();
 
   @override
-  String toString() => 'EmailChanged { email :$email , pw: $password }';
+  String toString() => 'SubmitEvent { email :$email , pw: $password }';
 }

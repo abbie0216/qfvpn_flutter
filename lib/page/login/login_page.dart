@@ -5,6 +5,8 @@ import 'package:qfvpn/bloc/login/login_bloc.dart';
 import 'package:qfvpn/page/login/forgot_pw_page.dart';
 import 'package:qfvpn/page/login/register_page.dart';
 import 'package:qfvpn/page/main/main_page.dart';
+import 'package:qfvpn/widget/MailField.dart';
+import 'package:qfvpn/widget/PasswordField.dart';
 
 import '../../r.dart';
 import '../../s.dart';
@@ -126,39 +128,18 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextStyle(color: Colors.white, fontSize: 14),
                         textAlign: TextAlign.left,
                       )),
-                  TextFormField(
-                    controller: _emailController,
-                    maxLength: 20,
-                    maxLines: 1,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      counterText: '',
+                  MailField(
                       prefixIcon: Padding(
                           padding: EdgeInsets.only(right: 12),
                           child: Image(image: R.image.ico_mail())),
-                      prefixIconConstraints:
-                          BoxConstraints(minWidth: 24, maxHeight: 24),
-                      hintStyle: TextStyle(
-                          color: R.color.login_hint_color(), fontSize: 14),
-                      hintText: S.of(context).login_email_hint,
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: R.color.text_field_border_color()),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: R.color.text_field_border_color()),
-                      ),
-                    ),
-                    autovalidateMode: AutovalidateMode.always,
-                    autocorrect: false,
-                    style: TextStyle(color: Colors.white),
-                    validator: (value) {
-                      return state is LoginEmailInvalidState
-                          ? S.of(context).login_email_error
-                          : null;
-                    },
-                  ),
+                      controller: _emailController,
+                      hintColor: R.color.login_hint_color(),
+                      textColor: Colors.white,
+                      validator: (value) {
+                        return state is LoginEmailInvalidState
+                            ? S.of(context).login_email_error
+                            : null;
+                      }),
                   SizedBox(height: 30),
                   Align(
                       alignment: Alignment.topLeft,
@@ -167,46 +148,26 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextStyle(color: Colors.white, fontSize: 14),
                         textAlign: TextAlign.left,
                       )),
-                  TextFormField(
-                    controller: _passwordController,
-                    maxLength: 20,
-                    maxLines: 1,
-                    keyboardType: TextInputType.visiblePassword,
-                    decoration: InputDecoration(
-                      counterText: '',
-                      prefixIcon: Padding(
-                          padding: EdgeInsets.only(right: 12),
-                          child: Image(image: R.image.ico_lock())),
-                      prefixIconConstraints:
-                          BoxConstraints(minWidth: 24, maxHeight: 24),
-                      suffixIcon: Padding(
-                          padding: EdgeInsets.only(right: 12),
-                          child: IconButton(
-                            icon: Image(
-                                image: showPassword
-                                    ? R.image.ico_eye()
-                                    : R.image.ico_eyeslash()),
-                            onPressed: () {
-                              showPassword = !showPassword;
-                              setState(() {});
-                            },
-                          )),
-                      hintStyle: TextStyle(
-                          color: R.color.login_hint_color(), fontSize: 14),
-                      hintText: S.of(context).login_pw_hint,
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: R.color.text_field_border_color()),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: R.color.text_field_border_color()),
-                      ),
-                    ),
+                  PasswordField(
+                    prefixIcon: Padding(
+                        padding: EdgeInsets.only(right: 12),
+                        child: Image(image: R.image.ico_lock())),
+                    suffixIcon: Padding(
+                        padding: EdgeInsets.only(right: 12),
+                        child: IconButton(
+                          icon: Image(
+                              image: showPassword
+                                  ? R.image.ico_eye()
+                                  : R.image.ico_eyeslash()),
+                          onPressed: () {
+                            showPassword = !showPassword;
+                            setState(() {});
+                          },
+                        )),
                     obscureText: !showPassword,
-                    autovalidateMode: AutovalidateMode.always,
-                    autocorrect: false,
-                    style: TextStyle(color: Colors.white),
+                    controller: _passwordController,
+                    hintColor: R.color.login_hint_color(),
+                    textColor: Colors.white,
                     validator: (_) {
                       return state is LoginPWInvalidState
                           ? S.of(context).login_pw_error
@@ -227,13 +188,12 @@ class _LoginPageState extends State<LoginPage> {
                               style: TextStyle(
                                   color: R.color.login_hint_color(),
                                   fontSize: 14)))),
-                  SizedBox(height: 20),
+                  SizedBox(height: 30),
                   Align(
                       alignment: Alignment.center,
                       child: TextButton(
                         style: TextButton.styleFrom(
                           minimumSize: Size(double.infinity, 44),
-                          primary: R.color.btn_white_color(),
                           backgroundColor: R.color.btn_white_color(),
                           elevation: 5.0,
                           shape: const RoundedRectangleBorder(

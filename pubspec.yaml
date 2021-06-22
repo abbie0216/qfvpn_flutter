@@ -26,6 +26,8 @@ dependencies:
   shared_preferences: ^2.0.6
   animations: ^2.0.0
   sprintf: ^6.0.0
+  # Info
+  package_info: ^0.4.0+16
 dev_dependencies:
   flutter_test:
     sdk: flutter
