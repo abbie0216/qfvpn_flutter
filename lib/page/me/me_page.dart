@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/bloc/login/forgot_pw_bloc.dart';
 import 'package:qfvpn/bloc/me/me_bloc.dart';
+import 'package:qfvpn/page/setting/setting_page.dart';
 
 import '../../r.dart';
 import '../../s.dart';
@@ -44,11 +45,10 @@ class _MePageState extends State<MePage> {
             centerTitle: true,
             actions: <Widget>[
               IconButton(
-                icon: Image(image: R.image.btn_setting_n()),
-                onPressed: () {
-                  // Go to settings page
-                },
-              )
+                  icon: Image(image: R.image.btn_setting_n()),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed((SettingPage).toString());
+                  })
             ],
           ),
           body: Stack(
@@ -177,128 +177,140 @@ class _MePageState extends State<MePage> {
                     children: [
                       SizedBox(
                         height: 48,
-                        child: Row(
-                          children: [
-                            Expanded(
-                                flex: 1,
-                                child: Image(
-                                  image: R.image.icon_notice(),
-                                )),
-                            Expanded(
-                                flex: 10,
-                                child: Text(S.of(context).me_item_my_info,
-                                    style: TextStyle(
-                                        color: R.color.text_gray_color()))),
-                            Expanded(
-                                flex: 1,
-                                child: Image(
-                                  image: R.image.btn_next_n(),
-                                ))
-                          ],
-                        ),
-                      ),
-                      Divider(
-                        color: R.color.background_color(),
-                        height: 1,
-                      ),
-                      SizedBox(
-                        height: 48,
-                        child: Row(
-                          children: [
-                            Expanded(
-                                flex: 1,
-                                child: Image(
-                                  image: R.image.icon_help(),
-                                )),
-                            Expanded(
-                                flex: 10,
-                                child: Text(S.of(context).me_item_help,
-                                    style: TextStyle(
-                                        color: R.color.text_gray_color()))),
-                            Expanded(
-                                flex: 1,
-                                child: Image(
-                                  image: R.image.btn_next_n(),
-                                ))
-                          ],
-                        ),
-                      ),
-                      Divider(
-                        color: R.color.background_color(),
-                        height: 1,
-                      ),
-                      SizedBox(
-                        height: 48,
-                        child: Row(
-                          children: [
-                            Expanded(
-                                flex: 1,
-                                child: Image(
-                                  image: R.image.icon_opinion(),
-                                )),
-                            Expanded(
-                                flex: 8,
-                                child: Text(S.of(context).me_item_feedback,
-                                    style: TextStyle(
-                                        color: R.color.text_gray_color()))),
-                            Expanded(
-                                flex: 2,
-                                child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Container(
-                                        height: 20,
-                                        width: 36,
-                                        decoration: BoxDecoration(
-                                          color: Colors.red,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(22)),
-                                        ),
-                                        child: Center(
-                                            child: Text(S.of(context).news,
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 12)))))),
-                            Expanded(
-                                flex: 1,
-                                child: Image(
-                                  image: R.image.btn_next_n(),
-                                ))
-                          ],
-                        ),
-                      ),
-                      Divider(
-                        color: R.color.background_color(),
-                        height: 1,
-                      ),
-                      SizedBox(
-                        height: 48,
-                        child: Row(
-                          children: [
-                            Expanded(
-                                flex: 1,
-                                child: Image(
-                                  image: R.image.icon_about(),
-                                )),
-                            Expanded(
-                                flex: 8,
-                                child: Text(S.of(context).me_item_about,
-                                    style: TextStyle(
-                                        color: R.color.text_gray_color()))),
-                            Expanded(
-                                flex: 2,
-                                child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text('v1.3.0',
+                        child: GestureDetector(
+                            onTap: () {},
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    flex: 1,
+                                    child: Image(
+                                      image: R.image.icon_notice(),
+                                    )),
+                                Expanded(
+                                    flex: 10,
+                                    child: Text(S.of(context).me_item_my_info,
                                         style: TextStyle(
-                                            color: R.color.text_blue_color(),
-                                            fontSize: 12)))),
-                            Expanded(
-                                flex: 1,
-                                child: Image(
-                                  image: R.image.btn_next_n(),
-                                ))
-                          ],
-                        ),
+                                            color: R.color.text_gray_color()))),
+                                Expanded(
+                                    flex: 1,
+                                    child: Image(
+                                      image: R.image.btn_next_n(),
+                                    ))
+                              ],
+                            )),
+                      ),
+                      Divider(
+                        color: R.color.background_color(),
+                        thickness: 1.0,
+                        height: 1,
+                      ),
+                      SizedBox(
+                        height: 48,
+                        child: GestureDetector(
+                            onTap: () {},
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    flex: 1,
+                                    child: Image(
+                                      image: R.image.icon_help(),
+                                    )),
+                                Expanded(
+                                    flex: 10,
+                                    child: Text(S.of(context).me_item_help,
+                                        style: TextStyle(
+                                            color: R.color.text_gray_color()))),
+                                Expanded(
+                                    flex: 1,
+                                    child: Image(
+                                      image: R.image.btn_next_n(),
+                                    ))
+                              ],
+                            )),
+                      ),
+                      Divider(
+                        color: R.color.background_color(),
+                        thickness: 1.0,
+                        height: 1,
+                      ),
+                      SizedBox(
+                        height: 48,
+                        child: GestureDetector(
+                            onTap: () {},
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    flex: 1,
+                                    child: Image(
+                                      image: R.image.icon_opinion(),
+                                    )),
+                                Expanded(
+                                    flex: 8,
+                                    child: Text(S.of(context).me_item_feedback,
+                                        style: TextStyle(
+                                            color: R.color.text_gray_color()))),
+                                Expanded(
+                                    flex: 2,
+                                    child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Container(
+                                            height: 20,
+                                            width: 36,
+                                            decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(22)),
+                                            ),
+                                            child: Center(
+                                                child: Text(S.of(context).news,
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 12)))))),
+                                Expanded(
+                                    flex: 1,
+                                    child: Image(
+                                      image: R.image.btn_next_n(),
+                                    ))
+                              ],
+                            )),
+                      ),
+                      Divider(
+                        color: R.color.background_color(),
+                        thickness: 1.0,
+                        height: 1,
+                      ),
+                      SizedBox(
+                        height: 48,
+                        child: GestureDetector(
+                            onTap: () {},
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    flex: 1,
+                                    child: Image(
+                                      image: R.image.icon_about(),
+                                    )),
+                                Expanded(
+                                    flex: 8,
+                                    child: Text(S.of(context).me_item_about,
+                                        style: TextStyle(
+                                            color: R.color.text_gray_color()))),
+                                Expanded(
+                                    flex: 2,
+                                    child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Text('v1.3.0',
+                                            style: TextStyle(
+                                                color:
+                                                    R.color.text_blue_color(),
+                                                fontSize: 12)))),
+                                Expanded(
+                                    flex: 1,
+                                    child: Image(
+                                      image: R.image.btn_next_n(),
+                                    ))
+                              ],
+                            )),
                       ),
                     ],
                   ),
@@ -342,21 +354,20 @@ class _MePageState extends State<MePage> {
                           Expanded(
                               flex: 1,
                               child: Center(
-                                  child: Container(
-                                      height: 36,
-                                      width: 60,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: R.color.btn_blue_color()),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(22)),
+                                  child: OutlinedButton(
+                                      style: TextButton.styleFrom(
+                                        backgroundColor:Colors.white,
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(22)),
+                                        ),
+                                        side: BorderSide(color: R.color.btn_blue_color())
                                       ),
-                                      child: Center(
-                                          child: Text(S.of(context).go,
-                                              style: TextStyle(
-                                                  color:
-                                                      R.color.text_blue_color(),
-                                                  fontSize: 14)))))),
+                                      onPressed: () {},
+                                      child: Text(S.of(context).go,
+                                          style: TextStyle(
+                                              color: R.color.text_blue_color(),
+                                              fontSize: 14))))),
                         ],
                       ),
                     )),

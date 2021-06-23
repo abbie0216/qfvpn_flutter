@@ -1,9 +1,9 @@
-part of 'register_bloc.dart';
+part of 'binding_bloc.dart';
 
 @immutable
-abstract class RegisterEvent {}
+abstract class BindingEvent {}
 
-class SubmitEvent extends RegisterEvent {
+class SubmitEvent extends BindingEvent {
   final String email;
   final String password;
   final String? invitationCode;

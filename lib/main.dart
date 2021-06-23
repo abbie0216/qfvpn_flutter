@@ -8,6 +8,9 @@ import 'bloc/home/home_bloc.dart';
 import 'bloc/login/forgot_pw_bloc.dart';
 import 'bloc/login/login_bloc.dart';
 import 'bloc/me/me_bloc.dart';
+import 'bloc/setting/binding_bloc.dart';
+import 'bloc/setting/pw_change_bloc.dart';
+import 'bloc/setting/setting_bloc.dart';
 import 'bloc/splash/splash_bloc.dart';
 import 'model/api/api_repository.dart';
 import 'model/config/config_data.dart';
@@ -58,6 +61,18 @@ class App extends StatelessWidget {
                       RepositoryProvider.of<ApiRepository>(context))),
               BlocProvider(
                   create: (context) => MeBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
+                  create: (context) => SettingBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
+                  create: (context) => BindingBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
+                  create: (context) => PwChangeBloc(
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
             ],

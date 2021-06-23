@@ -111,7 +111,7 @@ class _ForgotPwPageState extends State<ForgotPwPage> {
                           padding: EdgeInsets.only(right: 12),
                           child: Image(image: R.image.ico_mail_1())),
                       controller: _emailController,
-                      hintColor: R.color.forgot_hint_color(),
+                      hintColor: R.color.hint_color_light_bg(),
                       textColor: R.color.text_blue_color(),
                       validator: (_) {
                         return state is EmailInvalidState
@@ -155,7 +155,7 @@ class _ForgotPwPageState extends State<ForgotPwPage> {
                         )),
                     obscureText: !showPassword,
                     controller: _passwordController,
-                    hintColor: R.color.forgot_hint_color(),
+                    hintColor: R.color.hint_color_light_bg(),
                     textColor: R.color.text_blue_color(),
                     validator: (_) {
                       return state is PWInvalidState
@@ -215,7 +215,7 @@ class _ForgotPwPageState extends State<ForgotPwPage> {
                       prefixIconConstraints:
                           BoxConstraints(minWidth: 24, maxHeight: 24),
                       hintStyle: TextStyle(
-                          color: R.color.forgot_hint_color(), fontSize: 14),
+                          color: R.color.hint_color_light_bg(), fontSize: 14),
                       hintText: S.of(context).verification_code_hint,
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
