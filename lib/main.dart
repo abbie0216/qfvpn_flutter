@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:qfvpn/bloc/login/register_bloc.dart';
+import 'package:qfvpn/bloc/share/share_bloc.dart';
 import 'package:qfvpn/routes.dart';
 
 import 'bloc/home/home_bloc.dart';
@@ -58,6 +59,10 @@ class App extends StatelessWidget {
                       RepositoryProvider.of<ApiRepository>(context))),
               BlocProvider(
                   create: (context) => MeBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
+                  create: (context) => ShareBloc(
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
             ],

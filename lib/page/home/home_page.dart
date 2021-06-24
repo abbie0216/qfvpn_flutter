@@ -5,6 +5,7 @@ import 'package:qfvpn/bloc/home/home_bloc.dart';
 import 'package:qfvpn/bloc/home/home_state.dart';
 import 'package:qfvpn/page/home/option_line_bottom_sheet.dart';
 import 'package:qfvpn/page/home/vpn_btn.dart';
+import 'package:qfvpn/page/share/share_page.dart';
 import 'package:qfvpn/r.dart';
 import 'package:qfvpn/s.dart';
 import 'package:qfvpn/widget/ink_wrapper.dart';
@@ -65,7 +66,8 @@ class _HomePageState extends State<HomePage> {
                 Column(
                   children: [
                     /** logo and share **/
-                    Padding(
+                    Container(
+                        height: 56,
                         padding: EdgeInsets.only(left: 19, right: 10),
                         child: Row(children: [
                           Padding(
@@ -82,7 +84,10 @@ class _HomePageState extends State<HomePage> {
                           StatefulImage(
                             image: Image(image: R.image.btn_share_n()),
                             pressedImage: Image(image: R.image.btn_share_p()),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .pushNamed((SharePage).toString());
+                            },
                           )
                         ])),
                     /** announcement **/

@@ -85,6 +85,32 @@ class _R_Color {
   Color home_vpn_connect_btn_anim_progress_start() => Color(0xcc8488ff);
   Color home_vpn_connect_btn_anim_progress_end() => Color(0x0d8488ff);
 
+  Color share_invite_detail_btn_text() => Colors.white;
+  Color share_bg_top() => Color(0xff6569ee);
+  Color share_bg_bottom() => Color(0xfff4f6f9);
+  Color share_top_rec_bg() => Colors.white;
+  Color share_qr_code_border() => Color(0xffdddeec);
+  Color share_earn_point_hint_text() => Color(0xff6569ee);
+  Color share_invite_code_title_text() => Color(0x4d000000);
+  Color share_invite_code_text() => Color(0xff6569ee);
+  Color share_invite_code_bg() => Color(0xfff4f6f9);
+  Color share_copy_btn_text() => Colors.white;
+  Color share_copy_btn_bg() => Color(0xff6569ee);
+  Color share_invite_btn_text() => Colors.white;
+  Color share_invite_btn_bg() => Color(0xff6569ee);
+  Color share_download_btn_text() => Color(0xff6569ee);
+  Color share_download_btn_bg() => Color(0xff6569ee);
+  Color share_download_btn_splash() => Color(0x336569ee);
+  Color share_bottom_rec_bg_start() => Color(0xff7197fb);
+  Color share_bottom_rec_bg_end() => Color(0xff6569ee);
+  Color share_rule_text() => Colors.white;
+  Color share_rule_indicator_bg() => Color(0x19000000);
+  Color share_rule_indicator_border() => Color(0xffffd66d);
+  Color share_rule_indicator_border_shadow() => Color(0x4cffd66d);
+  Color share_rule_hint_title_text() => Color(0xccffffff);
+  Color share_rule_hint_desc_text() => Color(0x99ffffff);
+  Color share_rule_hint_bg() => Color(0x1a000000);
+
   Color forgot_hint_color() => Color(0x33000000);
 
   Color me_title_block_bg_color() => Color(0xffdddeec);
