@@ -58,8 +58,12 @@
 
   "original_password": "原始密码",
   "new_password": "新密码",
-
   "btn_logout": "退出登录",
+
+  "btn_using": "立即使用",
+  "btn_used": "已使用",
+  "coupon_empty": "暂无优惠券",
+
 
   "home_bottom_nav_bar_home": "HOME",
   "home_bottom_nav_bar_vip": "VIP",
