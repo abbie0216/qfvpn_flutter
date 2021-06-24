@@ -26,7 +26,7 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion BuildKt.buildTargetSdkVersion
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -35,10 +35,10 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "flutter.com.dabenxiang.qfvpn"
-        minSdkVersion 21
-        targetSdkVersion 30
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        minSdkVersion BuildKt.buildMinSdkVersion
+        targetSdkVersion BuildKt.buildTargetSdkVersion
+        versionCode BuildKt.buildVersionCode
+        versionName BuildKt.buildVersionName
     }
 
     buildTypes {
@@ -53,6 +53,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
 flutter {
@@ -66,7 +70,16 @@ dependencies {
     api(project(":design"))
     api(project(":common"))
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.10"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$DependenciesKt.coroutineVersion"
+    implementation "androidx.core:core-ktx:$DependenciesKt.coreVersion"
+    implementation "androidx.activity:activity-ktx:$DependenciesKt.activityVersion"
+    implementation "androidx.appcompat:appcompat:$DependenciesKt.appcompatVersion"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$DependenciesKt.coordinatorlayoutVersion"
+    implementation "androidx.fragment:fragment-ktx:$DependenciesKt.fragmentVersion"
+    implementation "com.google.android.material:material:$DependenciesKt.materialVersion"
+    implementation "com.jakewharton.timber:timber:$DependenciesKt.timberVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:$DependenciesKt.lifecycleVersion"
 
 //    implementation 'io.particle:cloudsdk:0.5.0'
 }
