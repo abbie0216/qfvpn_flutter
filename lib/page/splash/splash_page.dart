@@ -31,6 +31,27 @@ class _SplashPageState extends State<SplashPage> {
     }
   }
 
+  Future<void> defaultProfile() async {
+    try {
+      final int result =
+          await platform.invokeMethod('defaultProfile', {"packagename": "test"});
+      debugPrint('defaultProfile: $result');
+    } on PlatformException catch (e) {
+      debugPrint('defaultProfile error: ${e.message}');
+    }
+  }
+
+  Future<void> startVPN() async {
+    await Future.delayed(Duration(seconds: 5));
+    debugPrint('start VPN...');
+    try {
+      String result = await platform.invokeMethod('startVPN', {"packagename": "test"});
+      debugPrint('startVPN status: $result');
+    } on PlatformException catch (e) {
+      debugPrint('startVPN error: ${e.message}');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -38,6 +59,9 @@ class _SplashPageState extends State<SplashPage> {
     _splashBloc.add(SplashFetchEvent());
 
     getFreeSpace();
+    defaultProfile();
+
+    // startVPN();
   }
 
   @override
