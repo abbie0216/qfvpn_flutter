@@ -1,63 +1,57 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:qfvpn/bloc/login/login_bloc.dart';
-import 'package:qfvpn/page/login/forgot_pw_page.dart';
-import 'package:qfvpn/page/login/register_page.dart';
-import 'package:qfvpn/page/main/main_page.dart';
+import 'package:qfvpn/bloc/login/register_bloc.dart';
 import 'package:qfvpn/widget/MailField.dart';
 import 'package:qfvpn/widget/PasswordField.dart';
 
 import '../../r.dart';
 import '../../s.dart';
+import 'login_page.dart';
 
-class LoginPage extends StatefulWidget {
-  LoginPage({Key? key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  RegisterPage({Key? key}) : super(key: key);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  late LoginBloc _loginBloc;
+class _RegisterPageState extends State<RegisterPage> {
+  late RegisterBloc _registerBloc;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _invitationCodeController =
+      TextEditingController();
 
   bool showPassword = false;
 
   @override
   void initState() {
     super.initState();
-    _loginBloc = BlocProvider.of<LoginBloc>(context);
-    // _loginBloc.add(LoginFetchEvent());
-
-    // _emailController.addListener(_onEmailChanged);
+    _registerBloc = BlocProvider.of<RegisterBloc>(context);
   }
-
-  // void _onEmailChanged() {
-  //   _loginBloc.add(SubmitEvent(email: _emailController.text));
-  // }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginBloc, LoginState>(
+    return BlocListener<RegisterBloc, RegisterState>(
       listener: (context, state) {
-        if (state is LoginSuccessState) {
-          debugPrint('login success');
-        } else if (state is LoginFailedState) {
-          debugPrint('login failed');
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(
-                content: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(S.of(context).login_failed),
-              ],
-            )));
+        if (state is RegisterSuccessState) {
+          debugPrint('Register success');
+        } else if (state is RegisterFailedState) {
+          debugPrint('Register failed');
+          // ScaffoldMessenger.of(context)
+          //   ..hideCurrentSnackBar()
+          //   ..showSnackBar(SnackBar(
+          //       content: Row(
+          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //         children: <Widget>[
+          //           Text(Str.of(context).login_failed),
+          //         ],
+          //       )));
         }
       },
-      child: BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+      child:
+          BlocBuilder<RegisterBloc, RegisterState>(builder: (context, state) {
         return Scaffold(
           backgroundColor: R.color.login_bg_color(),
           resizeToAvoidBottomInset: false,
@@ -76,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Stack(fit: StackFit.expand, children: <Widget>[
                   _buildTitle(),
                   _buildInputRegion(),
-                  _buildRegisterMsg()
+                  _buildLoginMsg()
                 ]),
               )
             ],
@@ -103,17 +97,17 @@ class _LoginPageState extends State<LoginPage> {
         ),
         Container(
             margin: EdgeInsets.symmetric(vertical: 20.0),
-            child: Text(S.of(context).login_title,
+            child: Text(S.of(context).register_title,
                 style: TextStyle(color: Colors.white, fontSize: 24))),
       ],
     );
   }
 
   Widget _buildInputRegion() {
-    return BlocListener<LoginBloc, LoginState>(
-      listener: (BuildContext context, LoginState state) {},
-      child: BlocBuilder<LoginBloc, LoginState>(
-          builder: (BuildContext context, LoginState state) {
+    return BlocListener<RegisterBloc, RegisterState>(
+      listener: (BuildContext context, RegisterState state) {},
+      child: BlocBuilder<RegisterBloc, RegisterState>(
+          builder: (BuildContext context, RegisterState state) {
         return Positioned.fill(
             top: 150,
             child: Form(
@@ -136,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                       hintColor: R.color.hint_color_deep_bg(),
                       textColor: Colors.white,
                       validator: (value) {
-                        return state is LoginEmailInvalidState
+                        return state is RegisterEmailInvalidState
                             ? S.of(context).login_email_error
                             : null;
                       }),
@@ -169,26 +163,21 @@ class _LoginPageState extends State<LoginPage> {
                     hintColor: R.color.hint_color_deep_bg(),
                     textColor: Colors.white,
                     validator: (_) {
-                      return state is LoginPWInvalidState
+                      return state is RegisterPWInvalidState
                           ? S.of(context).login_pw_error
                           : null;
                     },
                   ),
-                  Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                          style: TextButton.styleFrom(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              alignment: Alignment.centerRight),
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed((ForgotPwPage).toString());
-                          },
-                          child: Text(S.of(context).login_forget_pw,
-                              style: TextStyle(
-                                  color: R.color.hint_color_deep_bg(),
-                                  fontSize: 14)))),
                   SizedBox(height: 30),
+                  Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        S.of(context).register_invitation_code_label,
+                        style: TextStyle(color: Colors.white, fontSize: 14),
+                        textAlign: TextAlign.left,
+                      )),
+                  _buildInvitationCodeField(),
+                  SizedBox(height: 40),
                   Align(
                       alignment: Alignment.center,
                       child: TextButton(
@@ -201,25 +190,17 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         onPressed: () {
-                          _loginBloc.add(SubmitEvent(
+                          _registerBloc.add(SubmitEvent(
                               email: _emailController.text,
-                              password: _passwordController.text));
+                              password: _passwordController.text,
+                              invitationCode: _invitationCodeController.text));
                         },
-                        child: Text(S.of(context).login,
+                        child: Text(S.of(context).register_and_login,
                             style: TextStyle(
                                 color: R.color.text_blue_color(),
                                 fontSize: 16)),
                       )),
-                  Align(
-                      alignment: Alignment.center,
-                      child: TextButton(
-                          onPressed: () {
-                            //todo test main page
-                            Navigator.of(context).pushReplacementNamed((MainPage).toString());
-                          },
-                          child: Text(S.of(context).login_by_visitor,
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 14)))),
+                  _buildPrivacyPolicyMsg()
                 ],
               ),
             ));
@@ -227,13 +208,61 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildRegisterMsg() {
+  Widget _buildInvitationCodeField() {
+    return TextFormField(
+      controller: _invitationCodeController,
+      maxLength: 20,
+      maxLines: 1,
+      keyboardType: TextInputType.visiblePassword,
+      decoration: InputDecoration(
+        counterText: '',
+        prefixIcon: Padding(
+            padding: EdgeInsets.only(right: 12),
+            child: Image(image: R.image.ico_handshake())),
+        prefixIconConstraints: BoxConstraints(minWidth: 24, maxHeight: 24),
+        hintStyle: TextStyle(color: R.color.hint_color_deep_bg(), fontSize: 14),
+        hintText: S.of(context).register_invitation_code_hint,
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: R.color.text_field_border_color()),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: R.color.text_field_border_color()),
+        ),
+      ),
+      autovalidateMode: AutovalidateMode.always,
+      autocorrect: false,
+      style: TextStyle(color: Colors.white),
+      validator: (_) {},
+    );
+  }
+
+  Widget _buildPrivacyPolicyMsg() {
     return Align(
         alignment: FractionalOffset.bottomCenter,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(S.of(context).login_register_hint,
+            Text(S.of(context).register_policy_msg,
+                style:
+                    TextStyle(color: R.color.hint_color_deep_bg(), fontSize: 14)),
+            TextButton(
+                style: TextButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    alignment: Alignment.centerLeft),
+                onPressed: () {},
+                child: Text(S.of(context).policy,
+                    style: TextStyle(color: Colors.white, fontSize: 14)))
+          ],
+        ));
+  }
+
+  Widget _buildLoginMsg() {
+    return Align(
+        alignment: FractionalOffset.bottomCenter,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(S.of(context).register_hint,
                 style:
                     TextStyle(color: R.color.hint_color_deep_bg(), fontSize: 14)),
             TextButton(
@@ -242,9 +271,9 @@ class _LoginPageState extends State<LoginPage> {
                     alignment: Alignment.centerLeft),
                 onPressed: () {
                   Navigator.of(context)
-                      .pushReplacementNamed((RegisterPage).toString());
+                      .pushReplacementNamed((LoginPage).toString());
                 },
-                child: Text(S.of(context).login_register_btn,
+                child: Text(S.of(context).login,
                     style: TextStyle(color: Colors.white, fontSize: 14)))
           ],
         ));

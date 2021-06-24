@@ -1,13 +1,67 @@
 {
   "@@locale": "zh",
 
+  "news": "new",
+  "go": "Go",
   "login_title": "嗨, 欢迎回来",
   "login_register_hint": "还不是会员?",
   "login_register_btn": "注册",
+  "login_forget_pw": "找回密码",
 
   "login_email_label": "邮箱帐号",
   "login_email_hint": "请输入邮箱帐号",
   "login_email_error": "邮箱帐号格式错误",
   "login_pw_label": "密码",
-  "login_pw_hint": "请输入密码"
+  "login_pw_hint": "请输入密码",
+  "login_pw_error": "密码格式错误",
+
+  "login_failed": "帐号或密码错误",
+
+  "register_title": "嗨, 欢迎注册",
+  "register_hint": "已经是会员??",
+  "register_invitation_code_label": "邀请码",
+  "register_invitation_code_hint": "请输入邀请码 (可选填)",
+
+  "verification_code": "验证码",
+  "verification_code_hint": "请输入验证码",
+  "forgot_email_label": "输入绑定的邮箱",
+  "forgot_pw_label": "新的密码",
+  "forgot_pw_send_verification_code": "发送验证码",
+
+  "verification_code_error": "验证码格式错误",
+  "verification_code_sent": "验证码已发送",
+
+  "submit": "提交",
+  "login": "登录",
+  "login_by_visitor": "游客登录",
+  "register_and_login": "注册并登录",
+  "register_policy_msg": "注册即代表您同意 XXX 加速器",
+  "policy": "《用户隐私及协议》",
+
+  "me_page_title": "我的中心",
+  "me_bind_mail": "绑定邮箱",
+  "me_coupon": "我的优惠券",
+  "me_vip_time_label": "VIP 有效期限至：",
+  "me_id_label": "ID：",
+  "me_item_my_info": "我的消息",
+  "me_item_help": "帮助中心",
+  "me_item_feedback": "意见反馈",
+  "me_item_about": "关于赤兔加速器",
+  "me_get_vip": "免费领取 VIP",
+
+  "home_bottom_nav_bar_home": "首页",
+  "home_bottom_nav_bar_vip": "VIP",
+  "home_bottom_nav_bar_me": "我的",
+  "home_option_title_mode": "加速模式",
+  "home_option_title_line": "当前线路",
+  "home_option_mode_list_title": "加速模式",
+  "home_option_line_list_title": "选择线路",
+  "home_option_mode_list_item_title_1": "智能加速",
+  "home_option_mode_list_item_title_2": "全局加速",
+  "home_option_mode_list_item_desc_1": "自动根据当前的线路选择解锁和加速策略。大多情况下用这个模式就可以工作。在不同地方可能会出现不同策略导致识别不准确，可以尝试全局模式。",
+  "home_option_mode_list_item_desc_2": "所有流量都走当前的所选线路，可能会影响某些网站的访问，一般用于智能模式依然无法解锁的问题。",
+  "home_vpn_connect_btn_click_hint": "点击连接",
+  "home_vpn_connect_btn_connecting_hint": "连结中...",
+  "home_vpn_connect_btn_connecting_time_default": "--:--:--",
+  "home_vpn_connect_btn_connected_hint": "已启动"
 }

@@ -35,9 +35,7 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     _splashBloc = BlocProvider.of<SplashBloc>(context);
-    Future.delayed(const Duration(seconds: 2), () {
-      _splashBloc.add(SplashFetchEvent());
-    });
+    _splashBloc.add(SplashFetchEvent());
 
     getFreeSpace();
   }
@@ -47,10 +45,7 @@ class _SplashPageState extends State<SplashPage> {
     return BlocListener<SplashBloc, SplashState>(
       listener: (context, state) {
         if (state is SplashLoadedState) {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext pageContext) => LoginPage()));
+          Navigator.of(context).pushReplacementNamed((LoginPage).toString());
         }
       },
       child: BlocBuilder<SplashBloc, SplashState>(builder: (context, state) {

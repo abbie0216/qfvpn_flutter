@@ -1,33 +1,28 @@
 part of 'login_bloc.dart';
 
-@immutable
-class LoginState extends Equatable {
-   LoginState({
-     required this.isEmailValid,
-     required this.isPasswordValid,
-     required this.showPassword
-  });
-
-  final bool isEmailValid;
-  final bool isPasswordValid;
-  final bool showPassword;
-
-  bool get isFormValid => isEmailValid && isPasswordValid;
+abstract class LoginState extends Equatable {
+  const LoginState();
 
   @override
-  List<Object> get props => [isEmailValid, isPasswordValid, showPassword];
-
-  LoginState copyWith({
-     bool? isEmailValid,
-     bool? isPasswordValid,
-     bool? showPassword
-  }) {
-    return LoginState(
-      isEmailValid: isEmailValid?? this.isEmailValid ,
-      isPasswordValid: isPasswordValid?? this.isPasswordValid ,
-      showPassword: showPassword?? this.showPassword
-    );
-  }
+  List<Object> get props => [];
 }
 
-// class LoginInitStat extends LoginState {}
+class LoginInitState extends LoginState {
+}
+
+class LoginEmailInvalidState extends LoginState {
+}
+
+class LoginPWInvalidState extends LoginState {
+}
+
+class LoginFailedState extends LoginState {
+  final int timeStamp;
+  const LoginFailedState(this.timeStamp): super();
+
+  @override
+  List<Object> get props => [timeStamp];
+}
+
+class LoginSuccessState extends LoginState {
+}
