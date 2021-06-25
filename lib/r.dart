@@ -37,6 +37,7 @@ class _R_Color {
   Color btn_blue_color() => Color(0xFF6569ee);
   Color text_blue_color() => Color(0xff6569ee);
   Color text_gray_color() => Color(0x4c000000);
+  Color text_color_alpha80() => Color(0xcc000000);
 
   Color text_field_border_color() => Color(0xffdddeec);
 
@@ -47,6 +48,8 @@ class _R_Color {
 
   Color login_bg_color() => Color(0xff6569ee);
   Color logo_bg_color() => Color(0xFFCFD1FF);
+
+  Color toggle_button_bg_color() => Color(0x196569e);
 
   Color home_primary_text() => Color(0xff6569ee);
   Color home_bg_1_start() => Color(0xffe2ecf5);

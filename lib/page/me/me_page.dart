@@ -4,12 +4,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:qfvpn/bloc/login/forgot_pw_bloc.dart';
 import 'package:qfvpn/bloc/me/me_bloc.dart';
+import 'package:qfvpn/page/me/points_page.dart';
+import 'package:qfvpn/page/setting/binding_page.dart';
 import 'package:qfvpn/page/setting/setting_page.dart';
 
 import '../../r.dart';
 import '../../s.dart';
+import 'coupon_page.dart';
+import 'news_page.dart';
 
 class MePage extends StatefulWidget {
   @override
@@ -127,7 +130,10 @@ class _MePageState extends State<MePage> {
                           borderRadius: BorderRadius.all(Radius.circular(22)),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushNamed((BindingPage).toString());
+                      },
                       child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -147,7 +153,9 @@ class _MePageState extends State<MePage> {
                         borderRadius: BorderRadius.all(Radius.circular(22)),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pushNamed((CouponPage).toString());
+                    },
                     child: Text(S.of(context).me_coupon,
                         style: TextStyle(color: Colors.white, fontSize: 14)),
                   )
@@ -178,7 +186,10 @@ class _MePageState extends State<MePage> {
                       SizedBox(
                         height: 48,
                         child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushNamed((NewsPage).toString());
+                            },
                             child: Row(
                               children: [
                                 Expanded(
@@ -188,9 +199,26 @@ class _MePageState extends State<MePage> {
                                     )),
                                 Expanded(
                                     flex: 10,
-                                    child: Text(S.of(context).me_item_my_info,
-                                        style: TextStyle(
-                                            color: R.color.text_gray_color()))),
+                                    child: RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                              text: S.of(context).me_item_news,
+                                              style: TextStyle(
+                                                  color: R.color
+                                                      .text_gray_color())),
+                                          WidgetSpan(
+                                              alignment:
+                                                  PlaceholderAlignment.middle,
+                                              child: Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 5),
+                                                  child: Icon(Icons.circle,
+                                                      size: 5,
+                                                      color: Colors.red)))
+                                        ],
+                                      ),
+                                    )),
                                 Expanded(
                                     flex: 1,
                                     child: Image(
@@ -207,7 +235,10 @@ class _MePageState extends State<MePage> {
                       SizedBox(
                         height: 48,
                         child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushNamed((NewsPage).toString());
+                            },
                             child: Row(
                               children: [
                                 Expanded(
@@ -356,14 +387,17 @@ class _MePageState extends State<MePage> {
                               child: Center(
                                   child: OutlinedButton(
                                       style: TextButton.styleFrom(
-                                        backgroundColor:Colors.white,
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(22)),
-                                        ),
-                                        side: BorderSide(color: R.color.btn_blue_color())
-                                      ),
-                                      onPressed: () {},
+                                          backgroundColor: Colors.white,
+                                          shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(22)),
+                                          ),
+                                          side: BorderSide(
+                                              color: R.color.btn_blue_color())),
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pushNamed((PointsPage).toString());
+                                      },
                                       child: Text(S.of(context).go,
                                           style: TextStyle(
                                               color: R.color.text_blue_color(),
@@ -372,15 +406,18 @@ class _MePageState extends State<MePage> {
                       ),
                     )),
                 Positioned.fill(
-                  left: 50,
-                  bottom: -5,
-                  child: Image(
-                    width: 100,
-                    height: 77,
-                    image: R.image.img_gift(),
-                    alignment: Alignment.bottomLeft,
-                  ),
-                ),
+                    left: 50,
+                    bottom: -5,
+                    child: IgnorePointer(
+                      ignoring: true,
+                      //ignore pointer, otherwise go button will have no touch event
+                      child: Image(
+                        width: 100,
+                        height: 77,
+                        image: R.image.img_gift(),
+                        alignment: Alignment.bottomLeft,
+                      ),
+                    )),
               ]);
         }));
   }
