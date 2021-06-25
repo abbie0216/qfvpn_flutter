@@ -33,6 +33,8 @@ class R {
 class _R_Color {
   const _R_Color();
 
+  Color primary() => Color(0xff6569ee);
+
   Color btn_white_color() => Color(0xFFf4f6f9);
   Color btn_blue_color() => Color(0xFF6569ee);
   Color text_blue_color() => Color(0xff6569ee);
@@ -46,6 +48,7 @@ class _R_Color {
   Color login_hint_color() => Color(0x66FFFFFF);
   Color logo_bg_color() => Color(0xFFCFD1FF);
 
+  Color home_app_bar_bg() => Color(0xffe2ecf5);
   Color home_primary_text() => Color(0xff6569ee);
   Color home_bg_1_start() => Color(0xffe2ecf5);
   Color home_bg_1_end() => Color(0xffe8f1fa);
@@ -85,6 +88,7 @@ class _R_Color {
   Color home_vpn_connect_btn_anim_progress_start() => Color(0xcc8488ff);
   Color home_vpn_connect_btn_anim_progress_end() => Color(0x0d8488ff);
 
+  Color share_app_bar_bg() => Color(0xff6569ee);
   Color share_invite_detail_btn_text() => Colors.white;
   Color share_bg_top() => Color(0xff6569ee);
   Color share_bg_bottom() => Color(0xfff4f6f9);
@@ -110,6 +114,25 @@ class _R_Color {
   Color share_rule_hint_title_text() => Color(0xccffffff);
   Color share_rule_hint_desc_text() => Color(0x99ffffff);
   Color share_rule_hint_bg() => Color(0x1a000000);
+
+  Color share_detail_app_bar_bg() => Color(0xfff4f6f9);
+  Color share_detail_title_text() => Color(0xff000000);
+  Color share_detail_bg_top() => Color(0xfff4f6f9);
+  Color share_detail_bg_bottom() => Colors.white;
+  Color share_detail_summary_bg() => Colors.white;
+  Color share_detail_summary_divider_bg() => Color(0xfff4f6f9);
+  Color share_detail_invited_count_text() => Color(0xff6569ee);
+  Color share_detail_invited_count_hint_text() => Color(0x80000000);
+  Color share_detail_reward_point_text() => Color(0xff6569ee);
+  Color share_detail_reward_point_hint_text() => Color(0x80000000);
+  Color share_detail_reward_detail_title_text() => Color(0x80000000);
+  Color share_detail_reward_detail_no_data_text() => Color(0x4d000000);
+  Color share_detail_invite_imm_btn_text() => Colors.white;
+  Color share_detail_invite_imm_btn_bg() => Color(0xff6569ee);
+  Color share_detail_reward_detail_item_border() => Color(0x1a000000);
+  Color share_detail_reward_detail_item_time_text() => Color(0x80000000);
+  Color share_detail_reward_detail_item_name_text() => Color(0xcc000000);
+  Color share_detail_reward_detail_item_point_text() => Color(0xff6569ee);
 
   Color forgot_hint_color() => Color(0x33000000);
 

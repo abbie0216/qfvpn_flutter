@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/bloc/share/share_bloc.dart';
 import 'package:qfvpn/bloc/share/share_state.dart';
+import 'package:qfvpn/page/sharedetail/share_detail_page.dart';
 import 'package:qfvpn/r.dart';
 import 'package:qfvpn/s.dart';
+import 'package:qfvpn/widget/selector_widget_button.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class SharePage extends StatefulWidget {
@@ -24,20 +26,44 @@ class _SharePageState extends State<SharePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return BlocListener<ShareBloc, ShareState>(
         listener: (context, state) {},
         child: BlocBuilder<ShareBloc, ShareState>(builder: (context, state) {
-          return Scaffold(
-              body: SafeArea(
-                  child: Container(
-                      color: R.color.share_bg_bottom(),
-                      child: Column(children: [
-                        buildTopBar(),
-                        /** scroll view **/
-                        Expanded(
-                          child: NotificationListener<OverscrollIndicatorNotification>(
-                            onNotification: (OverscrollIndicatorNotification overScroll) {
+          return Theme(
+              data: ThemeData(primaryColor: R.color.share_app_bar_bg()),
+              child: Scaffold(
+                  appBar: AppBar(
+                    elevation: 0,
+                    leading: SelectorWidgetButton(
+                      widgetN: Image(image: R.image.btn_back_white_n()),
+                      widgetP: Image(image: R.image.btn_back_white_p()),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    actions: [
+                      TextButton(
+                          style: ButtonStyle(
+                              splashFactory: NoSplash.splashFactory,
+                              padding: MaterialStateProperty.all(EdgeInsets.only(left: 16, right: 16))),
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed((ShareDetailPage).toString());
+                          },
+                          child: Text(
+                            S.of(context).share_invite_detail_btn,
+                            style: TextStyle(
+                                color: R.color.share_invite_detail_btn_text()),
+                          ))
+                    ],
+                  ),
+                  body: SafeArea(
+                      child: Container(
+                          color: R.color.share_bg_bottom(),
+                          child: NotificationListener<
+                              OverscrollIndicatorNotification>(
+                            onNotification:
+                                (OverscrollIndicatorNotification overScroll) {
                               overScroll.disallowGlow();
                               return false;
                             },
@@ -51,9 +77,7 @@ class _SharePageState extends State<SharePage> {
                                 ],
                               ),
                             ),
-                          ),
-                        )
-                      ]))));
+                          )))));
         }));
   }
 
@@ -69,7 +93,9 @@ class _SharePageState extends State<SharePage> {
           Image(image: R.image.btn_back_white_n()),
           TextButton(
               style: ButtonStyle(splashFactory: NoSplash.splashFactory),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed((ShareDetailPage).toString());
+              },
               child: Text(
                 S.of(context).share_invite_detail_btn,
                 style: TextStyle(color: R.color.share_invite_detail_btn_text()),

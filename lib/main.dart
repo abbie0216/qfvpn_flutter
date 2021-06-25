@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:qfvpn/bloc/login/register_bloc.dart';
@@ -9,6 +10,7 @@ import 'bloc/home/home_bloc.dart';
 import 'bloc/login/forgot_pw_bloc.dart';
 import 'bloc/login/login_bloc.dart';
 import 'bloc/me/me_bloc.dart';
+import 'bloc/sharedetail/share_detail_bloc.dart';
 import 'bloc/splash/splash_bloc.dart';
 import 'model/api/api_repository.dart';
 import 'model/config/config_data.dart';
@@ -21,6 +23,9 @@ Future<void> main() async {
     data: ConfigData(flavor: 'dev', apiBaseUrl: 'qfvpn.com'),
     child: App(),
   );
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+  ));
   runApp(configProvider);
 }
 
@@ -63,6 +68,10 @@ class App extends StatelessWidget {
                       RepositoryProvider.of<ApiRepository>(context))),
               BlocProvider(
                   create: (context) => ShareBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
+                  create: (context) => ShareDetailBloc(
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
             ],

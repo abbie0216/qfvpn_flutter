@@ -78,5 +78,12 @@
   "share_invite_rule_indicator_2_desc": "好友注册",
   "share_invite_rule_indicator_3_desc": "积分到帐",
   "share_invite_rule_hint_title": "规则说明",
-  "share_invite_rule_hint_content": "1. 分享加速器，安装使用后可以获得 10 积分\n2. 积分可以兑换会员权益\n3. 获得奖励没有数量上限，邀请越多奖励越多"
+  "share_invite_rule_hint_content": "1. 分享加速器，安装使用后可以获得 10 积分\n2. 积分可以兑换会员权益\n3. 获得奖励没有数量上限，邀请越多奖励越多",
+
+  "share_detail_title": "邀请明细",
+  "share_detail_invited_count_hint": "成功邀请人数",
+  "share_detail_total_reward_point_hint": "累积奖励积分",
+  "share_detail_total_reward_detail_title": "奖励明细",
+  "share_detail_no_data_hint": "尚无邀请明细",
+  "share_detail_invite_imm_btn": "立即邀请"
 }
