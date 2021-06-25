@@ -7,8 +7,11 @@ import 'package:qfvpn/routes.dart';
 import 'bloc/home/home_bloc.dart';
 import 'bloc/login/forgot_pw_bloc.dart';
 import 'bloc/login/login_bloc.dart';
-import 'bloc/me/coupon_bloc.dart';
+import 'bloc/me/coupon/coupon_bloc.dart';
 import 'bloc/me/me_bloc.dart';
+import 'bloc/me/news/news_bloc.dart';
+import 'bloc/me/news/news_detail_bloc.dart';
+import 'bloc/me/points/points_bloc.dart';
 import 'bloc/setting/binding_bloc.dart';
 import 'bloc/setting/pw_change_bloc.dart';
 import 'bloc/setting/setting_bloc.dart';
@@ -80,6 +83,19 @@ class App extends StatelessWidget {
                   create: (context) => CouponBloc(
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
+                  create: (context) => NewsBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
+                  create: (context) => NewsDetailBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
+                  create: (context) => PointsBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+
             ],
             child: MaterialApp(
               theme: ThemeData(

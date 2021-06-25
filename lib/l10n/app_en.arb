@@ -43,7 +43,7 @@
   "me_coupon": "我的优惠券",
   "me_vip_time_label": "VIP 有效期限至：",
   "me_id_label": "ID：",
-  "me_item_my_info": "我的消息",
+  "me_item_news": "我的消息",
   "me_item_help": "帮助中心",
   "me_item_feedback": "意见反馈",
   "me_item_about": "关于赤兔加速器",
@@ -64,6 +64,11 @@
   "btn_used": "已使用",
   "coupon_empty": "暂无优惠券",
 
+  "news_title": "消息中心",
+  "news_system": "系统公告",
+  "news_mime": "个人消息",
+  "news_detail": "消息详情",
+  "points_title": "积分中心",
 
   "home_bottom_nav_bar_home": "HOME",
   "home_bottom_nav_bar_vip": "VIP",
