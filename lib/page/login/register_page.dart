@@ -127,7 +127,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           padding: EdgeInsets.only(right: 12),
                           child: Image(image: R.image.ico_mail())),
                       controller: _emailController,
-                      hintColor: R.color.login_hint_color(),
+                      hintColor: R.color.hint_color_deep_bg(),
                       textColor: Colors.white,
                       validator: (value) {
                         return state is RegisterEmailInvalidState
@@ -160,7 +160,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         )),
                     obscureText: !showPassword,
                     controller: _passwordController,
-                    hintColor: R.color.login_hint_color(),
+                    hintColor: R.color.hint_color_deep_bg(),
                     textColor: Colors.white,
                     validator: (_) {
                       return state is RegisterPWInvalidState
@@ -220,7 +220,7 @@ class _RegisterPageState extends State<RegisterPage> {
             padding: EdgeInsets.only(right: 12),
             child: Image(image: R.image.ico_handshake())),
         prefixIconConstraints: BoxConstraints(minWidth: 24, maxHeight: 24),
-        hintStyle: TextStyle(color: R.color.login_hint_color(), fontSize: 14),
+        hintStyle: TextStyle(color: R.color.hint_color_deep_bg(), fontSize: 14),
         hintText: S.of(context).register_invitation_code_hint,
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: R.color.text_field_border_color()),
@@ -244,7 +244,7 @@ class _RegisterPageState extends State<RegisterPage> {
           children: [
             Text(S.of(context).register_policy_msg,
                 style:
-                    TextStyle(color: R.color.login_hint_color(), fontSize: 14)),
+                    TextStyle(color: R.color.hint_color_deep_bg(), fontSize: 14)),
             TextButton(
                 style: TextButton.styleFrom(
                     padding: EdgeInsets.symmetric(horizontal: 10),
@@ -264,7 +264,7 @@ class _RegisterPageState extends State<RegisterPage> {
           children: [
             Text(S.of(context).register_hint,
                 style:
-                    TextStyle(color: R.color.login_hint_color(), fontSize: 14)),
+                    TextStyle(color: R.color.hint_color_deep_bg(), fontSize: 14)),
             TextButton(
                 style: TextButton.styleFrom(
                     padding: EdgeInsets.symmetric(horizontal: 10),

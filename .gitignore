@@ -8,6 +8,7 @@
 .buildlog/
 .history
 .svn/
+*/**/build
 
 # IntelliJ related
 *.iml
@@ -53,6 +54,13 @@ app.*.map.json
 **/android/gradlew.bat
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
+**/android/.idea
+android/.idea
+android/core/.cxx
+android/core/src/main/golang/clash/go.sum
+android/core/src/main/golang/clash/test/go.sum
+android/core/src/main/golang/go.sum
+android/buildSrc/.gradle
 
 # iOS/XCode related
 **/ios/**/*.mode1v3

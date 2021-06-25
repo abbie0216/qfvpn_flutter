@@ -33,20 +33,23 @@ class R {
 class _R_Color {
   const _R_Color();
 
-  Color primary() => Color(0xff6569ee);
-
   Color btn_white_color() => Color(0xFFf4f6f9);
   Color btn_blue_color() => Color(0xFF6569ee);
   Color text_blue_color() => Color(0xff6569ee);
   Color text_gray_color() => Color(0x4c000000);
+  Color text_color_alpha80() => Color(0xcc000000);
 
   Color text_field_border_color() => Color(0xffdddeec);
 
   Color background_color() => Color(0xfff4f6f9);
 
+  Color hint_color_deep_bg() => Color(0x66FFFFFF);
+  Color hint_color_light_bg() => Color(0x33000000);
+
   Color login_bg_color() => Color(0xff6569ee);
-  Color login_hint_color() => Color(0x66FFFFFF);
   Color logo_bg_color() => Color(0xFFCFD1FF);
+
+  Color toggle_button_bg_color() => Color(0x196569e);
 
   Color home_app_bar_bg() => Color(0xffe2ecf5);
   Color home_primary_text() => Color(0xff6569ee);
