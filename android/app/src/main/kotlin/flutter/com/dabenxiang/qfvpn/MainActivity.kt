@@ -23,7 +23,7 @@ import java.util.*
 
 
 @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-class MainActivity() : BaseActivity() {
+class MainActivity : BaseActivity() {
     private val CHANNEL = "com.example.flutter_demo/app"
     private val METHOD = "getFreeSpace"
     private val KEY = "packagename"
@@ -47,7 +47,7 @@ class MainActivity() : BaseActivity() {
                     result.success(1)
                 }
                 START_VPN -> {
-                    if(checkVPNisRunning()) {oｏ
+                    if(checkVPNisRunning()) {
                         result.error("400000", "VPN server is running please stop ", null)
                     } else {
                         val statue = startVPN()
@@ -55,7 +55,7 @@ class MainActivity() : BaseActivity() {
                     }
                 }
                 STOP_VPN -> {
-                    launch { stopClashService() }
+                    stopClashService()
                 }
                 CHECK_SERVER_RUNNING -> {
                     result.success(checkVPNisRunning())
