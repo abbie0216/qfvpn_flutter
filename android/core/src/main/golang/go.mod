@@ -17,4 +17,4 @@ replace github.com/Dreamacro/clash => ./clash
 
 replace github.com/kr328/tun2socket => ./tun2socket
 
-replace cfa/blob => ../../../build/intermediates/golang_blob
+replace cfa/blob => ../../../../../build/core/intermediates/golang_blob
