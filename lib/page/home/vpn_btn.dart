@@ -2,6 +2,10 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qfvpn/bloc/home/vpn_bloc.dart';
+import 'package:qfvpn/bloc/home/vpn_event.dart';
+import 'package:qfvpn/bloc/home/vpn_state.dart';
 import 'package:qfvpn/r.dart';
 import 'package:qfvpn/s.dart';
 import 'package:sprintf/sprintf.dart';
@@ -25,6 +29,7 @@ class _VpnBtnState extends State<VpnBtn> with TickerProviderStateMixin {
   late Animation<double> _redDotAnim;
   late Timer _testConnectingTimer;
   late Timer _connectedTimer;
+  late VpnBloc _vpnBloc;
   int _connectedSeconds = 0;
 
   @override
@@ -39,7 +44,23 @@ class _VpnBtnState extends State<VpnBtn> with TickerProviderStateMixin {
           ..repeat(reverse: true);
     _blueDotAnim = Tween(begin: 1.0, end: 0.0).animate(_blueDotAnimController);
     _redDotAnim = Tween(begin: 0.0, end: 1.0).animate(_blueDotAnimController);
+    _vpnBloc = BlocProvider.of<VpnBloc>(context);
+    _vpnBloc.add(VpnFetchEvent());
     super.initState();
+  }
+
+  void startVPN() {
+    _testConnectingTimer = Timer(Duration(seconds: 0), () {
+      setState(() {
+        _btnState = BtnState.CONNECTED;
+        _connectedTimer =
+            Timer.periodic(Duration(seconds: 1), (timer) {
+              setState(() {
+                _connectedSeconds++;
+              });
+            });
+      });
+    });
   }
 
   @override
@@ -53,63 +74,68 @@ class _VpnBtnState extends State<VpnBtn> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: GestureDetector(
-        onTap: () {
-          switch (_btnState) {
-            case BtnState.INIT:
-              setState(() {
-                _btnState = BtnState.CONNECTING;
-                _testConnectingTimer = Timer(Duration(seconds: 2), () {
+    return BlocListener<VpnBloc, VpnState> (
+      listener: (context, state) {
+        if(state is VpnStartState) {
+          startVPN();
+        } else if(state is VpnStopState) {
+          setState(() {
+            _btnState = BtnState.INIT;
+          });
+        }
+      },
+      child: BlocBuilder<VpnBloc, VpnState>(builder: (context, state) {
+        return Container(
+          child: GestureDetector(
+            onTap: () {
+              switch (_btnState) {
+                case BtnState.INIT:
                   setState(() {
-                    _btnState = BtnState.CONNECTED;
-                    _connectedTimer =
-                        Timer.periodic(Duration(seconds: 1), (timer) {
-                      setState(() {
-                        _connectedSeconds++;
-                      });
-                    });
+                    _vpnBloc.add(VpnServiceStartEvent());
+                    _btnState = BtnState.CONNECTING;
                   });
-                });
-              });
-              break;
-            case BtnState.CONNECTING:
-              setState(() {
-                if (_testConnectingTimer.isActive) {
-                  _testConnectingTimer.cancel();
+                  break;
+                case BtnState.CONNECTING:
+                  setState(() {
+                    if (_testConnectingTimer.isActive) {
+                      _testConnectingTimer.cancel();
+                    }
+                    _btnState = BtnState.INIT;
+                    _vpnBloc.add(VpnServiceStopEvent());
+                  });
+                  break;
+                case BtnState.CONNECTED:
+                  setState(() {
+                    if (_connectedTimer.isActive) {
+                      _connectedTimer.cancel();
+                      _connectedSeconds = 0;
+                    }
+                    _btnState = BtnState.INIT;
+                    _vpnBloc.add(VpnServiceStopEvent());
+                  });
+                  break;
+              }
+            },
+            child: AnimatedSwitcher(
+              duration: Duration(milliseconds: 300),
+              transitionBuilder: (child, animation) {
+                if (child.key == ValueKey<int>(2)) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
+                } else {
+                  return ScaleTransition(
+                    scale: animation,
+                    child: child,
+                  );
                 }
-                _btnState = BtnState.INIT;
-              });
-              break;
-            case BtnState.CONNECTED:
-              setState(() {
-                if (_connectedTimer.isActive) {
-                  _connectedTimer.cancel();
-                  _connectedSeconds = 0;
-                }
-                _btnState = BtnState.INIT;
-              });
-              break;
-          }
-        },
-        child: AnimatedSwitcher(
-          duration: Duration(milliseconds: 300),
-          transitionBuilder: (child, animation) {
-            if (child.key == ValueKey<int>(2)) {
-              return FadeTransition(
-                opacity: animation,
-                child: child,
-              );
-            } else {
-              return ScaleTransition(
-                scale: animation,
-                child: child,
-              );
-            }
-          },
-          child: buildByBtnState(),
-        ),
-      ),
+              },
+              child: buildByBtnState(),
+            ),
+          ),
+        );
+      }),
     );
   }
 
