@@ -77,7 +77,9 @@ class _SharePageState extends State<SharePage> {
                                 ],
                               ),
                             ),
-                          )))));
+                          )
+                      )
+                  )));
         }));
   }
 

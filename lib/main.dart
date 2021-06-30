@@ -19,6 +19,7 @@ import 'bloc/setting/pw_change_bloc.dart';
 import 'bloc/setting/setting_bloc.dart';
 import 'bloc/sharedetail/share_detail_bloc.dart';
 import 'bloc/splash/splash_bloc.dart';
+import 'bloc/vip/vip_bloc.dart';
 import 'model/api/api_repository.dart';
 import 'model/config/config_data.dart';
 import 'model/config/config_provider.dart';
@@ -106,6 +107,10 @@ class App extends StatelessWidget {
                       RepositoryProvider.of<ApiRepository>(context))),
               BlocProvider(
                   create: (context) => ShareDetailBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
+                  create: (context) => VipBloc(
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
             ],

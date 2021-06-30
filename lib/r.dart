@@ -137,6 +137,39 @@ class _R_Color {
   Color share_detail_reward_detail_item_name_text() => Color(0xcc000000);
   Color share_detail_reward_detail_item_point_text() => Color(0xff6569ee);
 
+  Color vip_app_bar_bg() => Color(0xffdddeec);
+  Color vip_title_text() => Color(0xcc000000);
+  Color vip_subtitle_text() => Color(0x80000000);
+  Color vip_top_bg() => Color(0xffdddeec);
+  Color vip_bottom_bg() => Color(0xfff3f6fd);
+  Color vip_avatar_bg() => Color(0xfff4f6f9);
+  Color vip_expired_time_valid_text() => Color(0xff6569ee);
+  Color vip_expired_time_invalid_text() => Color(0xffff8080);
+  Color vip_id_text() => Color(0x33000000);
+  Color vip_package_name_main_text() => Color(0xff494dcf);
+  Color vip_package_name_sub_text() => Color(0xffff8080);
+  Color vip_package_unselected_bg() => Color(0x80ffffff);
+  Color vip_package_unselected_border() => Color(0xffdddeec);
+  Color vip_package_selected_bg() => Color(0xffe5e8fc);
+  Color vip_package_selected_border() => Color(0xff494dcf);
+  Color vip_package_new_in_gift_tag_bg() => Color(0xff6569ee);
+  Color vip_package_new_in_gift_tag_text() => Color(0xffffffff);
+  Color vip_package_extra_day_gift_tag_bg() => Color(0xfff1b517);
+  Color vip_package_extra_day_gift_tag_text() => Color(0xffffffff);
+  Color vip_coupon_state_text() => Color(0xff6569ee);
+  Color vip_coupon_state_bg() => Color(0xffe5e8fc);
+  Color vip_coupon_state_border() => Color(0xff494dcf);
+  Color vip_pay_btn_bg() => Color(0xff6569ee);
+  Color vip_pay_btn_text() => Color(0xffffffff);
+  Color vip_coupon_selector_title_text() => Color(0xff6569ee);
+  Color vip_coupon_selector_content_main_text() => Color(0xff6569ee);
+  Color vip_coupon_selector_content_sub_text() => Color(0x4d000000);
+  Color vip_coupon_selector_use_btn_bg() => Color(0xff6569ee);
+  Color vip_coupon_selector_use_btn_text() => Color(0xffffffff);
+  Color vip_coupon_selector_not_use_btn_border() => Color(0xff6569ee);
+  Color vip_coupon_selector_not_use_btn_text() => Color(0xff6569ee);
+  Color vip_benefits_item_text() => Color(0x59000000);
+
   Color forgot_hint_color() => Color(0x33000000);
 
   Color me_title_block_bg_color() => Color(0xffdddeec);
