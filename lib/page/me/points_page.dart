@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/bloc/me/points/points_bloc.dart';
+import 'package:timeline_tile/timeline_tile.dart';
 import '../../r.dart';
 import '../../s.dart';
 
@@ -138,9 +139,171 @@ class _PointsPageState extends State<PointsPage> {
                   ],
                 ),
                 Divider(height: 30, color: Colors.transparent),
+                _buildTimeLine(),
+                Divider(height: 30, color: Colors.transparent),
                 _checkInButton(enable: true, onPress: () {})
               ]));
         }));
+  }
+
+  Widget _buildTimeLine() {
+    var someList = <int>[1, 2, 3, 4, 5, 6, 7];
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: _createTimelineNode(someList),
+    );
+  }
+
+  List<Widget> _createTimelineNode(someList) {
+    return List<Widget>.generate(someList.length, (int index) {
+      var checked = index <= 3;
+      var nextChecked = index < 3;
+      if (index == 0) {
+        return Container(
+          constraints:
+              BoxConstraints(maxHeight: 60, minWidth: 40, maxWidth: 50),
+          child: TimelineTile(
+              isFirst: true,
+              axis: TimelineAxis.horizontal,
+              alignment: TimelineAlign.center,
+              startChild: Text(
+                '3.' + someList[index].toString(),
+                textAlign: TextAlign.center,
+                style:
+                    TextStyle(color: R.color.text_gray_color(), fontSize: 12),
+              ),
+              indicatorStyle: IndicatorStyle(
+                width: 24,
+                height: 24,
+                // padding: EdgeInsets.only(top: 16, bottom: 8),
+                drawGap: true,
+                indicator: checked
+                    ? Image(image: R.image.btn_radio_p())
+                    : Container(
+                        decoration: BoxDecoration(
+                          color: checked
+                              ? R.color.timeline_checked_color()
+                              : R.color.timeline_base_color(),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Text(
+                            '+' + someList[index].toString(),
+                            style: TextStyle(
+                              color: R.color.text_gray_color(),
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                      ),
+              ),
+              afterLineStyle: LineStyle(
+                  color: nextChecked
+                      ? R.color.timeline_checked_color()
+                      : R.color.timeline_base_color(),
+                  thickness: 2)),
+        );
+      } else if (index == someList.length - 1) {
+        return Container(
+          constraints:
+              BoxConstraints(maxHeight: 60, minWidth: 40, maxWidth: 50),
+          child: TimelineTile(
+              isLast: true,
+              axis: TimelineAxis.horizontal,
+              alignment: TimelineAlign.center,
+              startChild: Text(
+                '3.' + someList[index].toString(),
+                textAlign: TextAlign.center,
+                style:
+                    TextStyle(color: R.color.text_gray_color(), fontSize: 12),
+              ),
+              indicatorStyle: IndicatorStyle(
+                width: 24,
+                height: 24,
+                // padding: EdgeInsets.only(top: 16, bottom: 8),
+                drawGap: true,
+                indicator: checked
+                    ? Image(image: R.image.btn_radio_p())
+                    : Container(
+                        decoration: BoxDecoration(
+                          color: checked
+                              ? R.color.timeline_checked_color()
+                              : R.color.timeline_base_color(),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Text(
+                            '+' + someList[index].toString(),
+                            style: TextStyle(
+                              color: R.color.text_gray_color(),
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                      ),
+              ),
+              // afterLineStyle: LineStyle(
+              //     color: R.color.timeline_base_color(),
+              //     thickness: 2),
+              beforeLineStyle: LineStyle(
+                  color: checked
+                      ? R.color.timeline_checked_color()
+                      : R.color.timeline_base_color(),
+                  thickness: 2)),
+        );
+      } else {
+        return Container(
+          constraints:
+              BoxConstraints(maxHeight: 60, minWidth: 40, maxWidth: 50),
+          child: TimelineTile(
+              axis: TimelineAxis.horizontal,
+              alignment: TimelineAlign.center,
+              startChild: Text(
+                '3.' + someList[index].toString(),
+                textAlign: TextAlign.center,
+                style:
+                    TextStyle(color: R.color.text_gray_color(), fontSize: 12),
+              ),
+              indicatorStyle: IndicatorStyle(
+                width: 24,
+                height: 24,
+                // padding: EdgeInsets.only(top: 16, bottom: 8),
+                drawGap: true,
+                indicator: checked
+                    ? Image(image: R.image.btn_radio_p())
+                    : Container(
+                        // margin: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: checked
+                              ? R.color.timeline_checked_color()
+                              : R.color.timeline_base_color(),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Text(
+                            '+' + someList[index].toString(),
+                            style: TextStyle(
+                              color: R.color.text_gray_color(),
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                      ),
+              ),
+              afterLineStyle: LineStyle(
+                  color: nextChecked
+                      ? R.color.timeline_checked_color()
+                      : R.color.timeline_base_color(),
+                  thickness: 2),
+              beforeLineStyle: LineStyle(
+                  color: checked
+                      ? R.color.timeline_checked_color()
+                      : R.color.timeline_base_color(),
+                  thickness: 2)),
+        );
+      }
+    });
   }
 
   Widget _buildTasksRegion() {
@@ -154,7 +317,9 @@ class _PointsPageState extends State<PointsPage> {
               child: Column(
                 children: [
                   Text(S.of(context).points_task_title,
-                      style: TextStyle(color: R.color.text_gray_color(), fontWeight: FontWeight.bold)),
+                      style: TextStyle(
+                          color: R.color.text_gray_color(),
+                          fontWeight: FontWeight.bold)),
                   Divider(height: 10, color: Colors.transparent),
                   Row(
                     children: [
@@ -234,7 +399,9 @@ class _PointsPageState extends State<PointsPage> {
               child: Column(
                 children: [
                   Text(S.of(context).points_exchange_title,
-                      style: TextStyle(color: R.color.text_gray_color(), fontWeight: FontWeight.bold)),
+                      style: TextStyle(
+                          color: R.color.text_gray_color(),
+                          fontWeight: FontWeight.bold)),
                   Divider(height: 10, color: Colors.transparent),
                   ListView.separated(
                     itemCount: 4,

@@ -51,7 +51,8 @@ class _R_Color {
 
   // Color toggle_button_bg_color() => Color(0x196569e);
   Color divider_color() => Color(0xffdddeec);
-
+  Color timeline_base_color() => Color(0xffdddeec);
+  Color timeline_checked_color() => Color(0xFF6569ee);
 
   Color home_app_bar_bg() => Color(0xffe2ecf5);
   Color home_primary_text() => Color(0xff6569ee);
