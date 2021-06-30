@@ -18,6 +18,7 @@ import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.FileOutputStream
 import java.util.*
 
@@ -51,11 +52,12 @@ class MainActivity : BaseActivity() {
                         result.error("400000", "VPN server is running please stop ", null)
                     } else {
                         val statue = startVPN()
-                        result.success("startVPN status $statue")
+                        result.success(statue)
                     }
                 }
                 STOP_VPN -> {
                     stopClashService()
+                    result.success("stopVPN...")
                 }
                 CHECK_SERVER_RUNNING -> {
                     result.success(checkVPNisRunning())
@@ -112,6 +114,10 @@ class MainActivity : BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 100 && resultCode == RESULT_OK) {
             startClashService()
+            channel?.invokeMethod("VPN_Permission", true)
+        } else {
+            channel?.invokeMethod("VPN_Permission", false)
+            Timber.d("@@ cancel vpn bind...")
         }
     }
 
