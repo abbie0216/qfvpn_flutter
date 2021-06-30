@@ -53,6 +53,7 @@
   "setting_item_mail": "帐号邮箱",
   "setting_item_pw_change": "修改密码",
   "setting_item_hint_binding": "去绑定",
+  "setting_item_hint_bound": "已绑定",
   "binding_title": "绑定邮箱",
   "pw_change_title": "修改密码",
 
@@ -69,6 +70,19 @@
   "news_mime": "个人消息",
   "news_detail": "消息详情",
   "points_title": "积分中心",
+  "points_rule": "积分规则",
+  "checked_in_continuously": "已连续签到",
+  "points": "积分",
+  "day": "天",
+  "check_in": "签到",
+  "check_in_already": "今日已签到",
+  "points_task_title": "积分任务",
+
+  "points_task_mail_msg": "升级帐号绑定邮箱，积分+1",
+  "points_task_invite_msg": "按实际发放不限次数",
+  "points_exchange_title": "积分兑换",
+  "to_invite": "去邀请",
+
 
   "home_bottom_nav_bar_home": "HOME",
   "home_bottom_nav_bar_vip": "VIP",

@@ -49,7 +49,9 @@ class _R_Color {
   Color login_bg_color() => Color(0xff6569ee);
   Color logo_bg_color() => Color(0xFFCFD1FF);
 
-  Color toggle_button_bg_color() => Color(0x196569e);
+  // Color toggle_button_bg_color() => Color(0x196569e);
+  Color divider_color() => Color(0xffdddeec);
+
 
   Color home_app_bar_bg() => Color(0xffe2ecf5);
   Color home_primary_text() => Color(0xff6569ee);
