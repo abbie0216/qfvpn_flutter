@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/bloc/me/me_bloc.dart';
+import 'package:qfvpn/page/feedback/feedback_list_page.dart';
 import 'package:qfvpn/page/me/points_page.dart';
 import 'package:qfvpn/page/setting/binding_page.dart';
 import 'package:qfvpn/page/setting/setting_page.dart';
@@ -267,7 +268,10 @@ class _MePageState extends State<MePage> {
                       SizedBox(
                         height: 48,
                         child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushNamed((FeedbackListPage).toString());
+                            },
                             child: Row(
                               children: [
                                 Expanded(

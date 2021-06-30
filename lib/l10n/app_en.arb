@@ -141,6 +141,7 @@
 
   "vip_coupon_selector_title" : "可用优惠券",
   "vip_coupon_selector_use_btn" : "立即使用",
-  "vip_coupon_selector_not_use_btn" : "不使用优惠券"
+  "vip_coupon_selector_not_use_btn" : "不使用优惠券",
 
+  "feedback_list_title": "意见反馈"
 }

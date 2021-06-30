@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:qfvpn/page/feedback/feedback_list_page.dart';
 import 'package:qfvpn/page/login/forgot_pw_page.dart';
 import 'package:qfvpn/page/login/login_page.dart';
 import 'package:qfvpn/page/login/register_page.dart';
@@ -29,4 +30,5 @@ final Map<String, WidgetBuilder> routes = {
   (PointsPage).toString(): (context) => PointsPage(),
   (SharePage).toString(): (context) => SharePage(),
   (ShareDetailPage).toString(): (context) => ShareDetailPage(),
+  (FeedbackListPage).toString(): (context) => FeedbackListPage(),
 };
