@@ -164,12 +164,17 @@ class _R_Color {
   Color vip_pay_btn_bg() => Color(0xff6569ee);
   Color vip_pay_btn_text() => Color(0xffffffff);
   Color vip_coupon_selector_title_text() => Color(0xff6569ee);
-  Color vip_coupon_selector_content_main_text() => Color(0xff6569ee);
-  Color vip_coupon_selector_content_sub_text() => Color(0x4d000000);
+  Color vip_coupon_selector_selected_main_text() => Color(0x33000000);
+  Color vip_coupon_selector_selected_sub_text() => Color(0x4d000000);
+  Color vip_coupon_selector_unselected_main_text() => Color(0xff6569ee);
+  Color vip_coupon_selector_unselected_sub_text() => Color(0x4d000000);
   Color vip_coupon_selector_use_btn_bg() => Color(0xff6569ee);
   Color vip_coupon_selector_use_btn_text() => Color(0xffffffff);
+  Color vip_coupon_selector_already_use_btn_border() => Color(0x806569ee);
+  Color vip_coupon_selector_already_use_btn_text() => Color(0x806569ee);
   Color vip_coupon_selector_not_use_btn_border() => Color(0xff6569ee);
   Color vip_coupon_selector_not_use_btn_text() => Color(0xff6569ee);
+  Color vip_outline_btn_splash() => Color(0x226569ee);
   Color vip_benefits_item_text() => Color(0x59000000);
 
   Color forgot_hint_color() => Color(0x33000000);
