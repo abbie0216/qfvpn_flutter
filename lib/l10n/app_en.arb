@@ -1,6 +1,7 @@
 {
   "@@locale": "en",
 
+  "app_name": "赤兔加速器",
   "news": "new",
   "go": "Go",
   "login_title": "嗨, 欢迎回来",
@@ -84,6 +85,12 @@
   "to_invite": "去邀请",
   "points_detail_title": "积分明细",
 
+  "about_page_title": "关于我们",
+  "about_item_privacy_policy": "隐私条款",
+  "about_item_user_agreement": "用户协议",
+  "about_item_app_score": "APP 评分",
+  "about_contact_us": "邮件联系",
+  "about_to_web": "前往官网",
 
   "home_bottom_nav_bar_home": "HOME",
   "home_bottom_nav_bar_vip": "VIP",

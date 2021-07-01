@@ -11,6 +11,7 @@ import 'package:qfvpn/routes.dart';
 import 'bloc/home/home_bloc.dart';
 import 'bloc/login/forgot_pw_bloc.dart';
 import 'bloc/login/login_bloc.dart';
+import 'bloc/me/about/about_bloc.dart';
 import 'bloc/me/coupon/coupon_bloc.dart';
 import 'bloc/me/me_bloc.dart';
 import 'bloc/me/news/news_bloc.dart';
@@ -126,6 +127,10 @@ class App extends StatelessWidget {
                       RepositoryProvider.of<ApiRepository>(context))),
               BlocProvider(
                   create: (context) => FeedbackBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
+                  create: (context) => AboutBloc(
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
             ],
