@@ -146,5 +146,6 @@
   "feedback_list_title": "意见反馈",
   "feedback_solved": "已解答",
   "feedback_submit": "已提交",
-  "add_feedback_title": "添加反馈"
+  "add_feedback_title": "添加反馈",
+  "feedback_detail_title": "反馈详情"
 }

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/bloc/feedback/feedback_bloc.dart';
 import 'package:qfvpn/bloc/feedback/feedback_state.dart';
+import 'package:qfvpn/page/feedback/add_feedback_page.dart';
+import 'package:qfvpn/page/feedback/feedback_detail_page.dart';
 
 import '../../r.dart';
 import '../../s.dart';
@@ -49,7 +51,8 @@ class _FeedbackListState extends State<FeedbackListPage> {
               Padding(
                 padding: EdgeInsets.only(right: 12),
                 child: TextButton(
-                  onPressed: null,
+                  onPressed: () => Navigator.of(context)
+                      .pushNamed((AddFeedbackPage).toString()),
                   child: Text(
                     S.of(context).add_feedback_title,
                     style: TextStyle(color: Colors.black, fontSize: 14),
@@ -80,7 +83,8 @@ class _FeedbackListState extends State<FeedbackListPage> {
 
   Widget _buildListItem(BuildContext context, int index) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () => Navigator.of(context)
+          .pushNamed((FeedbackDetailPage).toString()),
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
