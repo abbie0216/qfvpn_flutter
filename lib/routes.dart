@@ -7,6 +7,7 @@ import 'package:qfvpn/page/main/main_page.dart';
 import 'package:qfvpn/page/me/coupon_page.dart';
 import 'package:qfvpn/page/me/news_detail_page.dart';
 import 'package:qfvpn/page/me/news_page.dart';
+import 'package:qfvpn/page/me/points_detail_page.dart';
 import 'package:qfvpn/page/me/points_page.dart';
 import 'package:qfvpn/page/setting/binding_page.dart';
 import 'package:qfvpn/page/setting/pw_change_page.dart';
@@ -28,6 +29,7 @@ final Map<String, WidgetBuilder> routes = {
   (NewsPage).toString(): (context) => NewsPage(),
   (NewsDetailPage).toString(): (context) => NewsDetailPage(),
   (PointsPage).toString(): (context) => PointsPage(),
+  (PointsDetailPage).toString(): (context) => PointsDetailPage(),
   (SharePage).toString(): (context) => SharePage(),
   (ShareDetailPage).toString(): (context) => ShareDetailPage(),
   (FeedbackListPage).toString(): (context) => FeedbackListPage(),

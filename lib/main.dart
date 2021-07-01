@@ -16,6 +16,7 @@ import 'bloc/me/me_bloc.dart';
 import 'bloc/me/news/news_bloc.dart';
 import 'bloc/me/news/news_detail_bloc.dart';
 import 'bloc/me/points/points_bloc.dart';
+import 'bloc/me/points/points_detail_bloc.dart';
 import 'bloc/setting/binding_bloc.dart';
 import 'bloc/setting/pw_change_bloc.dart';
 import 'bloc/setting/setting_bloc.dart';
@@ -101,6 +102,10 @@ class App extends StatelessWidget {
                       RepositoryProvider.of<ApiRepository>(context))),
               BlocProvider(
                   create: (context) => PointsBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
+                  create: (context) => PointsDetailBloc(
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
               BlocProvider(

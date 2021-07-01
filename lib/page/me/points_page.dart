@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/bloc/me/points/points_bloc.dart';
+import 'package:qfvpn/page/me/points_detail_page.dart';
+import 'package:qfvpn/page/setting/binding_page.dart';
+import 'package:qfvpn/page/share/share_page.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import '../../r.dart';
 import '../../s.dart';
@@ -117,25 +120,29 @@ class _PointsPageState extends State<PointsPage> {
                     ),
                     Expanded(
                         flex: 1,
-                        child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            // crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Column(children: [
-                                Text('366',
-                                    style: TextStyle(
-                                        fontSize: 40,
-                                        color: R.color
-                                            .text_blue_color()
-                                            .withAlpha(204))),
-                                Text(S.of(context).points,
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        color: R.color.text_gray_color()))
-                              ]),
-                              Image(image: R.image.btn_next_n())
-                            ]))
+                        child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(context, (PointsDetailPage).toString());
+                            },
+                            child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                // crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Column(children: [
+                                    Text('366',
+                                        style: TextStyle(
+                                            fontSize: 40,
+                                            color: R.color
+                                                .text_blue_color()
+                                                .withAlpha(204))),
+                                    Text(S.of(context).points,
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: R.color.text_gray_color()))
+                                  ]),
+                                  Image(image: R.image.btn_next_n())
+                                ])))
                   ],
                 ),
                 Divider(height: 30, color: Colors.transparent),
@@ -342,7 +349,12 @@ class _PointsPageState extends State<PointsPage> {
                                     color: R.color.text_gray_color()),
                               ),
                               Divider(height: 10, color: Colors.transparent),
-                              _bindingButton(enable: true, onPress: () {})
+                              _bindingButton(
+                                  enable: true,
+                                  onPress: () {
+                                    Navigator.pushNamed(
+                                        context, (BindingPage).toString());
+                                  })
                             ],
                           )),
                       Expanded(
@@ -374,7 +386,10 @@ class _PointsPageState extends State<PointsPage> {
                                         BorderRadius.all(Radius.circular(22)),
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                      context, (SharePage).toString());
+                                },
                                 child: Text(S.of(context).to_invite,
                                     style: TextStyle(
                                         color: Colors.white, fontSize: 14)),
