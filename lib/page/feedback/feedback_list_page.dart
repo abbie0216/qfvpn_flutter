@@ -30,7 +30,7 @@ class _FeedbackListState extends State<FeedbackListPage> {
         if (state is FeedbackInitState) {}
       },
       child:
-      BlocBuilder<FeedbackBloc, FeedbackState>(builder: (context, state) {
+          BlocBuilder<FeedbackBloc, FeedbackState>(builder: (context, state) {
         return Scaffold(
           backgroundColor: R.color.background_color(),
           resizeToAvoidBottomInset: false,
@@ -42,9 +42,21 @@ class _FeedbackListState extends State<FeedbackListPage> {
                     fontWeight: FontWeight.bold)),
             leading: IconButton(
               icon:
-              Icon(Icons.arrow_back_ios, color: R.color.text_blue_color()),
+                  Icon(Icons.arrow_back_ios, color: R.color.text_blue_color()),
               onPressed: () => Navigator.of(context).pop(),
             ),
+            actions: [
+              Padding(
+                padding: EdgeInsets.only(right: 12),
+                child: TextButton(
+                  onPressed: null,
+                  child: Text(
+                    S.of(context).add_feedback_title,
+                    style: TextStyle(color: Colors.black, fontSize: 14),
+                  ),
+                ),
+              ),
+            ],
             elevation: 0,
             backgroundColor: R.color.background_color(),
             centerTitle: true,
@@ -82,51 +94,35 @@ class _FeedbackListState extends State<FeedbackListPage> {
             Row(
               children: [
                 SizedBox(width: 16),
-                Text(
-                  '2018-03-20 20:20',
-                  style: TextStyle(
-                      color: R.color.text_color_alpha50(), fontSize: 12),
-                ),
+                _buildTimeItem(),
                 Spacer(),
                 _buildFlag(context, index % 3 == 0),
               ],
             ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 4, vertical: 10),
-              height: 1,
-              color: R.color.background_color(),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Text('反馈标题',
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-            ),
+            _buildDivider(),
+            _buildFeedbackTitle(),
             SizedBox(height: 2),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  '文字内容文字内容文字内容文字字内容文文字内容文字内容文字内容文字字内容文文字内容文字内容文字内容文字字内容文',
-                  textAlign: TextAlign.start,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                  style: TextStyle(
-                      color: R.color.text_color_alpha80(), fontSize: 14),
-                ),
-              ),
-            ),
+            _buildFeedbackContent(),
+            SizedBox(height: 12),
+            _buildResponse(context, index % 3 == 0),
           ],
         ),
       ),
     );
   }
 
+  Widget _buildTimeItem() {
+    return Text(
+      '2018-03-20 20:20',
+      style: TextStyle(color: R.color.text_color_alpha50(), fontSize: 12),
+    );
+  }
+
   Widget _buildFlag(BuildContext context, bool solved) {
-    var bg = solved ? R.color.feedback_solved_bg() : R.color.feedback_submit_bg();
-    var str = solved ? S.of(context).feedback_solved : S.of(context).feedback_submit;
+    var bg =
+        solved ? R.color.feedback_solved_bg() : R.color.feedback_submit_bg();
+    var str =
+        solved ? S.of(context).feedback_solved : S.of(context).feedback_submit;
     return Container(
       padding: EdgeInsets.only(top: 4, bottom: 4, left: 14, right: 10),
       decoration: BoxDecoration(
@@ -136,8 +132,63 @@ class _FeedbackListState extends State<FeedbackListPage> {
       ),
       child: Text(
         str,
-        style: TextStyle(
-            color: R.color.btn_white_color(), fontSize: 12),
+        style: TextStyle(color: R.color.btn_white_color(), fontSize: 12),
+      ),
+    );
+  }
+
+  Widget _buildDivider() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 4, vertical: 10),
+      height: 1,
+      color: R.color.background_color(),
+    );
+  }
+
+  Widget _buildFeedbackTitle() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: Text('反馈标题',
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+    );
+  }
+
+  Widget _buildFeedbackContent() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          '文字内容文字内容文字内容文字字内容文文字内容文字内容文字内容文字字内容文文字内容文字内容文字内容文字字内容文',
+          textAlign: TextAlign.start,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 2,
+          style: TextStyle(color: R.color.text_color_alpha80(), fontSize: 14),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildResponse(BuildContext context, bool solved) {
+    return Visibility(
+      visible: solved,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: R.color.background_color(),
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+          // fit: BoxFit.fill,
+        ),
+        child: Text(
+          '文字内容文字内容文字内容文字字内容文文字内容文字内容文字内容文字字内容文文字内容文字内容文字内容文字字内容文',
+          textAlign: TextAlign.start,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 2,
+          style: TextStyle(color: R.color.text_color_alpha50(), fontSize: 14),
+        ),
       ),
     );
   }
