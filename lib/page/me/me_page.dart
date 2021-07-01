@@ -12,6 +12,7 @@ import 'package:qfvpn/page/setting/setting_page.dart';
 
 import '../../r.dart';
 import '../../s.dart';
+import 'about_page.dart';
 import 'coupon_page.dart';
 import 'news_page.dart';
 
@@ -237,8 +238,8 @@ class _MePageState extends State<MePage> {
                         height: 48,
                         child: GestureDetector(
                             onTap: () {
-                              Navigator.of(context)
-                                  .pushNamed((NewsPage).toString());
+                              // Navigator.of(context)
+                              //     .pushNamed((NewsPage).toString());
                             },
                             child: Row(
                               children: [
@@ -317,7 +318,9 @@ class _MePageState extends State<MePage> {
                       SizedBox(
                         height: 48,
                         child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.pushNamed(context, (AboutPage).toString());
+                            },
                             child: Row(
                               children: [
                                 Expanded(

@@ -6,6 +6,7 @@ import 'package:qfvpn/page/login/forgot_pw_page.dart';
 import 'package:qfvpn/page/login/login_page.dart';
 import 'package:qfvpn/page/login/register_page.dart';
 import 'package:qfvpn/page/main/main_page.dart';
+import 'package:qfvpn/page/me/about_page.dart';
 import 'package:qfvpn/page/me/coupon_page.dart';
 import 'package:qfvpn/page/me/news_detail_page.dart';
 import 'package:qfvpn/page/me/news_page.dart';
@@ -37,4 +38,5 @@ final Map<String, WidgetBuilder> routes = {
   (FeedbackListPage).toString(): (context) => FeedbackListPage(),
   (AddFeedbackPage).toString(): (context) => AddFeedbackPage(),
   (FeedbackDetailPage).toString(): (context) => FeedbackDetailPage(),
+  (AboutPage).toString(): (context) => AboutPage(),
 };
