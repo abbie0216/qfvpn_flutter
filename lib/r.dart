@@ -38,6 +38,7 @@ class _R_Color {
   Color text_blue_color() => Color(0xff6569ee);
   Color text_gray_color() => Color(0x4c000000);
   Color text_color_alpha80() => Color(0xcc000000);
+  Color text_color_alpha50() => Color(0x80000000);
 
   Color text_field_border_color() => Color(0xffdddeec);
 
@@ -176,6 +177,8 @@ class _R_Color {
 
   Color me_title_block_bg_color() => Color(0xffdddeec);
 
+  Color feedback_solved_bg() => Color(0xff98e733);
+  Color feedback_submit_bg() => Color(0xfff9bb1d);
 }
 
 class _R_Image {
