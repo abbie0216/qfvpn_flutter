@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:qfvpn/bloc/feedback/feedback_bloc.dart';
 import 'package:qfvpn/bloc/home/vpn_bloc.dart';
@@ -31,6 +32,8 @@ import 'page/splash/splash_page.dart';
 
 
 Future<void> main() async {
+  Fimber.plantTree(DebugTree());
+
   var configProvider = ConfigProvider(
     data: ConfigData(flavor: 'dev', apiBaseUrl: 'qfvpn.com'),
     child: App(),

@@ -26,8 +26,10 @@ dependencies:
   shared_preferences: ^2.0.6
   animations: ^2.0.0
   sprintf: ^6.0.0
+  flutter_fimber: ^0.6.1
   # Info
-  package_info: ^0.4.0+16
+  package_info: ^2.0.2
+  device_info: ^2.0.2
   timeline_tile: ^2.0.0
 dev_dependencies:
   flutter_test:
