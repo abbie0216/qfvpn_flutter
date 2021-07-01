@@ -144,5 +144,8 @@
   "vip_coupon_selector_use_btn" : "立即使用",
   "vip_coupon_selector_not_use_btn" : "不使用优惠券",
 
+  "order_history_title" : "历史订单",
+  "order_history_empty" : "尚无历史订单",
+
   "feedback_list_title": "意见反馈"
 }

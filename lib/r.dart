@@ -38,6 +38,7 @@ class _R_Color {
   Color text_blue_color() => Color(0xff6569ee);
   Color text_gray_color() => Color(0x4c000000);
   Color text_color_alpha80() => Color(0xcc000000);
+  Color text_color_alpha40() => Color(0x66000000);
 
   Color text_field_border_color() => Color(0xffdddeec);
 
@@ -177,6 +178,13 @@ class _R_Color {
 
   Color me_title_block_bg_color() => Color(0xffdddeec);
 
+  Color order_history_bg_color() => Color(0xfff4f6f9);
+  Color order_history_text_expiry() => Color(0xffb3b3b3);
+  Color order_history_statue_close() => Color(0x4c000000);
+  Color order_history_statue_paid() => Color(0xff98e733);
+  Color order_history_statue_unpaid() => Color(0xfff9bb1d);
+  Color order_history_repurchase() => Color(0xff6569ee);
+  Color order_history_paid_now() => Color(0xffff8080);
 }
 
 class _R_Image {

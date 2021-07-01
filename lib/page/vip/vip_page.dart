@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/bloc/vip/vip_bloc.dart';
+import 'package:qfvpn/page/vip/order_history_page.dart';
 import 'package:qfvpn/s.dart';
 import 'package:qfvpn/widget/selector_widget_button.dart';
 import 'package:sprintf/sprintf.dart';
@@ -40,7 +41,7 @@ class _VipPageState extends State<VipPage> {
                       widgetN: Image(image: R.image.btn_history_n()),
                       widgetP: Image(image: R.image.btn_history_p()),
                       onPressed: () {
-                        //todo history
+                        Navigator.of(context).pushNamed((OrderHistoryPage).toString());
                       },
                     )
                   ],
