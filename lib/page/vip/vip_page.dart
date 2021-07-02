@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qfvpn/bloc/vip/vip_bloc.dart';
+import 'package:qfvpn/page/pay/pay_page.dart';
 import 'package:qfvpn/page/vip/vip_coupon_bottom_sheet.dart';
 import 'package:qfvpn/s.dart';
 import 'package:qfvpn/widget/selector_widget_button.dart';
@@ -352,7 +353,9 @@ class _VipPageState extends State<VipPage> {
                   borderRadius: BorderRadius.all(Radius.circular(50)))),
               backgroundColor:
                   MaterialStateProperty.all(R.color.vip_pay_btn_bg())),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushNamed((PayPage).toString());
+          },
           child: Text(
             S.of(context).vip_pay_btn,
             style: TextStyle(

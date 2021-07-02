@@ -177,6 +177,39 @@ class _R_Color {
   Color vip_outline_btn_splash() => Color(0x226569ee);
   Color vip_benefits_item_text() => Color(0x59000000);
 
+  Color pay_app_bar_bg() => Color(0xfff3f6fd);
+  Color pay_bg() => Color(0xfff3f6fd);
+  Color pay_title_text() => Color(0xcc000000);
+  Color pay_info_bg() => Color(0xffffffff);
+  Color pay_info_item_title_text() => Color(0x4d000000);
+  Color pay_info_item_value_text() => Color(0x80000000);
+  Color pay_way_title_text() => Color(0x80000000);
+  Color pay_way_btn_border() => Color(0xff6569ee);
+  Color pay_way_btn_unselected_bg() => Color(0xffe2ecf5);
+  Color pay_way_btn_unselected_text() => Color(0xff6569ee);
+  Color pay_way_btn_selected_bg() => Color(0xff6569ee);
+  Color pay_way_btn_selected_text() => Color(0xffffffff);
+  Color pay_hint_text() => Color(0x4d000000);
+  Color pay_divider_1_bg() => Color(0xfff4f6f9);
+  Color pay_divider_2_bg() => Color(0xffe8f1fa);
+  Color pay_total_amount_title_text() => Color(0xcc000000);
+  Color pay_total_amount_value_text() => Color(0xff6569ee);
+  Color pay_btn_bg() => Color(0xffff8080);
+  Color pay_btn_text() => Color(0xccffffff);
+  Color pay_btn_disable_bg() => Color(0x4dff8080);
+  Color pay_btn_disable_text() => Color(0x80ffffff);
+
+  Color pay_result_app_bar_bg() => Color(0xfff3f6fd);
+  Color pay_result_bg() => Color(0xfff3f6fd);
+  Color pay_result_title_text() => Color(0xcc000000);
+  Color pay_result_main_text() => Color(0xcc000000);
+  Color pay_result_sub_text() => Color(0x80000000);
+  Color pay_result_back_btn_text() => Color(0xff6569ee);
+  Color pay_result_back_btn_border() => Color(0xff6569ee);
+  Color pay_result_back_btn_splash() => Color(0x226569ee);
+  Color pay_result_next_btn_text() => Color(0xffffffff);
+  Color pay_result_next_btn_bg() => Color(0xff6569ee);
+
   Color forgot_hint_color() => Color(0x33000000);
 
   Color me_title_block_bg_color() => Color(0xffdddeec);

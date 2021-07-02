@@ -142,6 +142,25 @@
   "vip_coupon_selector_title" : "可用优惠券",
   "vip_coupon_selector_use_btn" : "立即使用",
   "vip_coupon_selector_already_use_btn" : "已使用",
-  "vip_coupon_selector_not_use_btn" : "不使用优惠券"
+  "vip_coupon_selector_not_use_btn" : "不使用优惠券",
+
+  "pay_title": "支付",
+  "pay_info_coupon_title": "优惠券",
+  "pay_info_coupon_not_available": "无可用",
+  "pay_info_amount_title": "实付款",
+  "pay_way_title": "选择支付方式",
+  "pay_way_wx": "微信支付",
+  "pay_way_ali": "支付宝支付",
+  "pay_hint": "1. 请先体验，满意后再购买。\n2. 充值成功不到账，请重启 APP，或反馈给我们，我们将及时解决。\n3. 请尽快完成支付，放弃支付订单将被取消。",
+  "pay_total_amount": "合计",
+  "pay_btn": "立即支付",
+
+  "pay_result_success": "支付成功",
+  "pay_result_failed": "支付失败",
+  "pay_result_failed_hint": "支付遇到问题，请重新尝试支付",
+  "pay_result_to_home_btn": "返回首页",
+  "pay_result_check_order_btn": "查看订单",
+  "pay_result_retry_btn": "继续支付"
+
 
 }

@@ -7,6 +7,7 @@ import 'package:qfvpn/page/me/coupon_page.dart';
 import 'package:qfvpn/page/me/news_detail_page.dart';
 import 'package:qfvpn/page/me/news_page.dart';
 import 'package:qfvpn/page/me/points_page.dart';
+import 'package:qfvpn/page/pay/pay_page.dart';
 import 'package:qfvpn/page/setting/binding_page.dart';
 import 'package:qfvpn/page/setting/pw_change_page.dart';
 import 'package:qfvpn/page/setting/setting_page.dart';
@@ -29,4 +30,5 @@ final Map<String, WidgetBuilder> routes = {
   (PointsPage).toString(): (context) => PointsPage(),
   (SharePage).toString(): (context) => SharePage(),
   (ShareDetailPage).toString(): (context) => ShareDetailPage(),
+  (PayPage).toString(): (context) => PayPage(),
 };
