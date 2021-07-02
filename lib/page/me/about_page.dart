@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:qfvpn/bloc/me/about/about_bloc.dart';
 
 import '../../r.dart';
@@ -20,6 +21,7 @@ class _AboutPageState extends State<AboutPage> {
   void initState() {
     super.initState();
     _aboutBloc = BlocProvider.of<AboutBloc>(context);
+    _aboutBloc.add(AppVersionEvent());
   }
 
   @override
@@ -51,16 +53,23 @@ class _AboutPageState extends State<AboutPage> {
   }
 
   Widget _buildContentView() {
+    var appVersion = '';
+
     return BlocListener<AboutBloc, AboutState>(
         listener: (context, state) {},
         child: BlocBuilder<AboutBloc, AboutState>(builder: (context, state) {
+          if (state is AppVersionState) {
+            appVersion = state.appVersion;
+            Fimber.d('appVersion: $appVersion');
+          }
+
           return Column(
             children: [
               Divider(height: 30, color: Colors.transparent),
               Text(S.of(context).app_name,
                   style: TextStyle(
                       color: R.color.text_blue_color(), fontSize: 18)),
-              Text('v1.3.0',
+              Text(appVersion,
                   style: TextStyle(
                       color: R.color.text_gray_color(), fontSize: 12)),
               Divider(height: 30, color: Colors.transparent),

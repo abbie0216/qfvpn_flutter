@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:qfvpn/bloc/me/me_bloc.dart';
 import 'package:qfvpn/page/feedback/feedback_list_page.dart';
 import 'package:qfvpn/page/me/points_page.dart';
@@ -28,6 +29,7 @@ class _MePageState extends State<MePage> {
   void initState() {
     super.initState();
     _meBloc = BlocProvider.of<MeBloc>(context);
+    _meBloc.add(AppVersionEvent());
   }
 
   @override
@@ -167,9 +169,14 @@ class _MePageState extends State<MePage> {
   }
 
   Widget _buildItemsRegion() {
+    var appVersion = '';
     return BlocListener<MeBloc, MeState>(
         listener: (context, state) {},
         child: BlocBuilder<MeBloc, MeState>(builder: (context, state) {
+          if (state is AppVersionState) {
+            appVersion = state.appVersion;
+            Fimber.d('appVersion: $appVersion');
+          }
           return Align(
               alignment: FractionalOffset(0.0, 0.6),
               child: Column(mainAxisSize: MainAxisSize.min, children: [
@@ -337,7 +344,7 @@ class _MePageState extends State<MePage> {
                                     flex: 2,
                                     child: Align(
                                         alignment: Alignment.centerRight,
-                                        child: Text('v1.3.0',
+                                        child: Text(appVersion,
                                             style: TextStyle(
                                                 color:
                                                     R.color.text_blue_color(),
