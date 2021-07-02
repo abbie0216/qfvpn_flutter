@@ -23,6 +23,7 @@ import 'bloc/setting/pw_change_bloc.dart';
 import 'bloc/setting/setting_bloc.dart';
 import 'bloc/sharedetail/share_detail_bloc.dart';
 import 'bloc/splash/splash_bloc.dart';
+import 'bloc/vip/order_history_detail_bloc.dart';
 import 'bloc/vip/vip_bloc.dart';
 import 'model/api/api_repository.dart';
 import 'model/config/config_data.dart';
@@ -131,6 +132,10 @@ class App extends StatelessWidget {
                       RepositoryProvider.of<ApiRepository>(context))),
               BlocProvider(
                   create: (context) => OrderHistoryBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
+                  create: (context) => OrderHistoryDetailBloc(
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
             ],

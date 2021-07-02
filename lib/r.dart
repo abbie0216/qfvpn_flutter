@@ -37,8 +37,10 @@ class _R_Color {
   Color btn_blue_color() => Color(0xFF6569ee);
   Color text_blue_color() => Color(0xff6569ee);
   Color text_gray_color() => Color(0x4c000000);
-  Color text_color_alpha80() => Color(0xcc000000);
+  Color text_color_alpha30() => Color(0x4d000000);
   Color text_color_alpha40() => Color(0x66000000);
+  Color text_color_alpha50() => Color(0x80000000);
+  Color text_color_alpha80() => Color(0xcc000000);
 
   Color text_field_border_color() => Color(0xffdddeec);
 

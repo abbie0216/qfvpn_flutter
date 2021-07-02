@@ -145,6 +145,15 @@
 
   "order_history_title" : "历史订单",
   "order_history_empty" : "尚无历史订单",
+  "order_history_paid_close" : "已关闭",
+  "order_history_paid_paid" : "已支付",
+  "order_history_paid_unpaid" : "待支付",
+  "order_history_paid_now" : "立即支付",
+  "order_history_repurchase" : "重新购买",
+
+  "order_history_detail_title" : "订单详情",
+  "order_history_detail_number" : "订单号｜",
+  "order_history_detail_expiry_date" : "请在 %s 内完成付款",
 
   "feedback_list_title": "意见反馈"
 }

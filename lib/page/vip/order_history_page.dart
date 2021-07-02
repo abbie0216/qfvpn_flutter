@@ -7,6 +7,7 @@ import 'package:qfvpn/widget/selector_widget_button.dart';
 
 import '../../r.dart';
 import '../../s.dart';
+import 'order_history_detail_page.dart';
 
 class OrderHistoryPage extends StatefulWidget {
   @override
@@ -99,19 +100,19 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
           var bg_color;
 
           if(used == 0) {
-            status = "已关闭";
+            status = S.of(context).order_history_paid_close;
             titleTextColor = R.color.order_history_text_expiry();
             bg_color = R.color.order_history_statue_close();
             paid_btn_color = R.color.btn_blue_color();
           } else if(used == 1) {
-            status = "已支付";
-            paidTitle = "重新购买";
+            status = S.of(context).order_history_paid_paid;
+            paidTitle = S.of(context).order_history_repurchase;
             titleTextColor = Colors.black;
             bg_color = R.color.order_history_statue_paid();
             paid_btn_color = R.color.order_history_repurchase();
           } else if(used == 2) {
-            status = "待支付";
-            paidTitle = "立即支付";
+            status = S.of(context).order_history_paid_unpaid;
+            paidTitle = S.of(context).order_history_paid_now;
             titleTextColor = Colors.black;
             bg_color = R.color.order_history_statue_unpaid();
             paid_btn_color = R.color.order_history_paid_now();
@@ -194,7 +195,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
                               splashFactory: NoSplash.splashFactory
                             ),
                             onPressed: (){
-                              debugPrint("tttttt");
+                              Navigator.of(context).pushNamed((OrderHistoryDetailPage).toString());
                             },
                             child: Text(
                               paidTitle,
