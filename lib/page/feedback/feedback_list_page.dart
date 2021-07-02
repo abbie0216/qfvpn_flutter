@@ -124,7 +124,7 @@ class _FeedbackListState extends State<FeedbackListPage> {
 
   Widget _buildFlag(BuildContext context, bool solved) {
     var bg =
-        solved ? R.color.feedback_solved_bg() : R.color.feedback_submit_bg();
+        solved ? R.color.feedback_solved_flag_bg() : R.color.feedback_submit_flag_bg();
     var str =
         solved ? S.of(context).feedback_solved : S.of(context).feedback_submit;
     return Container(

@@ -153,5 +153,12 @@
   "feedback_solved": "已解答",
   "feedback_submit": "已提交",
   "add_feedback_title": "添加反馈",
+  "add_feedback_type": "反馈类型",
+  "add_feedback_select": "请选择",
+  "add_feedback_Input_title": "问题和意见",
+  "add_feedback_Input_hint": "请描述你要反馈的问题，我们会尽快回复唷～",
+  "add_feedback_typed": "已输入",
+  "add_feedback_upload_hint": "上传图片（最多3张）",
+  "add_feedback_submit": "提交",
   "feedback_detail_title": "反馈详情"
 }
