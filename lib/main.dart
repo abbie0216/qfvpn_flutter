@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:qfvpn/bloc/feedback/feedback_bloc.dart';
 import 'package:qfvpn/bloc/home/vpn_bloc.dart';
 import 'package:qfvpn/bloc/login/register_bloc.dart';
 import 'package:qfvpn/bloc/share/share_bloc.dart';
@@ -10,11 +12,13 @@ import 'package:qfvpn/routes.dart';
 import 'bloc/home/home_bloc.dart';
 import 'bloc/login/forgot_pw_bloc.dart';
 import 'bloc/login/login_bloc.dart';
+import 'bloc/me/about/about_bloc.dart';
 import 'bloc/me/coupon/coupon_bloc.dart';
 import 'bloc/me/me_bloc.dart';
 import 'bloc/me/news/news_bloc.dart';
 import 'bloc/me/news/news_detail_bloc.dart';
 import 'bloc/me/points/points_bloc.dart';
+import 'bloc/me/points/points_detail_bloc.dart';
 import 'bloc/pay/pay_bloc.dart';
 import 'bloc/setting/binding_bloc.dart';
 import 'bloc/setting/pw_change_bloc.dart';
@@ -29,6 +33,8 @@ import 'page/splash/splash_page.dart';
 
 
 Future<void> main() async {
+  Fimber.plantTree(DebugTree());
+
   var configProvider = ConfigProvider(
     data: ConfigData(flavor: 'dev', apiBaseUrl: 'qfvpn.com'),
     child: App(),
@@ -104,6 +110,10 @@ class App extends StatelessWidget {
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
               BlocProvider(
+                  create: (context) => PointsDetailBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
                   create: (context) => ShareBloc(
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
@@ -117,6 +127,14 @@ class App extends StatelessWidget {
                       RepositoryProvider.of<ApiRepository>(context))),
               BlocProvider(
                   create: (context) => VpnBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
+                  create: (context) => FeedbackBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
+                  create: (context) => AboutBloc(
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
               BlocProvider(

@@ -1,6 +1,7 @@
 {
   "@@locale": "en",
 
+  "app_name": "赤兔加速器",
   "news": "new",
   "go": "Go",
   "login_title": "嗨, 欢迎回来",
@@ -82,7 +83,14 @@
   "points_task_invite_msg": "按实际发放不限次数",
   "points_exchange_title": "积分兑换",
   "to_invite": "去邀请",
+  "points_detail_title": "积分明细",
 
+  "about_page_title": "关于我们",
+  "about_item_privacy_policy": "隐私条款",
+  "about_item_user_agreement": "用户协议",
+  "about_item_app_score": "APP 评分",
+  "about_contact_us": "邮件联系",
+  "about_to_web": "前往官网",
 
   "home_bottom_nav_bar_home": "HOME",
   "home_bottom_nav_bar_vip": "VIP",
@@ -160,7 +168,21 @@
   "pay_result_failed_hint": "支付遇到问题，请重新尝试支付",
   "pay_result_to_home_btn": "返回首页",
   "pay_result_check_order_btn": "查看订单",
-  "pay_result_retry_btn": "继续支付"
+  "pay_result_retry_btn": "继续支付",
 
-
+  "feedback_list_title": "意见反馈",
+  "feedback_solved": "已解答",
+  "feedback_submit": "已提交",
+  "add_feedback_title": "添加反馈",
+  "add_feedback_type": "反馈类型",
+  "add_feedback_select": "请选择",
+  "add_feedback_input_title": "问题和意见",
+  "add_feedback_input_hint": "请描述你要反馈的问题，我们会尽快回复唷～",
+  "add_feedback_typed": "已输入",
+  "add_feedback_upload_hint": "上传图片（最多3张）",
+  "add_feedback_submit": "提交",
+  "feedback_detail_title": "反馈详情",
+  "feedback_detail_not_satisfied": "不满意",
+  "feedback_detail_average": "一般",
+  "feedback_detail_satisfied": "满意"
 }

@@ -1,6 +1,7 @@
 {
   "@@locale": "zh",
 
+  "app_name": "赤兔加速器",
   "news": "new",
   "go": "Go",
   "login_title": "嗨, 欢迎回来",
@@ -53,6 +54,7 @@
   "setting_item_mail": "帐号邮箱",
   "setting_item_pw_change": "修改密码",
   "setting_item_hint_binding": "去绑定",
+  "setting_item_hint_bound": "已绑定",
   "binding_title": "绑定邮箱",
   "pw_change_title": "修改密码",
 
@@ -69,6 +71,24 @@
   "news_mime": "个人消息",
   "news_detail": "消息详情",
   "points_title": "积分中心",
+  "points_rule": "积分规则",
+  "checked_in_continuously": "已连续签到",
+  "points": "积分",
+  "day": "天",
+  "check_in": "签到",
+  "check_in_already": "今日已签到",
+  "points_task_title": "积分任务",
+
+  "points_task_mail_msg": "升级帐号绑定邮箱，积分+1",
+  "points_task_invite_msg": "按实际发放不限次数",
+  "points_exchange_title": "积分兑换",
+  "to_invite": "去邀请",
+  "points_detail_title": "积分明细",
+
+   "about_page_title": "关于我们",
+   "about_item_privacy_policy": "隐私条款",
+   "about_item_user_agreement": "用户协议",
+   "about_item_app_score": "APP 评分",
 
   "home_bottom_nav_bar_home": "首页",
   "home_bottom_nav_bar_vip": "VIP",
@@ -127,6 +147,21 @@
 
   "vip_coupon_selector_title" : "可用优惠券",
   "vip_coupon_selector_use_btn" : "立即使用",
-  "vip_coupon_selector_not_use_btn" : "不使用优惠券"
+  "vip_coupon_selector_not_use_btn" : "不使用优惠券",
 
+  "feedback_list_title": "意见反馈",
+  "feedback_solved": "已解答",
+  "feedback_submit": "已提交",
+  "add_feedback_title": "添加反馈",
+  "add_feedback_type": "反馈类型",
+  "add_feedback_select": "请选择",
+  "add_feedback_Input_title": "问题和意见",
+  "add_feedback_Input_hint": "请描述你要反馈的问题，我们会尽快回复唷～",
+  "add_feedback_typed": "已输入",
+  "add_feedback_upload_hint": "上传图片（最多3张）",
+  "add_feedback_submit": "提交",
+  "feedback_detail_title": "反馈详情",
+  "feedback_detail_not_satisfied": "不满意",
+  "feedback_detail_not_average": "一般",
+  "feedback_detail_satisfied": "满意"
 }
