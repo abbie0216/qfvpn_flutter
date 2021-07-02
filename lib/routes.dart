@@ -1,14 +1,18 @@
 import 'package:flutter/widgets.dart';
+import 'package:qfvpn/page/feedback/add_feedback_page.dart';
+import 'package:qfvpn/page/feedback/feedback_detail_page.dart';
 import 'package:qfvpn/page/feedback/feedback_list_page.dart';
 import 'package:qfvpn/page/login/forgot_pw_page.dart';
 import 'package:qfvpn/page/login/login_page.dart';
 import 'package:qfvpn/page/login/register_page.dart';
 import 'package:qfvpn/page/main/main_page.dart';
+import 'package:qfvpn/page/me/about_page.dart';
 import 'package:qfvpn/page/me/coupon_page.dart';
 import 'package:qfvpn/page/me/news_detail_page.dart';
 import 'package:qfvpn/page/me/news_page.dart';
 import 'package:qfvpn/page/me/points_detail_page.dart';
 import 'package:qfvpn/page/me/points_page.dart';
+import 'package:qfvpn/page/pay/pay_page.dart';
 import 'package:qfvpn/page/setting/binding_page.dart';
 import 'package:qfvpn/page/setting/pw_change_page.dart';
 import 'package:qfvpn/page/setting/setting_page.dart';
@@ -37,4 +41,8 @@ final Map<String, WidgetBuilder> routes = {
   (FeedbackListPage).toString(): (context) => FeedbackListPage(),
   (OrderHistoryPage).toString(): (context) => OrderHistoryPage(),
   (OrderHistoryDetailPage).toString(): (context) => OrderHistoryDetailPage(),
+  (AddFeedbackPage).toString(): (context) => AddFeedbackPage(),
+  (FeedbackDetailPage).toString(): (context) => FeedbackDetailPage(),
+  (AboutPage).toString(): (context) => AboutPage(),
+  (PayPage).toString(): (context) => PayPage(),
 };

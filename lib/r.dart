@@ -41,6 +41,8 @@ class _R_Color {
   Color text_color_alpha40() => Color(0x66000000);
   Color text_color_alpha50() => Color(0x80000000);
   Color text_color_alpha80() => Color(0xcc000000);
+  Color text_color_alpha50() => Color(0x80000000);
+  Color text_color_alpha30() => Color(0x4D000000);
 
   Color text_field_border_color() => Color(0xffdddeec);
 
@@ -168,13 +170,51 @@ class _R_Color {
   Color vip_pay_btn_bg() => Color(0xff6569ee);
   Color vip_pay_btn_text() => Color(0xffffffff);
   Color vip_coupon_selector_title_text() => Color(0xff6569ee);
-  Color vip_coupon_selector_content_main_text() => Color(0xff6569ee);
-  Color vip_coupon_selector_content_sub_text() => Color(0x4d000000);
+  Color vip_coupon_selector_selected_main_text() => Color(0x33000000);
+  Color vip_coupon_selector_selected_sub_text() => Color(0x4d000000);
+  Color vip_coupon_selector_unselected_main_text() => Color(0xff6569ee);
+  Color vip_coupon_selector_unselected_sub_text() => Color(0x4d000000);
   Color vip_coupon_selector_use_btn_bg() => Color(0xff6569ee);
   Color vip_coupon_selector_use_btn_text() => Color(0xffffffff);
+  Color vip_coupon_selector_already_use_btn_border() => Color(0x806569ee);
+  Color vip_coupon_selector_already_use_btn_text() => Color(0x806569ee);
   Color vip_coupon_selector_not_use_btn_border() => Color(0xff6569ee);
   Color vip_coupon_selector_not_use_btn_text() => Color(0xff6569ee);
+  Color vip_outline_btn_splash() => Color(0x226569ee);
   Color vip_benefits_item_text() => Color(0x59000000);
+
+  Color pay_app_bar_bg() => Color(0xfff3f6fd);
+  Color pay_bg() => Color(0xfff3f6fd);
+  Color pay_title_text() => Color(0xcc000000);
+  Color pay_info_bg() => Color(0xffffffff);
+  Color pay_info_item_title_text() => Color(0x4d000000);
+  Color pay_info_item_value_text() => Color(0x80000000);
+  Color pay_way_title_text() => Color(0x80000000);
+  Color pay_way_btn_border() => Color(0xff6569ee);
+  Color pay_way_btn_unselected_bg() => Color(0xffe2ecf5);
+  Color pay_way_btn_unselected_text() => Color(0xff6569ee);
+  Color pay_way_btn_selected_bg() => Color(0xff6569ee);
+  Color pay_way_btn_selected_text() => Color(0xffffffff);
+  Color pay_hint_text() => Color(0x4d000000);
+  Color pay_divider_1_bg() => Color(0xfff4f6f9);
+  Color pay_divider_2_bg() => Color(0xffe8f1fa);
+  Color pay_total_amount_title_text() => Color(0xcc000000);
+  Color pay_total_amount_value_text() => Color(0xff6569ee);
+  Color pay_btn_bg() => Color(0xffff8080);
+  Color pay_btn_text() => Color(0xccffffff);
+  Color pay_btn_disable_bg() => Color(0x4dff8080);
+  Color pay_btn_disable_text() => Color(0x80ffffff);
+
+  Color pay_result_app_bar_bg() => Color(0xfff3f6fd);
+  Color pay_result_bg() => Color(0xfff3f6fd);
+  Color pay_result_title_text() => Color(0xcc000000);
+  Color pay_result_main_text() => Color(0xcc000000);
+  Color pay_result_sub_text() => Color(0x80000000);
+  Color pay_result_back_btn_text() => Color(0xff6569ee);
+  Color pay_result_back_btn_border() => Color(0xff6569ee);
+  Color pay_result_back_btn_splash() => Color(0x226569ee);
+  Color pay_result_next_btn_text() => Color(0xffffffff);
+  Color pay_result_next_btn_bg() => Color(0xff6569ee);
 
   Color forgot_hint_color() => Color(0x33000000);
 
@@ -187,6 +227,11 @@ class _R_Color {
   Color order_history_statue_unpaid() => Color(0xfff9bb1d);
   Color order_history_repurchase() => Color(0xff6569ee);
   Color order_history_paid_now() => Color(0xffff8080);
+
+  Color feedback_solved_flag_bg() => Color(0xff98e733);
+  Color feedback_submit_flag_bg() => Color(0xfff9bb1d);
+  Color feedback_submit_btn_bg() => Color(0xff6569ee);
+  Color feedback_satisfaction_select() => Color(0xff6569ee);
 }
 
 class _R_Image {

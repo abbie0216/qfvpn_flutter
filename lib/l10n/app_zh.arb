@@ -1,6 +1,7 @@
 {
   "@@locale": "zh",
 
+  "app_name": "赤兔加速器",
   "news": "new",
   "go": "Go",
   "login_title": "嗨, 欢迎回来",
@@ -84,6 +85,11 @@
   "to_invite": "去邀请",
   "points_detail_title": "积分明细",
 
+   "about_page_title": "关于我们",
+   "about_item_privacy_policy": "隐私条款",
+   "about_item_user_agreement": "用户协议",
+   "about_item_app_score": "APP 评分",
+
   "home_bottom_nav_bar_home": "首页",
   "home_bottom_nav_bar_vip": "VIP",
   "home_bottom_nav_bar_me": "我的",
@@ -155,5 +161,19 @@
   "order_history_detail_number" : "订单号｜",
   "order_history_detail_expiry_date" : "请在 %s 内完成付款",
 
-  "feedback_list_title": "意见反馈"
+  "feedback_list_title": "意见反馈",
+  "feedback_solved": "已解答",
+  "feedback_submit": "已提交",
+  "add_feedback_title": "添加反馈",
+  "add_feedback_type": "反馈类型",
+  "add_feedback_select": "请选择",
+  "add_feedback_Input_title": "问题和意见",
+  "add_feedback_Input_hint": "请描述你要反馈的问题，我们会尽快回复唷～",
+  "add_feedback_typed": "已输入",
+  "add_feedback_upload_hint": "上传图片（最多3张）",
+  "add_feedback_submit": "提交",
+  "feedback_detail_title": "反馈详情",
+  "feedback_detail_not_satisfied": "不满意",
+  "feedback_detail_not_average": "一般",
+  "feedback_detail_satisfied": "满意"
 }
