@@ -152,50 +152,36 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
           ),
           SizedBox(height: 12),
           Expanded(
-            child: ListView.separated(
-              shrinkWrap: true,
-              itemBuilder: _buildListItem,
-              itemCount: 2,
-              scrollDirection: Axis.horizontal,
-              separatorBuilder: (BuildContext context, int index) {
-                return Divider(
-                  indent: 10,
-                  color: Colors.transparent,
-                );
-              },
+            child: Row(
+              children: [
+                ListView.separated(
+                  shrinkWrap: true,
+                  itemBuilder: _buildListItem,
+                  itemCount: 2,
+                  scrollDirection: Axis.horizontal,
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Divider(
+                      indent: 10,
+                      color: Colors.transparent,
+                    );
+                  },
+                ),
+                SizedBox(width: 10),
+                Container(
+                  height: 80,
+                  width: 80,
+                  decoration: BoxDecoration(
+                    color: R.color.background_color(),
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    // fit: BoxFit.fill,
+                  ),
+                  child: Center(
+                    child: Image(image: R.image.btn_camera_n()),
+                  ),
+                )
+              ],
             ),
           ),
-
-          // Row(
-          //   children: [
-          //     Expanded(
-          //       child: ListView.separated(
-          //         shrinkWrap: true,
-          //         itemBuilder: _buildListItem,
-          //         itemCount: 2,
-          //         scrollDirection: Axis.horizontal,
-          //         separatorBuilder: (BuildContext context, int index) {
-          //           return Divider(
-          //             indent: 10,
-          //             color: Colors.transparent,
-          //           );
-          //         },
-          //       ),
-          //     ),
-          //     Container(
-          //       height: 80,
-          //       width: 80,
-          //       decoration: BoxDecoration(
-          //         color: R.color.background_color(),
-          //         borderRadius: BorderRadius.all(Radius.circular(8)),
-          //         // fit: BoxFit.fill,
-          //       ),
-          //       child: Center(
-          //         child: Image(image: R.image.btn_camera_n()),
-          //       ),
-          //     )
-          //   ],
-          // ),
         ],
       ),
     );
@@ -213,6 +199,7 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
       child: Stack(
         alignment: Alignment.center,
         children: [
+          Image(image: R.image.img_earnpoint()),
           Positioned(
             top: 5,
             right: 5,

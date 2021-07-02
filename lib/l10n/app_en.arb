@@ -162,5 +162,8 @@
   "add_feedback_typed": "已输入",
   "add_feedback_upload_hint": "上传图片（最多3张）",
   "add_feedback_submit": "提交",
-  "feedback_detail_title": "反馈详情"
+  "feedback_detail_title": "反馈详情",
+  "feedback_detail_not_satisfied": "不满意",
+  "feedback_detail_average": "一般",
+  "feedback_detail_satisfied": "满意"
 }
