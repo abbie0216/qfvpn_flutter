@@ -3,12 +3,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qfvpn/bloc/vip/vip_bloc.dart';
-<<<<<<< HEAD
 import 'package:qfvpn/page/vip/order_history_page.dart';
-=======
 import 'package:qfvpn/page/pay/pay_page.dart';
 import 'package:qfvpn/page/vip/vip_coupon_bottom_sheet.dart';
->>>>>>> develop
 import 'package:qfvpn/s.dart';
 import 'package:qfvpn/widget/selector_widget_button.dart';
 import 'package:sprintf/sprintf.dart';
