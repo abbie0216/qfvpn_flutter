@@ -7,6 +7,7 @@ import 'package:qfvpn/bloc/feedback/feedback_bloc.dart';
 import 'package:qfvpn/bloc/home/vpn_bloc.dart';
 import 'package:qfvpn/bloc/login/register_bloc.dart';
 import 'package:qfvpn/bloc/share/share_bloc.dart';
+import 'package:qfvpn/page/feedback/add_feedback_page.dart';
 import 'package:qfvpn/routes.dart';
 
 import 'bloc/home/home_bloc.dart';
@@ -144,7 +145,7 @@ class App extends StatelessWidget {
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
               debugShowCheckedModeBanner: false,
-              initialRoute: (SplashPage).toString(),
+              initialRoute: (AddFeedbackPage).toString(),
               routes: routes,
 
             )));
