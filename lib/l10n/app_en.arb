@@ -166,6 +166,7 @@
   "order_history_detail_unpaid_status" : "待支付",
   "order_history_detail_close_status" : "订单关闭",
   "order_history_detail_expiry_date" : "请在 %s 内完成付款",
+  "order_history_detail_repurchase" : "重新购买",
 
   "pay_title": "支付",
   "pay_info_coupon_title": "优惠券",
