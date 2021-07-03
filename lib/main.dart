@@ -7,7 +7,7 @@ import 'package:qfvpn/bloc/feedback/feedback_bloc.dart';
 import 'package:qfvpn/bloc/home/vpn_bloc.dart';
 import 'package:qfvpn/bloc/login/register_bloc.dart';
 import 'package:qfvpn/bloc/share/share_bloc.dart';
-import 'package:qfvpn/page/feedback/add_feedback_page.dart';
+import 'package:qfvpn/bloc/vip/order_history_bloc.dart';
 import 'package:qfvpn/routes.dart';
 
 import 'bloc/home/home_bloc.dart';
@@ -20,11 +20,13 @@ import 'bloc/me/news/news_bloc.dart';
 import 'bloc/me/news/news_detail_bloc.dart';
 import 'bloc/me/points/points_bloc.dart';
 import 'bloc/me/points/points_detail_bloc.dart';
+import 'bloc/pay/pay_bloc.dart';
 import 'bloc/setting/binding_bloc.dart';
 import 'bloc/setting/pw_change_bloc.dart';
 import 'bloc/setting/setting_bloc.dart';
 import 'bloc/sharedetail/share_detail_bloc.dart';
 import 'bloc/splash/splash_bloc.dart';
+import 'bloc/vip/order_history_detail_bloc.dart';
 import 'bloc/vip/vip_bloc.dart';
 import 'model/api/api_repository.dart';
 import 'model/config/config_data.dart';
@@ -134,7 +136,19 @@ class App extends StatelessWidget {
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
               BlocProvider(
+                  create: (context) => OrderHistoryBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
+                  create: (context) => OrderHistoryDetailBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
                   create: (context) => AboutBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
+                  create: (context) => PayBloc(
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
             ],
@@ -145,7 +159,7 @@ class App extends StatelessWidget {
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
               debugShowCheckedModeBanner: false,
-              initialRoute: (AddFeedbackPage).toString(),
+              initialRoute: (SplashPage).toString(),
               routes: routes,
 
             )));

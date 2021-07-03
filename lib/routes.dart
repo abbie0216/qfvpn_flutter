@@ -12,12 +12,15 @@ import 'package:qfvpn/page/me/news_detail_page.dart';
 import 'package:qfvpn/page/me/news_page.dart';
 import 'package:qfvpn/page/me/points_detail_page.dart';
 import 'package:qfvpn/page/me/points_page.dart';
+import 'package:qfvpn/page/pay/pay_page.dart';
 import 'package:qfvpn/page/setting/binding_page.dart';
 import 'package:qfvpn/page/setting/pw_change_page.dart';
 import 'package:qfvpn/page/setting/setting_page.dart';
 import 'package:qfvpn/page/share/share_page.dart';
 import 'package:qfvpn/page/sharedetail/share_detail_page.dart';
 import 'package:qfvpn/page/splash/splash_page.dart';
+import 'package:qfvpn/page/vip/order_history_detail_page.dart';
+import 'package:qfvpn/page/vip/order_history_page.dart';
 
 final Map<String, WidgetBuilder> routes = {
   (SplashPage).toString(): (context) => SplashPage(),
@@ -36,7 +39,10 @@ final Map<String, WidgetBuilder> routes = {
   (SharePage).toString(): (context) => SharePage(),
   (ShareDetailPage).toString(): (context) => ShareDetailPage(),
   (FeedbackListPage).toString(): (context) => FeedbackListPage(),
+  (OrderHistoryPage).toString(): (context) => OrderHistoryPage(),
+  (OrderHistoryDetailPage).toString(): (context) => OrderHistoryDetailPage(),
   (AddFeedbackPage).toString(): (context) => AddFeedbackPage(),
   (FeedbackDetailPage).toString(): (context) => FeedbackDetailPage(),
   (AboutPage).toString(): (context) => AboutPage(),
+  (PayPage).toString(): (context) => PayPage(),
 };
