@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qfvpn/bloc/feedback/feedback_bloc.dart';
 import 'package:qfvpn/bloc/feedback/feedback_state.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:qfvpn/page/feedback/feedback_type_bottom_sheet.dart';
 
 import '../../r.dart';
 import '../../s.dart';
@@ -74,32 +76,37 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
   }
 
   Widget _buildSelectTypeItem(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-        // fit: BoxFit.fill,
-      ),
-      child: Row(
-        children: [
-          Text(
-            S.of(context).add_feedback_type,
-            style: TextStyle(color: Colors.black, fontSize: 14),
-          ),
-          SizedBox(width: 14),
-          Text(
-            S.of(context).add_feedback_select,
-            style: TextStyle(color: R.color.text_color_alpha30(), fontSize: 14),
-          ),
-          Spacer(),
-          Image(image: R.image.btn_dropdown_n()),
-        ],
+    return GestureDetector(
+      onTap: () => _showFeedbackTypeBottomSheet(),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          // fit: BoxFit.fill,
+        ),
+        child: Row(
+          children: [
+            Text(
+              S.of(context).add_feedback_type,
+              style: TextStyle(color: Colors.black, fontSize: 14),
+            ),
+            SizedBox(width: 14),
+            Text(
+              S.of(context).add_feedback_select,
+              style:
+                  TextStyle(color: R.color.text_color_alpha30(), fontSize: 14),
+            ),
+            Spacer(),
+            Image(image: R.image.btn_dropdown_n()),
+          ],
+        ),
       ),
     );
   }
 
   int letterCount = 0;
+
   Widget _buildInputItem(BuildContext context) {
     return Container(
       height: 220,
@@ -176,7 +183,7 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
       ),
     );
   }
-  
+
   Widget _buildImageList() {
     var size = _imageFileList?.length ?? 0;
     return ListView.separated(
@@ -281,5 +288,13 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
         ),
       ),
     );
+  }
+
+  void _showFeedbackTypeBottomSheet() {
+    showMaterialModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        expand: false,
+        context: context,
+        builder: (context) => FeedbackTypeBottomSheet());
   }
 }
