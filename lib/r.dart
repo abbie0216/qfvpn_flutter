@@ -230,6 +230,10 @@ class _R_Color {
   Color feedback_submit_flag_bg() => Color(0xfff9bb1d);
   Color feedback_submit_btn_bg() => Color(0xff6569ee);
   Color feedback_satisfaction_select() => Color(0xff6569ee);
+  Color feedback_option_sheet_item_selected_bg() => Color(0x196569ee);
+  Color feedback_option_sheet_item_unselected_bg() => Colors.transparent;
+  Color feedback_option_sheet_item_selected_bg_border() => home_primary_text();
+  Color feedback_option_sheet_item_unselected_bg_border() => Color(0xffdddeec);
 }
 
 class _R_Image {

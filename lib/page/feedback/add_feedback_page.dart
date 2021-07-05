@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qfvpn/bloc/feedback/feedback_bloc.dart';
 import 'package:qfvpn/bloc/feedback/feedback_state.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:qfvpn/page/feedback/feedback_type_bottom_sheet.dart';
 
 import '../../r.dart';
 import '../../s.dart';
@@ -71,30 +76,36 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
   }
 
   Widget _buildSelectTypeItem(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-        // fit: BoxFit.fill,
-      ),
-      child: Row(
-        children: [
-          Text(
-            S.of(context).add_feedback_type,
-            style: TextStyle(color: Colors.black, fontSize: 14),
-          ),
-          SizedBox(width: 14),
-          Text(
-            S.of(context).add_feedback_select,
-            style: TextStyle(color: R.color.text_color_alpha30(), fontSize: 14),
-          ),
-          Spacer(),
-          Image(image: R.image.btn_dropdown_n()),
-        ],
+    return GestureDetector(
+      onTap: () => _showFeedbackTypeBottomSheet(),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          // fit: BoxFit.fill,
+        ),
+        child: Row(
+          children: [
+            Text(
+              S.of(context).add_feedback_type,
+              style: TextStyle(color: Colors.black, fontSize: 14),
+            ),
+            SizedBox(width: 14),
+            Text(
+              S.of(context).add_feedback_select,
+              style:
+                  TextStyle(color: R.color.text_color_alpha30(), fontSize: 14),
+            ),
+            Spacer(),
+            Image(image: R.image.btn_dropdown_n()),
+          ],
+        ),
       ),
     );
   }
+
+  int letterCount = 0;
 
   Widget _buildInputItem(BuildContext context) {
     return Container(
@@ -114,16 +125,24 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
             style: TextStyle(color: Colors.black, fontSize: 14),
           ),
           Expanded(
-            child: Text(
-              S.of(context).add_feedback_input_hint,
-              style:
-                  TextStyle(color: R.color.text_color_alpha30(), fontSize: 14),
+            child: TextField(
+              maxLines: null,
+              keyboardType: TextInputType.multiline,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: S.of(context).add_feedback_input_hint,
+                hintStyle: TextStyle(
+                    color: R.color.text_color_alpha30(), fontSize: 14),
+              ),
+              onChanged: (text) => setState(() {
+                letterCount = text.length;
+              }),
             ),
           ),
           Align(
             alignment: Alignment.centerRight,
             child: Text(
-              S.of(context).add_feedback_typed + ' 0 / 200',
+              S.of(context).add_feedback_typed + ' $letterCount / 200',
               style:
                   TextStyle(color: R.color.text_color_alpha30(), fontSize: 14),
             ),
@@ -152,33 +171,11 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
           ),
           SizedBox(height: 12),
           Expanded(
-            child: Row(
+            child: ListView(
+              scrollDirection: Axis.horizontal,
               children: [
-                ListView.separated(
-                  shrinkWrap: true,
-                  itemBuilder: _buildListItem,
-                  itemCount: 2,
-                  scrollDirection: Axis.horizontal,
-                  separatorBuilder: (BuildContext context, int index) {
-                    return Divider(
-                      indent: 10,
-                      color: Colors.transparent,
-                    );
-                  },
-                ),
-                SizedBox(width: 10),
-                Container(
-                  height: 80,
-                  width: 80,
-                  decoration: BoxDecoration(
-                    color: R.color.background_color(),
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    // fit: BoxFit.fill,
-                  ),
-                  child: Center(
-                    child: Image(image: R.image.btn_camera_n()),
-                  ),
-                )
+                _buildImageList(),
+                _buildAddImageItem(),
               ],
             ),
           ),
@@ -187,7 +184,24 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
     );
   }
 
-  Widget _buildListItem(BuildContext context, int index) {
+  Widget _buildImageList() {
+    var size = _imageFileList?.length ?? 0;
+    return ListView.separated(
+      padding: EdgeInsets.only(right: size == 0 ? 0 : 10),
+      shrinkWrap: true,
+      itemBuilder: _buildImageItem,
+      itemCount: size,
+      scrollDirection: Axis.horizontal,
+      separatorBuilder: (BuildContext context, int index) {
+        return Divider(
+          indent: 10,
+          color: Colors.transparent,
+        );
+      },
+    );
+  }
+
+  Widget _buildImageItem(BuildContext context, int index) {
     return Container(
       height: 80,
       width: 80,
@@ -199,7 +213,11 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Image(image: R.image.img_earnpoint()),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: Image.file(File(_imageFileList![index].path),
+                fit: BoxFit.cover, width: 80, height: 80),
+          ),
           Positioned(
             top: 5,
             right: 5,
@@ -208,6 +226,42 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
         ],
       ),
     );
+  }
+
+  final _picker = ImagePicker();
+  late final PickedFile? pickedFile;
+
+  Widget _buildAddImageItem() {
+    return GestureDetector(
+      onTap: () => _onImageButtonPressed(),
+      child: Container(
+        height: 80,
+        width: 80,
+        decoration: BoxDecoration(
+          color: R.color.background_color(),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          // fit: BoxFit.fill,
+        ),
+        child: Center(
+          child: Image(image: R.image.btn_camera_n()),
+        ),
+      ),
+    );
+  }
+
+  List<PickedFile>? _imageFileList;
+
+  void _onImageButtonPressed() async {
+    try {
+      final pickedFileList = await _picker.getMultiImage();
+      setState(() {
+        _imageFileList = pickedFileList;
+      });
+    } catch (e) {
+      setState(() {
+        // _pickImageError = e;
+      });
+    }
   }
 
   Widget _buildSubmitBtn() {
@@ -234,5 +288,13 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
         ),
       ),
     );
+  }
+
+  void _showFeedbackTypeBottomSheet() {
+    showMaterialModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        expand: false,
+        context: context,
+        builder: (context) => FeedbackTypeBottomSheet());
   }
 }
