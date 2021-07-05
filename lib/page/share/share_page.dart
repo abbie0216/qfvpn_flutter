@@ -6,6 +6,7 @@ import 'package:qfvpn/page/sharedetail/share_detail_page.dart';
 import 'package:qfvpn/r.dart';
 import 'package:qfvpn/s.dart';
 import 'package:qfvpn/widget/selector_widget_button.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class SharePage extends StatefulWidget {
@@ -45,7 +46,8 @@ class _SharePageState extends State<SharePage> {
                       TextButton(
                           style: ButtonStyle(
                               splashFactory: NoSplash.splashFactory,
-                              padding: MaterialStateProperty.all(EdgeInsets.only(left: 16, right: 16))),
+                              padding: MaterialStateProperty.all(
+                                  EdgeInsets.only(left: 16, right: 16))),
                           onPressed: () {
                             Navigator.of(context)
                                 .pushNamed((ShareDetailPage).toString());
@@ -77,9 +79,7 @@ class _SharePageState extends State<SharePage> {
                                 ],
                               ),
                             ),
-                          )
-                      )
-                  )));
+                          )))));
         }));
   }
 
@@ -159,13 +159,17 @@ class _SharePageState extends State<SharePage> {
           children: [
             /** qr code **/
             Container(
-                margin: EdgeInsets.only(top: 16, bottom: 30),
-                width: 140,
-                height: 140,
-                decoration: BoxDecoration(
-                    color: R.color.share_top_rec_bg(),
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    border: Border.all(color: R.color.share_qr_code_border()))),
+              margin: EdgeInsets.only(top: 16, bottom: 30),
+              width: 140,
+              height: 140,
+              decoration: BoxDecoration(
+                  color: R.color.share_top_rec_bg(),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  border: Border.all(color: R.color.share_qr_code_border())),
+              child: QrImage(
+                data: '1234567890',
+              ),
+            ),
             /** earn point hint **/
             Row(
               mainAxisSize: MainAxisSize.max,
