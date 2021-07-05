@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
@@ -43,14 +44,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } else {
       ApiResult result = await apiRepository.login(LoginReq(email, password));
       if (result is Success) {
-        Token token = (result.data as BaseResp).data;
+        Token token = result.data;
         Fimber.d('resp: $token');
         Pref().setupToken(token);
         yield LoginSuccessState();
       } else if (result is Error) {
-        Fimber.d('error: ${(result.error as BaseResp).toString()}');
+        Fimber.d('error: ${result.error.toString()}');
         yield LoginFailedState(
-            DateTime.now().millisecondsSinceEpoch, result);
+            DateTime.now().millisecondsSinceEpoch, result.error);
       }
       // yield LoginFailedState(DateTime.now().millisecondsSinceEpoch);
       // yield LoginSuccessState();

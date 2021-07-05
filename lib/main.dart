@@ -38,7 +38,7 @@ Future<void> main() async {
   Fimber.plantTree(DebugTree());
 
   var configProvider = ConfigProvider(
-    data: ConfigData(flavor: 'dev', apiBaseUrl: 'qfvpn.com'),
+    data: ConfigData(flavor: 'dev', apiBaseUrl: 'https://qfvpn.com'),
     child: App(),
   );
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -55,7 +55,7 @@ class App extends StatelessWidget {
     return MultiRepositoryProvider(
         providers: [
           RepositoryProvider(
-              create: (context) => ApiRepository(baseUrl: _configData?.apiBaseUrl ?? '')),
+              create: (context) => ApiRepository(_configData?.apiBaseUrl ?? '')),
         ],
         child: MultiBlocProvider(
             providers: [

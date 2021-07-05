@@ -20,7 +20,7 @@ class RegisterPWInvalidState extends RegisterState {
 
 class RegisterFailedState extends RegisterState {
   final int timeStamp;
-  final Error error;
+  final dynamic error;
   const RegisterFailedState(this.timeStamp, this.error): super();
 
   @override
@@ -32,7 +32,7 @@ class RegisterSuccessState extends RegisterState {
 
 class LoginFailedState extends RegisterState {
   final int timeStamp;
-  final Error errMsg;
+  final dynamic errMsg;
   const LoginFailedState(this.timeStamp, this.errMsg): super();
 
   @override
