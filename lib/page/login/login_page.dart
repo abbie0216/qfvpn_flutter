@@ -50,7 +50,6 @@ class _LoginPageState extends State<LoginPage> {
 
         } else if (state is LoginFailedState) {
           Fimber.d('login failed');
-
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(SnackBar(

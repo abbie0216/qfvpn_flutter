@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:meta/meta.dart';
@@ -41,17 +42,14 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     } else if (password.length <= 6) {
       yield RegisterPWInvalidState();
     } else {
-      //ToDo:  Register
-
       ApiResult result = await apiRepository.register(RegisterReq(email, password, invitationCode ?? ''));
       if(result is Success) {
-        RegisterResp resp = (result.data as BaseResp).data;
+        RegisterResp resp = result.data;
         Fimber.d('resp: $resp');
-
         yield* login(email, password);
       } else if (result is Error){
-        Fimber.d('error: ${result.error}');
-        yield RegisterFailedState(DateTime.now().millisecondsSinceEpoch, result);
+        Fimber.d('error: ${result.error.toString()}');
+        yield RegisterFailedState(DateTime.now().millisecondsSinceEpoch, result.error);
       }
     }
   }
@@ -60,14 +58,14 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       String email, String password) async* {
       ApiResult result = await apiRepository.login(LoginReq(email, password));
       if (result is Success) {
-        Token token = (result.data as BaseResp).data;
+        Token token = result.data;
         Fimber.d('resp: $token');
         Pref().setupToken(token);
         yield LoginSuccessState();
       } else if (result is Error) {
-        Fimber.d('error: ${(result.error as BaseResp).toString()}');
+        Fimber.d('error: ${result.error.toString()}');
         yield LoginFailedState(
-            DateTime.now().millisecondsSinceEpoch, result);
+            DateTime.now().millisecondsSinceEpoch, result.error);
       }
   }
 }

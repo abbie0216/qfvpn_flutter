@@ -18,7 +18,7 @@ class LoginPWInvalidState extends LoginState {
 
 class LoginFailedState extends LoginState {
   final int timeStamp;
-  final Error errMsg;
+  final dynamic errMsg;
   const LoginFailedState(this.timeStamp, this.errMsg): super();
 
   @override

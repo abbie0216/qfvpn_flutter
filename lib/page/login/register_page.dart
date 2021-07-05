@@ -44,7 +44,7 @@ class _RegisterPageState extends State<RegisterPage> {
           Navigator.pushNamed(context, (MainPage).toString());
         } else if (state is RegisterFailedState) {
           Fimber.d('Register failed');
-          var msg = ErrorCode.of(context).getErrorMsg(state.error.error);
+          var msg = ErrorCode.of(context).getErrorMsg(state.error);
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(SnackBar(
