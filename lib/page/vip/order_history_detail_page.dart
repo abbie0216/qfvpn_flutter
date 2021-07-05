@@ -11,9 +11,14 @@ import '../../utility/convert.dart';
 
 enum PainState { UNPAID, PAID, CLOSED }
 
+// ignore: must_be_immutable
 class OrderHistoryDetailPage extends StatefulWidget {
+  String orderNumber;
+
+  OrderHistoryDetailPage({required this.orderNumber});
+
   @override
-  State<StatefulWidget> createState() => _OrderHistoryDetailPageState();
+  State<StatefulWidget> createState() => _OrderHistoryDetailPageState(orderNumber: orderNumber);
 }
 
 class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
@@ -22,6 +27,9 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
   static const PAY_WAY_WX = 0;
   static const PAY_WAY_ALI = 1;
   int _selectedPayWay = PAY_WAY_NONE;
+  String orderNumber;
+
+  _OrderHistoryDetailPageState({required this.orderNumber});
 
   @override
   void initState() {
@@ -73,7 +81,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _stateContentView(),
-                _orderContentView("360天VIP", "201603230733541980852590"),
+                _orderContentView("360天VIP", orderNumber),
                 _orderDetailContentView(),
                 Spacer(),
                 _buttonContentView(),
@@ -177,7 +185,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
           Positioned(
               left: 20, top: 53,
               child: Text(
-                S.of(context).order_history_detail_number+orderNum,
+                S.of(context).order_history_number+orderNum,
                 style: TextStyle(
                     color: R.color.text_color_alpha40(),
                     fontSize: 14,
