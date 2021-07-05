@@ -18,7 +18,8 @@ class LoginPWInvalidState extends LoginState {
 
 class LoginFailedState extends LoginState {
   final int timeStamp;
-  const LoginFailedState(this.timeStamp): super();
+  final Error errMsg;
+  const LoginFailedState(this.timeStamp, this.errMsg): super();
 
   @override
   List<Object> get props => [timeStamp];

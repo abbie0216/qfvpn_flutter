@@ -26,7 +26,7 @@ class _PasswordFieldState extends State<PasswordField> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
-      maxLength: 20,
+      maxLength: 15,
       maxLines: 1,
       keyboardType: TextInputType.visiblePassword,
       decoration: InputDecoration(

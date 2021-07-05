@@ -19,7 +19,7 @@ BaseResp<T> _$BaseRespFromJson<T>(
 
 Map<String, dynamic> _$BaseRespToJson<T>(
   BaseResp<T> instance,
-  Object? Function(T value) toJsonT,
+  Object Function(T value) toJsonT,
 ) =>
     <String, dynamic>{
       'errCode': instance.errCode,

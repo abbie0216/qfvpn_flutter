@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:qfvpn/bloc/login/login_bloc.dart';
+import 'package:qfvpn/model/pref.dart';
 import 'package:qfvpn/page/login/forgot_pw_page.dart';
 import 'package:qfvpn/page/login/register_page.dart';
 import 'package:qfvpn/page/main/main_page.dart';
@@ -43,9 +45,12 @@ class _LoginPageState extends State<LoginPage> {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state is LoginSuccessState) {
-          debugPrint('login success');
+          Fimber.d('login success');
+          Navigator.pushNamed(context, (MainPage).toString());
+
         } else if (state is LoginFailedState) {
-          debugPrint('login failed');
+          Fimber.d('login failed');
+
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(SnackBar(

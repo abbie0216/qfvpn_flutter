@@ -2,8 +2,16 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:meta/meta.dart';
 import 'package:qfvpn/model/api/api_repository.dart';
+import 'package:qfvpn/model/api/api_result.dart';
+import 'package:qfvpn/model/api/bean/base_resp.dart';
+import 'package:qfvpn/model/api/bean/login/login_req.dart';
+import 'package:qfvpn/model/api/bean/login/register_req.dart';
+import 'package:qfvpn/model/api/bean/login/register_resp.dart';
+import 'package:qfvpn/model/api/bean/token.dart';
+import 'package:qfvpn/model/pref.dart';
 
 import '../../widget/validator.dart';
 
@@ -29,11 +37,37 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     if (email.isEmpty || !Validators.isValidEmail(email)) {
       yield RegisterEmailInvalidState();
     } else if (password.isEmpty) {
+      yield RegisterPWEmptyState();
+    } else if (password.length <= 6) {
       yield RegisterPWInvalidState();
     } else {
       //ToDo:  Register
-      // yield RegisterFailedState(DateTime.now().millisecondsSinceEpoch);
-      yield RegisterSuccessState();
+
+      ApiResult result = await apiRepository.register(RegisterReq(email, password, invitationCode ?? ''));
+      if(result is Success) {
+        RegisterResp resp = (result.data as BaseResp).data;
+        Fimber.d('resp: $resp');
+
+        yield* login(email, password);
+      } else if (result is Error){
+        Fimber.d('error: ${result.error}');
+        yield RegisterFailedState(DateTime.now().millisecondsSinceEpoch, result);
+      }
     }
+  }
+
+  Stream<RegisterState> login(
+      String email, String password) async* {
+      ApiResult result = await apiRepository.login(LoginReq(email, password));
+      if (result is Success) {
+        Token token = (result.data as BaseResp).data;
+        Fimber.d('resp: $token');
+        Pref().setupToken(token);
+        yield LoginSuccessState();
+      } else if (result is Error) {
+        Fimber.d('error: ${(result.error as BaseResp).toString()}');
+        yield LoginFailedState(
+            DateTime.now().millisecondsSinceEpoch, result);
+      }
   }
 }

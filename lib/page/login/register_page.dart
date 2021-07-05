@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:qfvpn/bloc/login/register_bloc.dart';
+import 'package:qfvpn/model/api/bean/base_resp.dart';
+import 'package:qfvpn/page/ErrorCode.dart';
+import 'package:qfvpn/page/main/main_page.dart';
 import 'package:qfvpn/widget/MailField.dart';
 import 'package:qfvpn/widget/PasswordField.dart';
 
@@ -35,19 +39,21 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return BlocListener<RegisterBloc, RegisterState>(
       listener: (context, state) {
-        if (state is RegisterSuccessState) {
-          debugPrint('Register success');
+        if (state is LoginSuccessState) {
+          Fimber.d('Register&Login success');
+          Navigator.pushNamed(context, (MainPage).toString());
         } else if (state is RegisterFailedState) {
-          debugPrint('Register failed');
-          // ScaffoldMessenger.of(context)
-          //   ..hideCurrentSnackBar()
-          //   ..showSnackBar(SnackBar(
-          //       content: Row(
-          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //         children: <Widget>[
-          //           Text(Str.of(context).login_failed),
-          //         ],
-          //       )));
+          Fimber.d('Register failed');
+          var msg = ErrorCode.of(context).getErrorMsg(state.error.error);
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBar(
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(msg),
+                  ],
+                )));
         }
       },
       child:
@@ -163,9 +169,13 @@ class _RegisterPageState extends State<RegisterPage> {
                     hintColor: R.color.hint_color_deep_bg(),
                     textColor: Colors.white,
                     validator: (_) {
-                      return state is RegisterPWInvalidState
-                          ? S.of(context).login_pw_error
-                          : null;
+                       if (state is RegisterPWEmptyState) {
+                        return S.of(context).login_pw_error;
+                       } else if (state is RegisterPWInvalidState) {
+                         return S.of(context).error_pw_too_short;
+                       } else {
+                         return null;
+                       }
                     },
                   ),
                   SizedBox(height: 30),

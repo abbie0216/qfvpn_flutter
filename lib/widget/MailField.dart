@@ -22,7 +22,7 @@ class _MailFieldState extends State<MailField> {
   Widget build(BuildContext context) {
     return TextFormField(
         controller: widget.controller,
-        maxLength: 20,
+        maxLength: 50,
         maxLines: 1,
         keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
