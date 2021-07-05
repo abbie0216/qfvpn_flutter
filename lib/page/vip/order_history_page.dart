@@ -91,7 +91,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
         child: BlocBuilder<OrderHistoryBloc, OrderHistoryState>(builder: (context, state) {
           var used = Random().nextInt(3); //for test
           var productName = "30天VIP";
-          var orderNum = "订单号｜201603230733541980852590";
+          var orderNum = "2016032307335419808"+Random().nextInt(10000).toString();
           var textColor = R.color.btn_white_color();
           var titleTextColor = R.color.btn_white_color();
           var paid_btn_color;
@@ -120,7 +120,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
 
           return SizedBox(
             width: 328,
-            height: 135,
+            height: 125,
             child: Card(
               elevation: 0,
               margin: EdgeInsets.only(left: 16, right: 16, top: 6, bottom: 6),
@@ -131,7 +131,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(left: 20, top: 15),
+                    padding: EdgeInsets.only(left: 20, top: 10),
                     child: Text(
                       productName,
                       style: TextStyle(
@@ -148,7 +148,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: Expanded(
                         child: Text(
-                          orderNum,
+                          S.of(context).order_history_number+orderNum,
                           style: TextStyle(
                               color: R.color.text_color_alpha40(),
                               fontSize: 14,
@@ -159,7 +159,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        margin: EdgeInsets.only(top: 17,bottom: 19),
+                        margin: EdgeInsets.only(top: 8,bottom: 19),
                         constraints: BoxConstraints.expand(width: 60, height: 21),
                         decoration: BoxDecoration(
                           color: bg_color,
@@ -180,32 +180,30 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
                         )
                       ),
                       used != 0 ? Container(
-                        margin: EdgeInsets.only(right: 20,top: 13),
+                        margin: EdgeInsets.only(right: 20,top: 11, bottom: 14),
                         constraints: BoxConstraints.expand(width: 84, height: 30),
                         decoration: BoxDecoration(
                           color: paid_btn_color,
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: TextButton(
-                            style: ButtonStyle(
+                        child: TextButton(
+                          style: ButtonStyle(
                               textStyle: MaterialStateProperty.all(TextStyle(fontSize: 14)),
                               padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.only(left: 14, right: 14, top: 3, bottom: 5)),
                               splashFactory: NoSplash.splashFactory
-                            ),
-                            onPressed: (){
-                              Navigator.of(context).pushNamed((OrderHistoryDetailPage).toString());
-                            },
-                            child: Text(
-                              paidTitle,
-                              style: TextStyle(
-                                  color: textColor,
-                                  fontWeight: FontWeight.normal),
-                                textAlign: TextAlign.center,
-                            ),
                           ),
-                        )
+                          onPressed: (){
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => OrderHistoryDetailPage(orderNumber: orderNum)));
+                          },
+                          child: Text(
+                            paidTitle,
+                            style: TextStyle(
+                                color: textColor,
+                                fontWeight: FontWeight.normal),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                       ) : Container(),
                     ],
                   ),

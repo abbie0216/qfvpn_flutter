@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fimber/flutter_fimber.dart';
+import 'package:qfvpn/model/pref.dart';
 import 'package:qfvpn/page/home/home_page.dart';
 import 'package:qfvpn/page/me/me_page.dart';
 import 'package:qfvpn/page/vip/vip_page.dart';

@@ -8,5 +8,4 @@ class SubmitEvent extends RegisterEvent {
   final String password;
   final String? invitationCode;
   SubmitEvent({required this.email, required this.password, this.invitationCode}) : super();
-
 }
