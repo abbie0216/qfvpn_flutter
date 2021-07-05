@@ -3,16 +3,22 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qfvpn/bloc/vip/vip_bloc.dart';
-import 'package:qfvpn/page/vip/order_history_page.dart';
+import 'package:qfvpn/page/home/home_page.dart';
 import 'package:qfvpn/page/pay/pay_page.dart';
+import 'package:qfvpn/page/vip/order_history_page.dart';
 import 'package:qfvpn/page/vip/vip_coupon_bottom_sheet.dart';
 import 'package:qfvpn/s.dart';
+import 'package:qfvpn/utility/pop_result.dart';
 import 'package:qfvpn/widget/selector_widget_button.dart';
 import 'package:sprintf/sprintf.dart';
 
 import '../../r.dart';
 
 class VipPage extends StatefulWidget {
+  final Function(int index) goToMainPage;
+
+  VipPage(this.goToMainPage);
+
   @override
   State<StatefulWidget> createState() => _VipPageState();
 }
@@ -44,7 +50,8 @@ class _VipPageState extends State<VipPage> {
                       widgetN: Image(image: R.image.btn_history_n()),
                       widgetP: Image(image: R.image.btn_history_p()),
                       onPressed: () {
-                        Navigator.of(context).pushNamed((OrderHistoryPage).toString());
+                        Navigator.of(context)
+                            .pushNamed((OrderHistoryPage).toString());
                       },
                     )
                   ],
@@ -355,7 +362,15 @@ class _VipPageState extends State<VipPage> {
               backgroundColor:
                   MaterialStateProperty.all(R.color.vip_pay_btn_bg())),
           onPressed: () {
-            Navigator.of(context).pushNamed((PayPage).toString());
+            Navigator.of(context)
+                .pushNamed((PayPage).toString())
+                .then((results) {
+              if (results is PopResult) {
+                if(results.toPage == (HomePage).toString()) {
+                  widget.goToMainPage(0);
+                }
+              }
+            });
           },
           child: Text(
             S.of(context).vip_pay_btn,

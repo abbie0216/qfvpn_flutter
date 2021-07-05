@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/bloc/pay/pay_bloc.dart';
 import 'package:qfvpn/page/pay/pay_result_page.dart';
+import 'package:qfvpn/utility/pop_result.dart';
 import 'package:qfvpn/widget/selector_widget_button.dart';
 
 import '../../r.dart';
@@ -306,11 +307,23 @@ class _PayPageState extends State<PayPage> {
             onPressed: () {
               if (_selectedPayWay != PAY_WAY_NONE) {
                 //success
-                // Navigator.of(context).pushReplacement(MaterialPageRoute(
-                //     builder: (context) => PayResultPage(isSuccess: true)));
+                // Navigator.of(context)
+                //     .push(MaterialPageRoute(
+                //         builder: (context) => PayResultPage(isSuccess: true)))
+                //     .then((results) {
+                //   if (results is PopResult) {
+                //     Navigator.of(context).pop(results);
+                //   }
+                // });
                 //failed
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => PayResultPage(isSuccess: false)));
+                Navigator.of(context)
+                    .push(MaterialPageRoute(
+                        builder: (context) => PayResultPage(isSuccess: false)))
+                    .then((results) {
+                  if (results is PopResult) {
+                    Navigator.of(context).pop(results);
+                  }
+                });
               }
             },
             style: TextButton.styleFrom(

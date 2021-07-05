@@ -15,7 +15,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _currentIndex = 0;
-  final pages = [HomePage(), VipPage(), MePage()];
+  List<Widget> pages = [];
 
   @override
   void initState() {
@@ -24,6 +24,10 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (pages.isEmpty) {
+      pages = [HomePage(), VipPage(goToMainPage), MePage()];
+    }
+
     return Scaffold(
       backgroundColor: R.color.home_bg_2(),
       body: IndexedStack(
@@ -38,13 +42,17 @@ class _MainPageState extends State<MainPage> {
             Container(
               decoration: BoxDecoration(
                   color: R.color.home_bottom_nav_bar_bg_border(),
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(22))),
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(22))),
             ),
-            Padding(padding: EdgeInsets.only(top: 1,left: 0.5,right: 0.5),child: Container(
-              decoration: BoxDecoration(
-                  color: R.color.home_bottom_nav_bar_bg(),
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(22))),
-            )),
+            Padding(
+                padding: EdgeInsets.only(top: 1, left: 0.5, right: 0.5),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: R.color.home_bottom_nav_bar_bg(),
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(22))),
+                )),
             BottomNavigationBar(
               backgroundColor: Colors.transparent,
               elevation: 0,
@@ -63,7 +71,8 @@ class _MainPageState extends State<MainPage> {
                     label: S.of(context).home_bottom_nav_bar_me)
               ],
               fixedColor: R.color.home_bottom_nav_bar_selected_text(),
-              unselectedItemColor: R.color.home_bottom_nav_bar_unselected_text(),
+              unselectedItemColor:
+                  R.color.home_bottom_nav_bar_unselected_text(),
               unselectedLabelStyle: TextStyle(fontSize: 12),
               selectedLabelStyle:
                   TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
@@ -79,4 +88,11 @@ class _MainPageState extends State<MainPage> {
       ),
     );
   }
+
+  void goToMainPage(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
 }
