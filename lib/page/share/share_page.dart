@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/bloc/share/share_bloc.dart';
 import 'package:qfvpn/bloc/share/share_state.dart';
@@ -7,6 +8,7 @@ import 'package:qfvpn/r.dart';
 import 'package:qfvpn/s.dart';
 import 'package:qfvpn/widget/selector_widget_button.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class SharePage extends StatefulWidget {
@@ -228,7 +230,14 @@ class _SharePageState extends State<SharePage> {
                         ],
                       )),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Clipboard.setData(ClipboardData(text: 'JUSTICE'))
+                              .then((value) {
+                                //todo fix snack bar style
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('copied!')));
+                          });
+                        },
                         style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.resolveWith((states) {
@@ -258,7 +267,9 @@ class _SharePageState extends State<SharePage> {
           Expanded(
               flex: 15,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  onShare(context);
+                },
                 style: ButtonStyle(
                     padding: MaterialStateProperty.all(
                         EdgeInsets.only(top: 11, bottom: 11)),
@@ -501,4 +512,7 @@ class _SharePageState extends State<SharePage> {
       ),
     );
   }
+
+  Future<void> onShare(BuildContext context) async =>
+      await Share.share('# share text <3<3<3');
 }
