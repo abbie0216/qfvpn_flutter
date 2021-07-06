@@ -1,22 +1,18 @@
-import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:meta/meta.dart';
+import 'dart:convert';
 
-part 'register_resp.g.dart';
+class RegisterResp {
+  RegisterResp({
+    required this.userId,
+  });
 
-@JsonSerializable()
-class RegisterResp extends Equatable {
-  @JsonKey(name: 'userId')
   final int userId;
 
-  RegisterResp(this.userId);
+  factory RegisterResp.fromJson(Map<String, dynamic> json) => RegisterResp(
+    userId: json['userId'],
+  );
 
-  @override
-  List<Object?> get props => [userId];
-
-  factory RegisterResp.fromJson(Map<String, dynamic> json) => _$RegisterRespFromJson(json);
-
-  Map<String, dynamic> toJson() => _$RegisterRespToJson(this);
-
-  static RegisterResp fromJsonModel(Map<String, dynamic> json) => RegisterResp.fromJson(json);
-
+  Map<String, dynamic> toJson() => {
+    'userId': userId,
+  };
 }

@@ -32,3 +32,5 @@ class SplashForceUpdateState extends SplashState{
 }
 
 class SplashNoUpdateState extends SplashState{}
+class LoginState extends SplashState {}
+class NonLoginState extends SplashState {}

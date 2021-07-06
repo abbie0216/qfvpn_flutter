@@ -1,47 +1,85 @@
+import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
+class LoginReq {
+  LoginReq({
+    required this.email,
+    required this.password,
+    this.device,
+  });
 
-part 'login_req.g.dart';
-
-// {
-//   "email": "sion.wang@silkrode.com.tw",
-//   "device": {
-//     "ua": "string",
-//     "os_type": "android",
-//     "os_version": "string",
-//     "make": "string",
-//     "model": "string",
-//     "brand": "string",
-//     "connection_type": "none",
-//     "carrier": "string",
-//     "android_id": "string",
-//     "idfa": "string",
-//     "idfv": "string"
-//   },
-//   "password": "aa123456"
-// }
-
-///run "flutter pub run build_runner build" to generate login_req.g.dart
-
-@JsonSerializable()
-class LoginReq extends Equatable {
-  @JsonKey(name: 'email')
   final String email;
-  @JsonKey(name: 'password')
+  Device? device;
   final String password;
 
-  LoginReq(this.email, this.password);
+  factory LoginReq.fromJson(Map<String, dynamic> json) => LoginReq(
+    email: json['email'],
+    device: json['device'] == null ? null : Device.fromJson(json['device']),
+    password: json['password'],
+  );
 
-  @override
-  List<Object?> get props => [email];
-
-  @override
-  String toString() {
-    return 'LoginReq{email: $email, password: $password}';
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['email'] = email;
+    if (device != null) {
+      data['device'] = device!.toJson();
+    }
+    data['password'] = password;
+    return data;
   }
+}
 
-  factory LoginReq.fromJson(Map<String, dynamic> json) => _$LoginReqFromJson(json);
+class Device {
+  Device({
+    required this.ua,
+    required this.osType,
+    required this.osVersion,
+    required this.make,
+    required this.model,
+    required this.brand,
+    required this.connectionType,
+    required this.carrier,
+    required this.androidId,
+    required this.idfa,
+    required this.idfv,
+  });
 
-  Map<String, dynamic> toJson() => _$LoginReqToJson(this);
+  final String ua;
+  final String osType;
+  final String osVersion;
+  final String make;
+  final String model;
+  final String brand;
+  final String connectionType;
+  final String carrier;
+  final String androidId;
+  final String idfa;
+  final String idfv;
+
+  factory Device.fromJson(Map<String, dynamic> json) => Device(
+    ua: json['ua'],
+    osType: json['osType'],
+    osVersion: json['osVersion'],
+    make: json['make'],
+    model: json['model'],
+    brand: json['brand'],
+    connectionType: json['connectionType'],
+    carrier: json['carrier'],
+    androidId: json['androidId'],
+    idfa: json['idfa'],
+    idfv: json['idfv'],
+  );
+
+  Map<String, dynamic> toJson() => {
+    'ua': ua,
+    'osType': osType,
+    'osVersion': osVersion,
+    'make': make,
+    'model': model,
+    'brand': brand,
+    'connectionType': connectionType,
+    'carrier': carrier,
+    'androidId': androidId,
+    'idfa': idfa,
+    'idfv': idfv,
+  };
 }
