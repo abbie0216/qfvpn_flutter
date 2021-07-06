@@ -42,7 +42,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } else if (password.isEmpty) {
       yield LoginPWInvalidState();
     } else {
-      ApiResult result = await apiRepository.login(LoginReq(email, password));
+      ApiResult result = await apiRepository.login(LoginReq(email: email, password: password));
       if (result is Success) {
         Token token = result.data;
         Fimber.d('resp: $token');

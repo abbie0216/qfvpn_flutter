@@ -1,8 +1,5 @@
 
-import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
-
-part 'register_req.g.dart';
+import 'dart:convert';
 
 // {
 // "inviteCode": "string",
@@ -12,26 +9,30 @@ part 'register_req.g.dart';
 
 ///run "flutter pub run build_runner build" to generate register_req.g.dart
 
-@JsonSerializable()
-class RegisterReq extends Equatable {
-  @JsonKey(name: 'email')
-  final String email;
-  @JsonKey(name: 'password')
-  final String password;
-  @JsonKey(name: 'inviteCode')
+RegisterReq registerReqFromJson(String str) => RegisterReq.fromJson(json.decode(str));
+
+String registerReqToJson(RegisterReq data) => json.encode(data.toJson());
+
+class RegisterReq {
+  RegisterReq({
+    required this.inviteCode,
+    required this.email,
+    required this.password,
+  });
+
   final String inviteCode;
+  final String email;
+  final String password;
 
-  RegisterReq(this.email, this.password, this.inviteCode);
+  factory RegisterReq.fromJson(Map<String, dynamic> json) => RegisterReq(
+    inviteCode: json['inviteCode'],
+    email: json['email'],
+    password: json['password'],
+  );
 
-  @override
-  List<Object?> get props => [email];
-
-  @override
-  String toString() {
-    return 'RegisterReq{email: $email, password: $password, inviteCode: $inviteCode}';
-  }
-
-  factory RegisterReq.fromJson(Map<String, dynamic> json) => _$RegisterReqFromJson(json);
-
-  Map<String, dynamic> toJson() => _$RegisterReqToJson(this);
+  Map<String, dynamic> toJson() => {
+    'inviteCode': inviteCode,
+    'email': email,
+    'password': password,
+  };
 }

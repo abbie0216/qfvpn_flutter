@@ -42,7 +42,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     } else if (password.length <= 6) {
       yield RegisterPWInvalidState();
     } else {
-      ApiResult result = await apiRepository.register(RegisterReq(email, password, invitationCode ?? ''));
+      ApiResult result = await apiRepository.register(RegisterReq(inviteCode: invitationCode?? '', email: email, password: password));
       if(result is Success) {
         RegisterResp resp = result.data;
         Fimber.d('resp: $resp');
@@ -56,7 +56,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   Stream<RegisterState> login(
       String email, String password) async* {
-      ApiResult result = await apiRepository.login(LoginReq(email, password));
+      ApiResult result = await apiRepository.login(LoginReq(email: email, password: password));
       if (result is Success) {
         Token token = result.data;
         Fimber.d('resp: $token');
