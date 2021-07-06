@@ -91,9 +91,11 @@ class _HomePageState extends State<HomePage> {
                       )),
                   /** contents **/
                   Column(
+                    mainAxisSize: MainAxisSize.max,
                     children: [
                       /** announcement **/
-                      Padding(
+                      Expanded(
+                          child: Padding(
                         padding: EdgeInsets.only(left: 20, right: 20),
                         child: Card(
                           elevation: 3,
@@ -101,25 +103,22 @@ class _HomePageState extends State<HomePage> {
                           shape: RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(12))),
-                          child: SizedBox(
-                            height: 40,
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 12, right: 12),
-                              child: Row(
-                                children: [
-                                  Image(image: R.image.ico_broadcast()),
-                                  VerticalMarquee(values: [
-                                    '公告内容公告内容公告内容公告内容1',
-                                    '公告内容公告内容公告内容公告内容2',
-                                    '公告内容公告内容公告内容公告内容3'
-                                  ])
-                                ],
-                              ),
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 12, right: 12),
+                            child: Row(
+                              children: [
+                                Image(image: R.image.ico_broadcast()),
+                                VerticalMarquee(values: [
+                                  '公告内容公告内容公告内容公告内容1',
+                                  '公告内容公告内容公告内容公告内容2',
+                                  '公告内容公告内容公告内容公告内容3'
+                                ])
+                              ],
                             ),
                           ),
                         ),
-                      ),
-                      Expanded(flex: 3, child: Container()),
+                      )),
+                      Spacer(flex: 3),
                       /** connect btn **/
                       Container(
                         width: MediaQuery.of(context).size.width * 0.6,
@@ -130,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                               child: VpnBtn(),
                             )),
                       ),
-                      Expanded(flex: 3, child: Container()),
+                      Spacer(flex: 3),
                       /** option btn **/
                       Padding(
                         padding: EdgeInsets.only(left: 20, right: 20),
@@ -210,7 +209,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-                      Expanded(flex: 2, child: Container())
+                      Spacer(flex: 2)
                     ],
                   )
                 ],
