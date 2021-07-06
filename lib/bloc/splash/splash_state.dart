@@ -13,18 +13,22 @@ class SplashLoadedState extends SplashState {}
 
 class SplashUpdateState extends SplashState{
   final String downloadUrl;
-  const SplashUpdateState(this.downloadUrl): super();
+  final String releaseNote;
+  final int timeStamp;
+  const SplashUpdateState(this.downloadUrl, this.releaseNote, this.timeStamp): super();
 
   @override
-  List<Object> get props => [downloadUrl];
+  List<Object> get props => [downloadUrl, releaseNote];
 }
 
 class SplashForceUpdateState extends SplashState{
   final String downloadUrl;
-  const SplashForceUpdateState(this.downloadUrl): super();
+  final String releaseNote;
+  final int timeStamp;
+  const SplashForceUpdateState(this.downloadUrl, this.releaseNote, this.timeStamp): super();
 
   @override
-  List<Object> get props => [downloadUrl];
+  List<Object> get props => [downloadUrl, releaseNote, timeStamp];
 }
 
 class SplashNoUpdateState extends SplashState{}

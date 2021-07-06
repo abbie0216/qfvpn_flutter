@@ -253,6 +253,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  flowder:
+    dependency: "direct main"
+    description:
+      name: flowder
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -462,10 +469,24 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0"
+  path_provider:
+    dependency: "direct main"
+    description:
+      name: path_provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.2"
   path_provider_linux:
     dependency: transitive
     description:
       name: path_provider_linux
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
+  path_provider_macos:
+    dependency: transitive
+    description:
+      name: path_provider_macos
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
@@ -670,6 +691,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.5"
+  sn_progress_dialog:
+    dependency: "direct main"
+    description:
+      name: sn_progress_dialog
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   source_gen:
     dependency: transitive
     description:

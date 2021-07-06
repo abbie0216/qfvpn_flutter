@@ -33,9 +33,9 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
         var version = await AppUtils.getAppVersionCode();
         VersionResp resp = (result.data as BaseResp).data;
         if(resp.isForce) {
-          yield SplashForceUpdateState(resp.downloadUrl);
+          yield SplashForceUpdateState(resp.downloadUrl, resp.releaseNote, DateTime.now().millisecondsSinceEpoch);
         } else if(int.parse(version) > resp.versionCode) {
-          yield SplashUpdateState(resp.downloadUrl);
+          yield SplashUpdateState(resp.downloadUrl, resp.releaseNote, DateTime.now().millisecondsSinceEpoch);
         } else {
           yield SplashNoUpdateState();
         }
