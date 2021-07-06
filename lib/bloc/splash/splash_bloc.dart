@@ -55,10 +55,10 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
         } else if(int.parse(version) > resp.versionCode) {
           yield SplashUpdateState(resp.downloadUrl, resp.releaseNote, DateTime.now().millisecondsSinceEpoch);
         } else {
-          yield SplashNoUpdateState();
+          add(SplashFetchEvent());
         }
       } else {
-        yield SplashNoUpdateState();
+        add(SplashFetchEvent());
       }
     }
   }

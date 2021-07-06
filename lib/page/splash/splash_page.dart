@@ -78,13 +78,11 @@ class _SplashPageState extends State<SplashPage> {
     pr = ProgressDialog(context: context);
     return BlocListener<SplashBloc, SplashState>(
       listener: (context, state) {
-        if (state is SplashNoUpdateState) {
-          // Navigator.of(context).pushReplacementNamed((LoginPage).toString());
-        } else if(state is SplashForceUpdateState) {
+        if(state is SplashForceUpdateState) {
           alert(true, state.downloadUrl, state.releaseNote);
         } else if(state is SplashUpdateState) {
           alert(false, state.downloadUrl, state.releaseNote);
-        if (state is NonLoginState) {
+        } else if (state is NonLoginState) {
           Navigator.of(context).pushReplacementNamed((LoginPage).toString());
         } else if (state is LoginState) {
           Navigator.of(context).pushReplacementNamed((MainPage).toString());
