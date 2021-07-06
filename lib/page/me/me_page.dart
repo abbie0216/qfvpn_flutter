@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:qfvpn/bloc/me/me_bloc.dart';
 import 'package:qfvpn/page/feedback/feedback_list_page.dart';
+import 'package:qfvpn/page/login/login_page.dart';
 import 'package:qfvpn/page/me/points_page.dart';
 import 'package:qfvpn/page/setting/binding_page.dart';
 import 'package:qfvpn/page/setting/setting_page.dart';

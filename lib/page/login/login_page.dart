@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
       listener: (context, state) {
         if (state is LoginSuccessState) {
           Fimber.d('login success');
-          Navigator.pushNamed(context, (MainPage).toString());
+          Navigator.pushReplacementNamed(context, (MainPage).toString());
 
         } else if (state is LoginFailedState) {
           Fimber.d('login failed');

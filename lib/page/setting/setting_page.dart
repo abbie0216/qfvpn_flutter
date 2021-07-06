@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/bloc/setting/pw_change_bloc.dart';
 import 'package:qfvpn/bloc/setting/setting_bloc.dart';
+import 'package:qfvpn/model/pref.dart';
+import 'package:qfvpn/page/login/login_page.dart';
 import 'package:qfvpn/page/setting/pw_change_page.dart';
 
 import '../../r.dart';
@@ -159,7 +162,9 @@ class _SettingPageState extends State<SettingPage> {
                             borderRadius: BorderRadius.all(Radius.circular(22)),
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          _logout();
+                        },
                         child: Text(S.of(context).btn_logout,
                             style: TextStyle(
                                 color: R.color.text_blue_color(),
@@ -167,5 +172,11 @@ class _SettingPageState extends State<SettingPage> {
                                 fontSize: 14)))),
               ]));
         }));
+  }
+
+  void _logout() {
+     Pref().clearToken();
+     Navigator.pushNamedAndRemoveUntil(context, (LoginPage).toString(), (route) => false);
+
   }
 }

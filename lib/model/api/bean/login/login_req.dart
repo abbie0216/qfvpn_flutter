@@ -1,9 +1,5 @@
 import 'dart:convert';
 
-LoginReq loginReqFromJson(String str) => LoginReq.fromJson(json.decode(str));
-
-String loginReqToJson(LoginReq data) => json.encode(data.toJson());
-
 class LoginReq {
   LoginReq({
     required this.email,

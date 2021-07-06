@@ -27,8 +27,8 @@ class _VpnBtnState extends State<VpnBtn> with TickerProviderStateMixin {
   late AnimationController _blueDotAnimController;
   late Animation<double> _blueDotAnim;
   late Animation<double> _redDotAnim;
-  late Timer _testConnectingTimer;
-  late Timer _connectedTimer;
+  Timer? _testConnectingTimer;
+  Timer? _connectedTimer;
   late VpnBloc _vpnBloc;
   int _connectedSeconds = 0;
 
@@ -67,8 +67,8 @@ class _VpnBtnState extends State<VpnBtn> with TickerProviderStateMixin {
   void dispose() {
     _progressAnimController.dispose();
     _blueDotAnimController.dispose();
-    if (_testConnectingTimer.isActive) _testConnectingTimer.cancel();
-    if (_connectedTimer.isActive) _connectedTimer.cancel();
+    if (_testConnectingTimer != null &&  _testConnectingTimer!.isActive) _testConnectingTimer!.cancel();
+    if (_connectedTimer!=null && _connectedTimer!.isActive) _connectedTimer!.cancel();
     super.dispose();
   }
 
@@ -97,8 +97,8 @@ class _VpnBtnState extends State<VpnBtn> with TickerProviderStateMixin {
                   break;
                 case BtnState.CONNECTING:
                   setState(() {
-                    if (_testConnectingTimer.isActive) {
-                      _testConnectingTimer.cancel();
+                    if (_testConnectingTimer != null && _testConnectingTimer!.isActive) {
+                      _testConnectingTimer!.cancel();
                     }
                     _btnState = BtnState.INIT;
                     _vpnBloc.add(VpnServiceStopEvent());
@@ -106,8 +106,8 @@ class _VpnBtnState extends State<VpnBtn> with TickerProviderStateMixin {
                   break;
                 case BtnState.CONNECTED:
                   setState(() {
-                    if (_connectedTimer.isActive) {
-                      _connectedTimer.cancel();
+                    if (_connectedTimer!= null && _connectedTimer!.isActive) {
+                      _connectedTimer!.cancel();
                       _connectedSeconds = 0;
                     }
                     _btnState = BtnState.INIT;

@@ -9,10 +9,6 @@ import 'dart:convert';
 
 ///run "flutter pub run build_runner build" to generate register_req.g.dart
 
-RegisterReq registerReqFromJson(String str) => RegisterReq.fromJson(json.decode(str));
-
-String registerReqToJson(RegisterReq data) => json.encode(data.toJson());
-
 class RegisterReq {
   RegisterReq({
     required this.inviteCode,
