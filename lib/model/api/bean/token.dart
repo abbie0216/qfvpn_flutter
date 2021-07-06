@@ -13,6 +13,11 @@ class Token {
   final String refreshToken;
   final String refreshTokenExpireAt;
 
+  @override
+  String toString() {
+    return 'Token{accessToken: $accessToken, accessTokenExpireAt: $accessTokenExpireAt, refreshToken: $refreshToken, refreshTokenExpireAt: $refreshTokenExpireAt}';
+  }
+
   factory Token.fromJson(Map<String, dynamic> json) => Token(
     accessToken: json['accessToken'],
     accessTokenExpireAt: json['accessTokenExpireAt'],

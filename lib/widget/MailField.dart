@@ -21,13 +21,6 @@ class MailField extends StatefulWidget {
 class _MailFieldState extends State<MailField> {
 
   @override
-  void didChangeDependencies() {
-    context.dependOnInheritedWidgetOfExactType();
-    super.didChangeDependencies();
-    Fimber.d('didChangeDependencies');
-  }
-
-  @override
   Widget build(BuildContext context) {
     return TextFormField(
         controller: widget.controller,

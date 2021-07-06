@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/bloc/splash/splash_bloc.dart';
 import 'package:qfvpn/bloc/splash/splash_event.dart';
 import 'package:qfvpn/bloc/splash/splash_state.dart';
+import 'package:qfvpn/page/main/main_page.dart';
 
 import '../../r.dart';
 import '../login/login_page.dart';
@@ -68,8 +69,10 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return BlocListener<SplashBloc, SplashState>(
       listener: (context, state) {
-        if (state is SplashLoadedState) {
+        if (state is NonLoginState) {
           Navigator.of(context).pushReplacementNamed((LoginPage).toString());
+        } else if (state is LoginState) {
+          Navigator.of(context).pushReplacementNamed((MainPage).toString());
         }
       },
       child: BlocBuilder<SplashBloc, SplashState>(builder: (context, state) {

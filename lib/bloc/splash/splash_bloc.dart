@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:qfvpn/model/api/api_repository.dart';
 import 'package:qfvpn/model/api/api_result.dart';
 import 'package:qfvpn/model/api/bean/base_resp.dart';
+import 'package:qfvpn/model/api/bean/login/RefreshTokenReq.dart';
+import 'package:qfvpn/model/api/bean/login/RefreshTokenResp.dart';
 import 'package:qfvpn/model/api/bean/login/login_req.dart';
 import 'package:qfvpn/model/api/bean/token.dart';
+import 'package:qfvpn/model/pref.dart';
 
 import 'splash_event.dart';
 import 'splash_state.dart';
@@ -16,14 +20,29 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
 
   @override
   Stream<SplashState> mapEventToState(SplashEvent event) async* {
-    if(event is SplashFetchEvent) {
-      // ApiResult result = await apiRepository.login(LoginReq("sion.wang@silkrode.com.tw", "aa123456"));
-      // if(result is Success) {
-      //   LoginResp resp = (result.data as BaseResp).data;
-      //   debugPrint('resp: $resp');
-      // }
-      await Future.delayed(const Duration(seconds: 2), (){});
-      yield SplashLoadedState();
+    if (event is SplashFetchEvent) {
+      var token = await Pref().getToken();
+      if (token == null) {
+        await Future.delayed(const Duration(seconds: 2), () {});
+        yield NonLoginState();
+      } else {
+        ApiResult result = await apiRepository.refreshToken(
+            RefreshTokenReq(refreshToken: token.refreshToken));
+        if (result is Success) {
+          var newToken = Token(accessToken: result.data.accessToken,
+              accessTokenExpireAt: result.data.accessTokenExpireAt,
+              refreshToken: token.refreshToken,
+              refreshTokenExpireAt: token.refreshTokenExpireAt);
+          Fimber.d('new token: $token');
+          Pref().setupToken(newToken);
+          yield LoginState();
+        } else if (result is Error) {
+          Fimber.d('refresh token failed: ${result.error.toString()}');
+          Pref().clearToken();
+          await Future.delayed(const Duration(seconds: 2), () {});
+          yield NonLoginState();
+        }
+      }
     } else {
 
     }
