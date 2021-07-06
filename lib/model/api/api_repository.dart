@@ -10,6 +10,8 @@ import 'bean/login/register_req.dart';
 import 'bean/login/register_resp.dart';
 import 'package:dio/dio.dart';
 
+import 'bean/splash/version_resp.dart';
+
 class ApiRepository {
   late final String _baseUrl;
   late Dio _dio;
@@ -71,6 +73,25 @@ class ApiRepository {
 
       if (response.statusCode == 201) {
         return ApiResult.success(Token.fromJson(response.data['data']));
+      } else {
+        Fimber.d('error: ' + response.data['errCode']);
+        return ApiResult.error(response);
+      }
+    } catch (error) {
+      Fimber.d('error: ' + error.toString());
+      return ApiResult.error(error);
+    }
+  }
+
+  Future<ApiResult<VersionResp>> checkVersion() async {
+    try{
+      final response = await _dio.post('/api/version/check');
+
+      Fimber.d('response: ' + response.toString());
+      Fimber.d('status code: ' + response.statusCode.toString());
+      
+      if (response.statusCode == 201) {
+        return ApiResult.success(VersionResp.fromJson(response.data['data']));
       } else {
         Fimber.d('error: ' + response.data['errCode']);
         return ApiResult.error(response);

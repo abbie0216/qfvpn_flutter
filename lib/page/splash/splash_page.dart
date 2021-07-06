@@ -56,7 +56,7 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     _splashBloc = BlocProvider.of<SplashBloc>(context);
-    _splashBloc.add(SplashFetchEvent());
+    _splashBloc.add(SplashCheckVersionEvent());
 
     getFreeSpace();
     defaultProfile();
@@ -68,9 +68,9 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return BlocListener<SplashBloc, SplashState>(
       listener: (context, state) {
-        if (state is SplashLoadedState) {
+        if (state is SplashNoUpdateState) {
           Navigator.of(context).pushReplacementNamed((LoginPage).toString());
-        }
+        } 
       },
       child: BlocBuilder<SplashBloc, SplashState>(builder: (context, state) {
         return Scaffold(
