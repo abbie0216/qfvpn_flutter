@@ -18,7 +18,7 @@ class VpnBloc extends Bloc<VpnEvent, VpnState> {
     if(event is VpnFetchEvent) {
       _channel.setMethodCallHandler( (MethodCall methodCall) async {
         switch (methodCall.method) {
-          case "VPN_Permission": {
+          case 'VPN_Permission': {
             if(!methodCall.arguments) {
               add(VpnPermissionFailedEvent());
             } else {

@@ -11,6 +11,7 @@ import 'package:qfvpn/bloc/vip/order_history_bloc.dart';
 import 'package:qfvpn/routes.dart';
 
 import 'bloc/home/home_bloc.dart';
+import 'bloc/home/option_line_bloc.dart';
 import 'bloc/login/forgot_pw_bloc.dart';
 import 'bloc/login/login_bloc.dart';
 import 'bloc/me/about/about_bloc.dart';
@@ -129,6 +130,10 @@ class App extends StatelessWidget {
                       RepositoryProvider.of<ApiRepository>(context))),
               BlocProvider(
                   create: (context) => VpnBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
+                  create: (context) => OptionLineBloc(
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
               BlocProvider(

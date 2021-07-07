@@ -3,12 +3,12 @@ import 'package:flutter/widgets.dart';
 import 'package:qfvpn/r.dart';
 import 'package:qfvpn/s.dart';
 
-class OptionModeBottomSheet extends StatefulWidget {
+class OptionModeSelector extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _OptionModeBottomSheetState();
+  State<StatefulWidget> createState() => _OptionModeSelectorState();
 }
 
-class _OptionModeBottomSheetState extends State<OptionModeBottomSheet> {
+class _OptionModeSelectorState extends State<OptionModeSelector> {
   int _selectedIndex = 0;
 
   @override

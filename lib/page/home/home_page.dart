@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qfvpn/bloc/home/home_bloc.dart';
 import 'package:qfvpn/bloc/home/home_state.dart';
-import 'package:qfvpn/page/home/option_line_bottom_sheet.dart';
+import 'package:qfvpn/page/home/option_line_selector.dart';
+import 'package:qfvpn/page/home/option_mode_selector.dart';
 import 'package:qfvpn/page/home/vpn_btn.dart';
 import 'package:qfvpn/page/share/share_page.dart';
 import 'package:qfvpn/r.dart';
@@ -12,7 +13,6 @@ import 'package:qfvpn/widget/ink_wrapper.dart';
 import 'package:qfvpn/widget/selector_widget_button.dart';
 import 'package:qfvpn/widget/vertical_marquee.dart';
 
-import 'option_mode_bottom_sheet.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -34,7 +34,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return BlocListener<HomeBloc, HomeState>(
       listener: (context, state) {
-        if (state is HomeLoadedState) {}
       },
       child: BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
         return Theme(
@@ -42,6 +41,7 @@ class _HomePageState extends State<HomePage> {
           child: Scaffold(
             appBar: AppBar(
               elevation: 0,
+              automaticallyImplyLeading: false,
               title: Row(children: [
                 Padding(
                     padding: EdgeInsets.only(right: 5),
@@ -95,6 +95,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       /** announcement **/
                       Expanded(
+                        flex: 2,
                           child: Padding(
                         padding: EdgeInsets.only(left: 20, right: 20),
                         child: Card(
@@ -118,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       )),
-                      Spacer(flex: 3),
+                      Spacer(flex: 4),
                       /** connect btn **/
                       Container(
                         width: MediaQuery.of(context).size.width * 0.6,
@@ -129,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                               child: VpnBtn(),
                             )),
                       ),
-                      Spacer(flex: 3),
+                      Spacer(flex: 4),
                       /** option btn **/
                       Padding(
                         padding: EdgeInsets.only(left: 20, right: 20),
@@ -226,7 +227,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.transparent,
         expand: false,
         context: context,
-        builder: (context) => OptionModeBottomSheet());
+        builder: (context) => OptionModeSelector());
   }
 
   void showOptionLineBottomSheet() {
@@ -234,6 +235,6 @@ class _HomePageState extends State<HomePage> {
         enableDrag: false,
         context: context,
         backgroundColor: Colors.transparent,
-        builder: (context) => OptionLineBottomSheet());
+        builder: (context) => OptionLineSelector());
   }
 }

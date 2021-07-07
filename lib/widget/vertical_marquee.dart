@@ -17,7 +17,7 @@ class VerticalMarquee extends StatelessWidget {
         child: CarouselSlider(
           options: CarouselOptions(
               autoPlay: true,
-              autoPlayAnimationDuration: Duration(seconds: 1),
+              autoPlayAnimationDuration: Duration(milliseconds: 500),
               scrollDirection: Axis.vertical),
           items: values.map((info) {
             return Builder(
