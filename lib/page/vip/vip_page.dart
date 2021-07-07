@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_fimber/flutter_fimber.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qfvpn/bloc/vip/vip_bloc.dart';
 import 'package:qfvpn/model/api/bean/product/product_list_result.dart';
 import 'package:qfvpn/page/home/home_page.dart';
 import 'package:qfvpn/page/pay/pay_page.dart';
 import 'package:qfvpn/page/vip/order_history_page.dart';
-import 'package:qfvpn/page/vip/product_list.dart';
-import 'package:qfvpn/page/vip/vip_coupon_selector.dart';
+import 'package:qfvpn/page/vip/product_selector.dart';
 import 'package:qfvpn/s.dart';
 import 'package:qfvpn/utility/pop_result.dart';
 import 'package:qfvpn/widget/selector_widget_button.dart';
@@ -28,6 +25,7 @@ class VipPage extends StatefulWidget {
 
 class _VipPageState extends State<VipPage> {
   Items? _product;
+  Coupons? _coupons;
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +65,7 @@ class _VipPageState extends State<VipPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _buildMemberInfo(),
-                        ProductList(_setSelectedProduct),
-                        _buildCouponInfo(),
+                        ProductSelector(_setSelectedProduct),
                         _buildPayBtn(),
                         _buildVipBenefits()
                       ],
@@ -79,10 +76,6 @@ class _VipPageState extends State<VipPage> {
             );
           },
         ));
-  }
-
-  void _setSelectedProduct(Items product){
-    _product = product;
   }
 
   Widget _buildMemberInfo() {
@@ -130,63 +123,6 @@ class _VipPageState extends State<VipPage> {
               ],
             ),
           ))
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCouponInfo() {
-    return Padding(
-      padding: EdgeInsets.only(left: 28, right: 28),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            S.of(context).vip_coupon_title,
-            style: TextStyle(
-                color: R.color.vip_subtitle_text(),
-                fontSize: 14,
-                fontWeight: FontWeight.bold),
-          ),
-          IndexedStack(
-            alignment: Alignment.centerRight,
-            index: 0,
-            children: [
-              TextButton(
-                  onPressed: () {
-                    _showVipCouponSelector();
-                  },
-                  style: TextButton.styleFrom(
-                      splashFactory: NoSplash.splashFactory),
-                  child: Text(
-                    sprintf(S.of(context).vip_coupon_unselected_desc, [1]),
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                        fontSize: 12,
-                        color: R.color.vip_coupon_state_text(),
-                        fontWeight: FontWeight.bold),
-                  )),
-              OutlinedButton(
-                  onPressed: () {
-                    _showVipCouponSelector();
-                  },
-                  style: ButtonStyle(
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(22))),
-                      backgroundColor: MaterialStateProperty.all(
-                          R.color.vip_coupon_state_bg()),
-                      side: MaterialStateProperty.all(
-                          BorderSide(color: R.color.vip_coupon_state_border())),
-                      overlayColor: MaterialStateProperty.all(
-                          R.color.vip_outline_btn_splash())),
-                  child: Text(
-                    sprintf(S.of(context).vip_coupon_selected_desc, [30, 24]),
-                    style: TextStyle(
-                        fontSize: 12, color: R.color.vip_coupon_state_text()),
-                  )),
-            ],
-          )
         ],
       ),
     );
@@ -326,11 +262,9 @@ class _VipPageState extends State<VipPage> {
     );
   }
 
-  void _showVipCouponSelector() {
-    showMaterialModalBottomSheet(
-        enableDrag: false,
-        context: context,
-        backgroundColor: Colors.transparent,
-        builder: (context) => VipCouponSelector());
+  void _setSelectedProduct(Items product, Coupons? coupons){
+    _product = product;
+    _coupons = coupons;
   }
+
 }

@@ -145,7 +145,7 @@
   "vip_product_extra_day_gift_tag": "加送%d天",
   "vip_coupon_title": "优惠券",
   "vip_coupon_unselected_desc": "%d 张可用",
-  "vip_coupon_selected_desc" : "%d天优惠券 | -¥%d",
+  "vip_coupon_selected_desc" : "%s | -¥%s",
   "vip_pay_btn": "立即支付",
   "vip_benefits_title": "会员权益",
   "vip_benefits_1": "不限速防拥挤",
@@ -156,6 +156,7 @@
 
   "vip_coupon_selector_title" : "可用优惠券",
   "vip_coupon_selector_use_btn" : "立即使用",
+  "vip_coupon_selector_already_use_btn" : "使用中",
   "vip_coupon_selector_not_use_btn" : "不使用优惠券",
 
   "order_history_number" : "订单号｜",

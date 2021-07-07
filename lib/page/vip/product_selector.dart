@@ -1,76 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:qfvpn/bloc/vip/product_list_bloc.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:qfvpn/bloc/vip/product_selector_bloc.dart';
 import 'package:qfvpn/model/api/bean/product/product_list_result.dart';
+import 'package:qfvpn/page/vip/coupon_selector.dart';
 import 'package:sprintf/sprintf.dart';
 
 import '../../r.dart';
 import '../../s.dart';
 
-class ProductList extends StatefulWidget {
-  final void Function(Items product) setSelectedProduct;
+class ProductSelector extends StatefulWidget {
+  final void Function(Items product, Coupons? coupons) setSelectedProduct;
 
-  ProductList(this.setSelectedProduct);
+  ProductSelector(this.setSelectedProduct);
 
   @override
-  State<StatefulWidget> createState() => _ProductListState();
+  State<StatefulWidget> createState() => _ProductSelectorState();
 }
 
-class _ProductListState extends State<ProductList> {
-  late ProductListBloc _productListBloc;
-  int _selectedId = 0;
+class _ProductSelectorState extends State<ProductSelector> {
+  late ProductSelectorBloc _productSelectorBloc;
+  Items? _selectedProduct;
+  Coupons? _selectedCoupon;
 
   @override
   void initState() {
     super.initState();
-    _productListBloc = BlocProvider.of<ProductListBloc>(context);
-    _productListBloc.add(ProductListFetchEvent());
+    _productSelectorBloc = BlocProvider.of<ProductSelectorBloc>(context);
+    _productSelectorBloc.add(ProductListFetchEvent());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ProductListBloc, ProductListState>(
+    return BlocListener<ProductSelectorBloc, ProductSelectorState>(
       listener: (context, state) {
         if (state is LoadedState) {
           if (state.result.items?.isNotEmpty == true) {
-            widget.setSelectedProduct(state.result.items!.first);
+            _selectedProduct = state.result.items!.first;
+            widget.setSelectedProduct(_selectedProduct!, _selectedCoupon);
           }
         }
       },
-      child: BlocBuilder<ProductListBloc, ProductListState>(
+      child: BlocBuilder<ProductSelectorBloc, ProductSelectorState>(
         builder: (context, state) {
           if (state is LoadedState) {
-            return NotificationListener<OverscrollIndicatorNotification>(
-              onNotification: (OverscrollIndicatorNotification overScroll) {
-                overScroll.disallowGlow();
-                return false;
-              },
-              child: Expanded(
-                  child: Container(
-                margin:
-                    EdgeInsets.only(top: 20, bottom: 20, left: 28, right: 28),
-                child: ListView.separated(
-                    itemBuilder: (context, index) {
-                      var product = state.result.items?.elementAt(index);
-                      if (product != null) {
-                        return Stack(
-                          children: [
-                            _buildMainItem(index, product),
-                            _buildTag(product)
-                          ],
-                        );
-                      } else {
-                        return Container();
-                      }
-                    },
-                    separatorBuilder: (context, index) {
-                      return Container(
-                        height: 6,
-                      );
-                    },
-                    itemCount: state.result.items?.length ?? 0),
-              )),
-            );
+            return Expanded(
+                child: Column(
+              children: [
+                _buildProductList(state),
+                _buildCouponInfo(),
+              ],
+            ));
           } else {
             return Container();
           }
@@ -79,7 +59,37 @@ class _ProductListState extends State<ProductList> {
     );
   }
 
-  Widget _buildMainItem(int index, Items product) {
+  Widget _buildProductList(state) {
+    return NotificationListener<OverscrollIndicatorNotification>(
+      onNotification: (OverscrollIndicatorNotification overScroll) {
+        overScroll.disallowGlow();
+        return false;
+      },
+      child: Expanded(
+          child: Container(
+        margin: EdgeInsets.only(top: 20, bottom: 20, left: 28, right: 28),
+        child: ListView.separated(
+            itemBuilder: (context, index) {
+              var product = state.result.items?.elementAt(index);
+              if (product != null) {
+                return Stack(
+                  children: [_buildMainItem(product), _buildTag(product)],
+                );
+              } else {
+                return Container();
+              }
+            },
+            separatorBuilder: (context, index) {
+              return Container(
+                height: 6,
+              );
+            },
+            itemCount: state.result.items?.length ?? 0),
+      )),
+    );
+  }
+
+  Widget _buildMainItem(Items product) {
     return Padding(
       padding: EdgeInsets.only(top: 9),
       child: OutlinedButton(
@@ -87,11 +97,11 @@ class _ProductListState extends State<ProductList> {
               padding:
                   EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
               splashFactory: NoSplash.splashFactory,
-              backgroundColor: _selectedId == index
+              backgroundColor: _selectedProduct!.productId == product.productId
                   ? R.color.vip_product_selected_bg()
                   : R.color.vip_product_unselected_bg(),
               side: BorderSide(
-                  color: _selectedId == index
+                  color: _selectedProduct!.productId == product.productId
                       ? R.color.vip_product_selected_border()
                       : R.color.vip_product_unselected_border()),
               shape: RoundedRectangleBorder(
@@ -99,14 +109,17 @@ class _ProductListState extends State<ProductList> {
               )),
           onPressed: () {
             setState(() {
-              _selectedId = index;
+              if (_selectedProduct!.productId != product.productId) {
+                _selectedProduct = product;
+                _selectedCoupon = null;
+              }
             });
-            widget.setSelectedProduct(product);
+            widget.setSelectedProduct(_selectedProduct!, _selectedCoupon);
           },
           child: Row(
             children: [
               Image(
-                  image: _selectedId == index
+                  image: _selectedProduct!.productId == product.productId
                       ? R.image.btn_radio_p()
                       : R.image.btn_radio_n()),
               Padding(
@@ -231,5 +244,88 @@ class _ProductListState extends State<ProductList> {
         )
       ],
     );
+  }
+
+  Widget _buildCouponInfo() {
+    var type = _selectedCoupon == null ? 0 : 1;
+
+    return Padding(
+      padding: EdgeInsets.only(left: 28, right: 28),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            S.of(context).vip_coupon_title,
+            style: TextStyle(
+                color: R.color.vip_subtitle_text(),
+                fontSize: 14,
+                fontWeight: FontWeight.bold),
+          ),
+          IndexedStack(
+            alignment: Alignment.centerRight,
+            index: type,
+            children: [
+              /** 0: coupon not selected **/
+              TextButton(
+                  onPressed: () {
+                    _showVipCouponSelector(_selectedProduct?.coupons);
+                  },
+                  style: TextButton.styleFrom(
+                      splashFactory: NoSplash.splashFactory),
+                  child: Text(
+                    sprintf(S.of(context).vip_coupon_unselected_desc,
+                        [_selectedProduct?.coupons?.length ?? 0]),
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: R.color.vip_coupon_state_text(),
+                        fontWeight: FontWeight.bold),
+                  )),
+              /** 1: coupon selected **/
+              OutlinedButton(
+                  onPressed: () {
+                    _showVipCouponSelector(_selectedProduct?.coupons);
+                  },
+                  style: ButtonStyle(
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(22))),
+                      backgroundColor: MaterialStateProperty.all(
+                          R.color.vip_coupon_state_bg()),
+                      side: MaterialStateProperty.all(
+                          BorderSide(color: R.color.vip_coupon_state_border())),
+                      overlayColor: MaterialStateProperty.all(
+                          R.color.vip_outline_btn_splash())),
+                  child: Text(
+                    sprintf(S.of(context).vip_coupon_selected_desc, [
+                      _selectedCoupon?.title ?? '',
+                      _selectedCoupon?.reduceAmount ?? ''
+                    ]),
+                    style: TextStyle(
+                        fontSize: 12, color: R.color.vip_coupon_state_text()),
+                  )),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  void _showVipCouponSelector(List<Coupons>? coupons) {
+    if (coupons?.isNotEmpty == true) {
+      showMaterialModalBottomSheet(
+          enableDrag: false,
+          context: context,
+          backgroundColor: Colors.transparent,
+          builder: (context) =>
+              CouponSelector(coupons!, _selectedCoupon)).then((result) {
+        if ((result as Coupons?)?.userCouponId != _selectedCoupon?.userCouponId) {
+          setState(() {
+            _selectedCoupon = result;
+          });
+          widget.setSelectedProduct(_selectedProduct!, _selectedCoupon);
+        }
+      });
+    }
   }
 }

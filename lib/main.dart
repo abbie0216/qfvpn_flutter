@@ -9,7 +9,7 @@ import 'package:qfvpn/bloc/home/vpn_bloc.dart';
 import 'package:qfvpn/bloc/login/register_bloc.dart';
 import 'package:qfvpn/bloc/share/share_bloc.dart';
 import 'package:qfvpn/bloc/vip/order_history_bloc.dart';
-import 'package:qfvpn/bloc/vip/product_list_bloc.dart';
+import 'package:qfvpn/bloc/vip/product_selector_bloc.dart';
 import 'package:qfvpn/routes.dart';
 
 import 'bloc/home/home_bloc.dart';
@@ -163,7 +163,7 @@ class App extends StatelessWidget {
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
               BlocProvider(
-                  create: (context) => ProductListBloc(
+                  create: (context) => ProductSelectorBloc(
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
             ],

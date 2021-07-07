@@ -88,7 +88,7 @@ class ApiRepository {
   }
 
   Future<ApiResult<VersionResp>> checkVersion() async {
-    try{
+    try {
       final response = await _dio.post('/api/version/check');
 
       Fimber.d('response: ' + response.toString());
@@ -115,7 +115,8 @@ class ApiRepository {
       Fimber.d('status code: ' + response.statusCode.toString());
 
       if (response.statusCode == 201) {
-        return ApiResult.success(RefreshTokenResp.fromJson(response.data['data']));
+        return ApiResult.success(
+            RefreshTokenResp.fromJson(response.data['data']));
       } else {
         Fimber.d('error: ' + response.data['errCode']);
         return ApiResult.error(response);
@@ -133,7 +134,8 @@ class ApiRepository {
       Fimber.d('response: ' + response.toString());
       Fimber.d('status code: ' + response.statusCode.toString());
       if (response.statusCode == 201) {
-        return ApiResult.success(NodeListResult.fromJson(response.data['data']));
+        return ApiResult.success(
+            NodeListResult.fromJson(response.data['data']));
       } else {
         Fimber.d('error: ' + response.data['errCode']);
         return ApiResult.error(response);
@@ -151,7 +153,8 @@ class ApiRepository {
       Fimber.d('response: ' + response.toString());
       Fimber.d('status code: ' + response.statusCode.toString());
       if (response.statusCode == 201) {
-        return ApiResult.success(ProductListResult.fromJson(response.data['data']));
+        return ApiResult.success(
+            ProductListResult.fromJson(response.data['data']));
       } else {
         Fimber.d('error: ' + response.data['errCode']);
         return ApiResult.error(response);
@@ -161,4 +164,5 @@ class ApiRepository {
       return ApiResult.error(error);
     }
   }
+
 }
