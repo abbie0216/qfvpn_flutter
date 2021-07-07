@@ -53,8 +53,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         yield LoginFailedState(
             DateTime.now().millisecondsSinceEpoch, result.error);
       }
-      // yield LoginFailedState(DateTime.now().millisecondsSinceEpoch);
-      // yield LoginSuccessState();
     }
   }
 }

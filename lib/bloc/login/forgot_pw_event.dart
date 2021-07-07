@@ -5,7 +5,8 @@ abstract class ForgotPwEvent {
 }
 
 class SendCodeStart extends ForgotPwEvent {
-  SendCodeStart() : super();
+  final String email;
+  SendCodeStart({required this.email}) : super();
 }
 
 class SendCodeTimer extends ForgotPwEvent {

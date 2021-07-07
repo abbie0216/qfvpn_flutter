@@ -2,12 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:qfvpn/bloc/login/forgot_pw_bloc.dart';
 import 'package:qfvpn/widget/MailField.dart';
 import 'package:qfvpn/widget/PasswordField.dart';
 
 import '../../r.dart';
 import '../../s.dart';
+import '../ErrorCode.dart';
 
 class ForgotPwPage extends StatefulWidget {
   ForgotPwPage({Key? key}) : super(key: key);
@@ -31,6 +33,18 @@ class _ForgotPwPageState extends State<ForgotPwPage> {
     _forgotPwBloc = BlocProvider.of<ForgotPwBloc>(context);
   }
 
+  void _showSnakeBar(String msg) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+          content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(msg),
+        ],
+      )));
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<ForgotPwBloc, ForgotPwState>(
@@ -40,15 +54,21 @@ class _ForgotPwPageState extends State<ForgotPwPage> {
             ..hideCurrentSnackBar()
             ..showSnackBar(SnackBar(
                 content: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(S.of(context).verification_code_sent),
-                  ],
-                )));
-        } else if(state is ForgotPwSuccessState) {
-          debugPrint('success');
-        } else if (state is ForgotPwFailedState) {
-          debugPrint('failed');
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(S.of(context).verification_code_sent),
+              ],
+            )));
+        } else if (state is CodeVerifyFailState) {
+          _showSnakeBar(S.of(context).verification_code_incorrect);
+        } else if (state is NotSendCodeState) {
+          _showSnakeBar(S.of(context).please_send_verification_code);
+        } else if (state is ErrorState) {
+          Fimber.d('error: ${state.error}');
+          var msg = ErrorCode.of(context).getErrorMsg(state.error);
+          _showSnakeBar(msg);
+        } else if (state is SuccessState) {
+          Navigator.of(context).pop();
         }
       },
       child:
@@ -231,7 +251,7 @@ class _ForgotPwPageState extends State<ForgotPwPage> {
                     style: TextStyle(color: R.color.text_blue_color()),
                     validator: (value) {
                       return state is VerificationCodeInvalidState
-                      ? S.of(context).verification_code_error
+                          ? S.of(context).verification_code_error
                           : null;
                     },
                   )),
@@ -254,12 +274,14 @@ class _ForgotPwPageState extends State<ForgotPwPage> {
                           if (state is CodeCountDownState) {
                             return;
                           }
-                          _forgotPwBloc.add(SendCodeStart());
+                          _forgotPwBloc
+                              .add(SendCodeStart(email: _emailController.text));
                         },
                         child: Text(
                             state is CodeCountDownState
                                 ? '${state.time.toString()}s...'
-                                : S.of(context)
+                                : S
+                                    .of(context)
                                     .forgot_pw_send_verification_code,
                             style: TextStyle(
                                 color: state is CodeCountDownState

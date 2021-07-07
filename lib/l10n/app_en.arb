@@ -37,6 +37,8 @@
   "forgot_email_label": "输入绑定的邮箱",
   "forgot_pw_label": "新的密码",
   "forgot_pw_send_verification_code": "发送验证码",
+  "please_send_verification_code": "请先发送验证码",
+  "verification_code_incorrect": "验证码不正确",
 
   "verification_code_error": "验证码格式错误",
   "verification_code_sent": "验证码已发送",

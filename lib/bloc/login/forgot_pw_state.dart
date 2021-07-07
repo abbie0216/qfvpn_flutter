@@ -31,13 +31,20 @@ class PWInvalidState extends ForgotPwState {
 class VerificationCodeInvalidState extends ForgotPwState {
 }
 
-class ForgotPwFailedState extends ForgotPwState {
-  final int timeStamp;
-  const ForgotPwFailedState(this.timeStamp): super();
-
-  @override
-  List<Object> get props => [timeStamp];
+class NotSendCodeState extends ForgotPwState {
 }
 
-class ForgotPwSuccessState extends ForgotPwState {
+class CodeVerifyFailState extends ForgotPwState {
+}
+
+class SuccessState extends ForgotPwState {
+}
+
+class ErrorState extends ForgotPwState {
+  final dynamic error;
+  final int _timeStamp = DateTime.now().millisecondsSinceEpoch;
+  ErrorState(this.error);
+
+  @override
+  List<Object> get props => [_timeStamp];
 }
