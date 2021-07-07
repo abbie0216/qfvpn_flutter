@@ -36,6 +36,7 @@ class ApiRepository {
       },
     ));
 
+    dio.interceptors.add(LogInterceptor());
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
         var token = await _pref.getToken();
@@ -48,6 +49,27 @@ class ApiRepository {
         Fimber.d('query: ${options.queryParameters}');
         return handler.next(options);
       },
+        // for test change domain
+      onError: (error, handler) async {
+        if(error.message.contains('SocketException')) {
+          var options = error.requestOptions;
+          options.baseUrl = 'https://qfvpn.com';
+          options.headers = {
+            'accept': 'application/json',
+            'Content-Type': 'application/json'};
+          Fimber.d('@@ url = ${options.baseUrl}, ${options.uri}');
+          dio.options.baseUrl = options.baseUrl;
+          dio.options.headers = {
+            'accept': 'application/json',
+            'Content-Type': 'application/json'
+          };
+          dio.options.method = options.method;
+          var response = await dio.request(options.path);
+          handler.resolve(response);
+        } else {
+          handler.next(error);
+        }
+      }
     ));
     return dio;
   }
