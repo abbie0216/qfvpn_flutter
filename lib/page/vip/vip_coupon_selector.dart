@@ -4,12 +4,12 @@ import 'package:flutter/widgets.dart';
 import '../../r.dart';
 import '../../s.dart';
 
-class VipCouponBottomSheet extends StatefulWidget {
+class VipCouponSelector extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _VipCouponBottomSheetState();
+  State<StatefulWidget> createState() => _VipCouponSelectorState();
 }
 
-class _VipCouponBottomSheetState extends State<VipCouponBottomSheet> {
+class _VipCouponSelectorState extends State<VipCouponSelector> {
   int _selectedId = 0;
 
   @override

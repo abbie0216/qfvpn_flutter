@@ -4,6 +4,7 @@ import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:qfvpn/model/api/bean/login/RefreshTokenReq.dart';
 import 'package:qfvpn/model/api/bean/login/login_req.dart';
 import 'package:qfvpn/model/api/bean/node/node_list_result.dart';
+import 'package:qfvpn/model/api/bean/product/product_list_result.dart';
 import 'package:qfvpn/model/api/bean/token.dart';
 
 import '../pref.dart';
@@ -143,4 +144,21 @@ class ApiRepository {
     }
   }
 
+  Future<ApiResult<ProductListResult>> fetchProductList() async {
+    try {
+      final response = await _dio.post('/api/product/list');
+
+      Fimber.d('response: ' + response.toString());
+      Fimber.d('status code: ' + response.statusCode.toString());
+      if (response.statusCode == 201) {
+        return ApiResult.success(ProductListResult.fromJson(response.data['data']));
+      } else {
+        Fimber.d('error: ' + response.data['errCode']);
+        return ApiResult.error(response);
+      }
+    } catch (error) {
+      Fimber.d('error: ' + error.toString());
+      return ApiResult.error(error);
+    }
+  }
 }
