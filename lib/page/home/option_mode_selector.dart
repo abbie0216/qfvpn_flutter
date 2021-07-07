@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:qfvpn/model/pref.dart';
 import 'package:qfvpn/r.dart';
 import 'package:qfvpn/s.dart';
 
 class OptionModeSelector extends StatefulWidget {
+  final int? defaultValue;
+
+  OptionModeSelector(this.defaultValue);
+
   @override
   State<StatefulWidget> createState() => _OptionModeSelectorState();
 }
 
 class _OptionModeSelectorState extends State<OptionModeSelector> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.defaultValue??0;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +76,8 @@ class _OptionModeSelectorState extends State<OptionModeSelector> {
         setState(() {
           _selectedIndex = which;
         });
-        Navigator.pop(context);
+        Pref().setupOptionMode(which);
+        Navigator.pop(context, which);
       },
       child: Container(
         padding: EdgeInsets.only(top: 20,bottom: 20),

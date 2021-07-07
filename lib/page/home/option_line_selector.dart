@@ -1,47 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_fimber/flutter_fimber.dart';
-import 'package:qfvpn/bloc/home/option_line_bloc.dart';
+import 'package:qfvpn/bloc/home/line_selector_bloc.dart';
 import 'package:qfvpn/model/api/bean/node/node_list_result.dart';
+import 'package:qfvpn/model/pref.dart';
 import 'package:qfvpn/utility/flag_res_map.dart';
 
 import '../../r.dart';
 import '../../s.dart';
 
 class OptionLineSelector extends StatefulWidget {
+  final Items? defaultValue;
+
+  OptionLineSelector(this.defaultValue);
+
   @override
   State<StatefulWidget> createState() => _OptionLineSelectorState();
 }
 
 class _OptionLineSelectorState extends State<OptionLineSelector> {
-  late OptionLineBloc _optionLineBloc;
-  int _selectedId = 0;
+  late LineSelectorBloc _optionLineBloc;
+  late int _selectedId;
 
   @override
   void initState() {
     super.initState();
-    _optionLineBloc = BlocProvider.of<OptionLineBloc>(context);
-    _optionLineBloc.add(OptionLineFetchEvent());
+    _selectedId = widget.defaultValue?.nodeId ?? 0;
+    _optionLineBloc = BlocProvider.of<LineSelectorBloc>(context);
+    _optionLineBloc.add(LineSelectorFetchEvent());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<OptionLineBloc, OptionLineState>(
+    return BlocListener<LineSelectorBloc, LineSelectorState>(
       listener: (context, state) {
-        if (state is LoadedState) {
-
-        }
+        if (state is LoadedState) {}
       },
-      child: BlocBuilder<OptionLineBloc, OptionLineState>(
+      child: BlocBuilder<LineSelectorBloc, LineSelectorState>(
         builder: (context, state) {
-          if(state is LoadedState){
+          if (state is LoadedState) {
             return Container(
               padding: EdgeInsets.only(left: 16, right: 16, top: 16),
               height: MediaQuery.of(context).size.height * 0.9,
               decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(22))),
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(22))),
               child: Column(
                 children: [
                   /** title **/
@@ -58,7 +62,7 @@ class _OptionLineSelectorState extends State<OptionLineSelector> {
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                                 color:
-                                R.color.home_vpn_option_sheet_title_text()),
+                                    R.color.home_vpn_option_sheet_title_text()),
                           )
                         ]),
                   ),
@@ -68,8 +72,8 @@ class _OptionLineSelectorState extends State<OptionLineSelector> {
                       physics: BouncingScrollPhysics(),
                       padding: EdgeInsets.only(top: 0),
                       itemBuilder: (BuildContext context, int index) {
-                        Fimber.d('message:${state.result.items}');
-                        return buildListItem(context,state.result.items!.elementAt(index));
+                        return buildListItem(
+                            context, state.result.items!.elementAt(index));
                       },
                       itemCount: state.result.items!.length,
                     ),
@@ -77,7 +81,7 @@ class _OptionLineSelectorState extends State<OptionLineSelector> {
                 ],
               ),
             );
-          }else{
+          } else {
             return Container();
           }
         },
@@ -102,18 +106,19 @@ class _OptionLineSelectorState extends State<OptionLineSelector> {
             )),
         onPressed: () {
           setState(() {
-            _selectedId = item.nodeId??-1;
+            _selectedId = item.nodeId ?? -1;
           });
-          Navigator.pop(context);
+          Pref().setupOptionLine(item);
+          Navigator.pop(context, item);
         },
         child: Row(
           children: [
-            Image(image: FlagResMap().get(item.country??'')),
+            Image(image: FlagResMap().get(item.country ?? '')),
             Expanded(
                 child: Padding(
               padding: EdgeInsets.only(left: 10, right: 10),
               child: Text(
-                item.name??'',
+                item.name ?? '',
                 overflow: TextOverflow.fade,
                 style: TextStyle(
                     fontSize: 14,
@@ -123,7 +128,7 @@ class _OptionLineSelectorState extends State<OptionLineSelector> {
             Padding(
               padding: EdgeInsets.only(right: 10),
               child: IndexedStack(
-                index: item.loadLevel!-1,
+                index: item.loadLevel! - 1,
                 children: [
                   Image(image: R.image.ico_signal_1()),
                   Image(image: R.image.ico_signal_2()),

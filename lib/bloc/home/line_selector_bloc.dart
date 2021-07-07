@@ -6,20 +6,19 @@ import 'package:qfvpn/model/api/api_repository.dart';
 import 'package:qfvpn/model/api/api_result.dart';
 import 'package:qfvpn/model/api/bean/node/node_list_result.dart';
 
-part 'option_line_event.dart';
+part 'line_selector_event.dart';
+part 'line_selector_state.dart';
 
-part 'option_line_state.dart';
-
-class OptionLineBloc extends Bloc<OptionLineEvent, OptionLineState> {
+class LineSelectorBloc extends Bloc<LineSelectorEvent, LineSelectorState> {
   final ApiRepository apiRepository;
 
-  OptionLineBloc({required this.apiRepository}) : super(InitState());
+  LineSelectorBloc({required this.apiRepository}) : super(InitState());
 
   @override
-  Stream<OptionLineState> mapEventToState(
-    OptionLineEvent event,
+  Stream<LineSelectorState> mapEventToState(
+    LineSelectorEvent event,
   ) async* {
-    if (event is OptionLineFetchEvent) {
+    if (event is LineSelectorFetchEvent) {
       ApiResult result = await apiRepository.fetchNodeList();
       if (result is Success) {
         yield LoadedState(result.data);
