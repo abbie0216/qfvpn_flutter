@@ -7,13 +7,12 @@ import 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final ApiRepository apiRepository;
 
-  HomeBloc({required this.apiRepository}) : super(HomeInitState());
+  HomeBloc({required this.apiRepository}) : super(InitState());
 
   @override
   Stream<HomeState> mapEventToState(
-      HomeEvent event,
-      ) async* {
-    // TODO: implement mapEventToState
+    HomeEvent event,
+  ) async* {
   }
-
 }
+

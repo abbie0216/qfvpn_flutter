@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:qfvpn/bloc/feedback/feedback_bloc.dart';
+import 'package:qfvpn/bloc/home/option_btn_bloc.dart';
 import 'package:qfvpn/bloc/home/vpn_bloc.dart';
 import 'package:qfvpn/bloc/login/register_bloc.dart';
 import 'package:qfvpn/bloc/share/share_bloc.dart';
@@ -11,7 +12,7 @@ import 'package:qfvpn/bloc/vip/order_history_bloc.dart';
 import 'package:qfvpn/routes.dart';
 
 import 'bloc/home/home_bloc.dart';
-import 'bloc/home/option_line_bloc.dart';
+import 'bloc/home/line_selector_bloc.dart';
 import 'bloc/login/forgot_pw_bloc.dart';
 import 'bloc/login/login_bloc.dart';
 import 'bloc/me/about/about_bloc.dart';
@@ -133,7 +134,7 @@ class App extends StatelessWidget {
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
               BlocProvider(
-                  create: (context) => OptionLineBloc(
+                  create: (context) => LineSelectorBloc(
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
               BlocProvider(
@@ -154,6 +155,10 @@ class App extends StatelessWidget {
                       RepositoryProvider.of<ApiRepository>(context))),
               BlocProvider(
                   create: (context) => PayBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
+                  create: (context) => OptionBtnBloc(
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
             ],
