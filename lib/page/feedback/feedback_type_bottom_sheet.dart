@@ -5,15 +5,19 @@ import '../../r.dart';
 import '../../s.dart';
 
 class FeedbackTypeBottomSheet extends StatefulWidget {
+  final int? index;
+  FeedbackTypeBottomSheet({this.index});
+
   @override
   State<StatefulWidget> createState() => _FeedbackTypeBottomSheetState();
 }
 
 class _FeedbackTypeBottomSheetState extends State<FeedbackTypeBottomSheet> {
-  int _selectedIndex = 0;
+  int? _selectedIndex;
 
   @override
   Widget build(BuildContext context) {
+    _selectedIndex = widget.index;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -73,7 +77,7 @@ class _FeedbackTypeBottomSheetState extends State<FeedbackTypeBottomSheet> {
         setState(() {
           _selectedIndex = which;
         });
-        Navigator.pop(context);
+        Navigator.pop(context, which);
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 12),
@@ -101,30 +105,14 @@ class _FeedbackTypeBottomSheetState extends State<FeedbackTypeBottomSheet> {
   }
 
   String _getOptionTitle(int which) {
-    var text = '';
-    switch (which) {
-      case 0:
-        text = S.of(context).add_feedback_type_0;
-        break;
-      case 1:
-        text = S.of(context).add_feedback_type_1;
-        break;
-      case 2:
-        text = S.of(context).add_feedback_type_2;
-        break;
-      case 3:
-        text = S.of(context).add_feedback_type_3;
-        break;
-      case 4:
-        text = S.of(context).add_feedback_type_4;
-        break;
-      case 5:
-        text = S.of(context).add_feedback_type_5;
-        break;
-      default:
-        text = S.of(context).add_feedback_type_0;
-        break;
-    };
-    return text;
+    var arr = [
+      S.of(context).add_feedback_type_0,
+      S.of(context).add_feedback_type_1,
+      S.of(context).add_feedback_type_2,
+      S.of(context).add_feedback_type_3,
+      S.of(context).add_feedback_type_4,
+      S.of(context).add_feedback_type_5
+    ];
+    return arr[which];
   }
 }
