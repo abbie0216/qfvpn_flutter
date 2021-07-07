@@ -1,15 +1,19 @@
 import 'dart:convert';
 
 import 'package:flutter_fimber/flutter_fimber.dart';
+import 'package:qfvpn/model/api/bean/login/RefreshTokenReq.dart';
 import 'package:qfvpn/model/api/bean/login/login_req.dart';
 import 'package:qfvpn/model/api/bean/node/node_list_result.dart';
 import 'package:qfvpn/model/api/bean/token.dart';
 
 import '../pref.dart';
 import 'api_result.dart';
+import 'bean/login/RefreshTokenResp.dart';
 import 'bean/login/register_req.dart';
 import 'bean/login/register_resp.dart';
 import 'package:dio/dio.dart';
+
+import 'bean/splash/version_resp.dart';
 
 class ApiRepository {
   late final String _baseUrl;
@@ -82,24 +86,44 @@ class ApiRepository {
     }
   }
 
-  // Future<ApiResult<Token>> getPointInfo(LoginReq loginReq) async {
-  //   try {
-  //     final response = await _dio.post('/api/point/info');
-  //
-  //     Fimber.d('response: ' + response.toString());
-  //     Fimber.d('status code: ' + response.statusCode.toString());
-  //
-  //     if (response.statusCode == 201) {
-  //       return ApiResult.success(Token.fromJson(response.data['data']));
-  //     } else {
-  //       Fimber.d('error: ' + response.data['errCode']);
-  //       return ApiResult.error(response);
-  //     }
-  //   } catch (error) {
-  //     Fimber.d('error: ' + error.toString());
-  //     return ApiResult.error(error);
-  //   }
-  // }
+  Future<ApiResult<VersionResp>> checkVersion() async {
+    try{
+      final response = await _dio.post('/api/version/check');
+
+      Fimber.d('response: ' + response.toString());
+      Fimber.d('status code: ' + response.statusCode.toString());
+
+      if (response.statusCode == 201) {
+        return ApiResult.success(VersionResp.fromJson(response.data['data']));
+      } else {
+        Fimber.d('error: ' + response.data['errCode']);
+        return ApiResult.error(response);
+      }
+    } catch (error) {
+      Fimber.d('error: ' + error.toString());
+      return ApiResult.error(error);
+    }
+  }
+
+  Future<ApiResult<RefreshTokenResp>> refreshToken(RefreshTokenReq req) async {
+    try {
+      final response = await _dio.post('/api/user/refreshToken',
+          data: json.encode(req.toJson()));
+
+      Fimber.d('response: ' + response.toString());
+      Fimber.d('status code: ' + response.statusCode.toString());
+
+      if (response.statusCode == 201) {
+        return ApiResult.success(RefreshTokenResp.fromJson(response.data['data']));
+      } else {
+        Fimber.d('error: ' + response.data['errCode']);
+        return ApiResult.error(response);
+      }
+    } catch (error) {
+      Fimber.d('error: ' + error.toString());
+      return ApiResult.error(error);
+    }
+  }
 
   Future<ApiResult<NodeListResult>> fetchNodeList() async {
     try {

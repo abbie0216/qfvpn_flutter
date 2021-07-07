@@ -36,6 +36,18 @@ class AppUtils {
     return [deviceName, deviceVersion, identifier];
   }
 
+  static Future<String> getAppVersionCode() async {
+    var appVersion;
+    try {
+      var packageInfo = await PackageInfo.fromPlatform();
+      appVersion = packageInfo.buildNumber;
+    } on PlatformException catch (e) {
+      Fimber.e('$e');
+    }
+
+    return appVersion;
+  }
+
   static Future<String> getAppVersion() async {
     var appVersion;
     try {

@@ -4,6 +4,15 @@
   "app_name": "赤兔加速器",
   "news": "new",
   "go": "Go",
+
+  "alert_update_notification_title" : "更新通知",
+  "alert_force_update_btn" : "强制升级",
+  "alert_update_btn" : "更新",
+  "alert_cancel_btn" : "取消",
+  "alert_skip_btn" : "跳过版本",
+  "alert_exit_btn" : "退出",
+  "alert_file_download" : "文件下载中...",
+
   "login_title": "嗨, 欢迎回来",
   "login_register_hint": "还不是会员?",
   "login_register_btn": "注册",

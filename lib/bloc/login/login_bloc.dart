@@ -45,9 +45,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       ApiResult result = await apiRepository.login(LoginReq(email: email, password: password));
       if (result is Success) {
         Token token = result.data;
-        Fimber.d('resp: $token');
+        Fimber.d('resp: ${token.toString()}');
         Pref().setupToken(token);
-        yield LoginSuccessState();
+        yield LoginSuccessState(DateTime.now().millisecondsSinceEpoch);
       } else if (result is Error) {
         Fimber.d('error: ${result.error.toString()}');
         yield LoginFailedState(

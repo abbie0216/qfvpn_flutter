@@ -1,9 +1,5 @@
 import 'dart:convert';
 
-Token tokenFromJson(String str) => Token.fromJson(json.decode(str));
-
-String tokenToJson(Token data) => json.encode(data.toJson());
-
 class Token {
   Token({
     required this.accessToken,
@@ -17,8 +13,13 @@ class Token {
   final String refreshToken;
   final String refreshTokenExpireAt;
 
+  @override
+  String toString() {
+    return 'Token{accessToken: $accessToken, accessTokenExpireAt: $accessTokenExpireAt, refreshToken: $refreshToken, refreshTokenExpireAt: $refreshTokenExpireAt}';
+  }
+
   factory Token.fromJson(Map<String, dynamic> json) => Token(
-    accessToken: json['accessToken'],
+    accessToken: json['acce, {accessToken}ssToken'],
     accessTokenExpireAt: json['accessTokenExpireAt'],
     refreshToken: json['refreshToken'],
     refreshTokenExpireAt: json['refreshTokenExpireAt'],
