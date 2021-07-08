@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
@@ -7,6 +8,7 @@ import 'package:qfvpn/model/api/bean/login/RefreshTokenReq.dart';
 import 'package:qfvpn/model/api/bean/login/SendCodeReq.dart';
 import 'package:qfvpn/model/api/bean/login/login_req.dart';
 import 'package:qfvpn/model/api/bean/node/node_list_result.dart';
+import 'package:qfvpn/model/api/bean/splash/version_req.dart';
 import 'package:qfvpn/model/api/bean/product/product_list_result.dart';
 import 'package:qfvpn/model/api/bean/token.dart';
 import 'package:qfvpn/model/api/generate_api_result.dart';
@@ -20,6 +22,7 @@ import 'bean/login/VerifyCodeReq.dart';
 import 'bean/login/register_req.dart';
 import 'bean/login/register_resp.dart';
 import 'bean/splash/version_resp.dart';
+import 'bean/user/User.dart';
 
 class ApiRepository {
   late final String _baseUrl;
@@ -55,27 +58,23 @@ class ApiRepository {
         Fimber.d('query: ${options.queryParameters}');
         return handler.next(options);
       },
-        // for test change domain
+      // for test change domain
       onError: (error, handler) async {
-        if(error.message.contains('SocketException')) {
-          var options = error.requestOptions;
-          options.baseUrl = 'https://qfvpn.com';
-          options.headers = {
-            'accept': 'application/json',
-            'Content-Type': 'application/json'};
-          Fimber.d('@@ url = ${options.baseUrl}, ${options.uri}');
-          dio.options.baseUrl = options.baseUrl;
+        if (error.message.contains('SocketException')) {
+          dio.options.baseUrl = 'https://qfvpn.com';
           dio.options.headers = {
             'accept': 'application/json',
             'Content-Type': 'application/json'
           };
-          dio.options.method = options.method;
-          var response = await dio.request(options.path);
+          dio.options.queryParameters = error.requestOptions.queryParameters;
+          dio.options.method = error.requestOptions.method;
+          var response = await dio.request(error.requestOptions.path,
+              data: error.requestOptions.data);
           handler.resolve(response);
         } else {
           handler.next(error);
         }
-      }
+      },
     ));
     return dio;
   }
@@ -105,9 +104,16 @@ class ApiRepository {
   }
 
   Future<ApiResult<VersionResp>> checkVersion() async {
+    var platform;
+    if (Platform.isAndroid) {
+      platform = 'Android';
+    } else {
+      platform = 'iOS';
+    }
     return GenerateApiResult.from<VersionResp>(
       apiCall: () async {
-        return await _dio.post('/api/version/check');
+        return await _dio.post('/api/version/check',
+            data: VersionReq(platform: platform).toJson());
       },
       parseSuccessData: (response) {
         return VersionResp.fromJson(response.data['data']);
@@ -171,6 +177,17 @@ class ApiRepository {
       },
       parseSuccessData: (response) {
         return true;
+      },
+    );
+  }
+
+  Future<ApiResult<User>> getUserInfo() async {
+    return GenerateApiResult.from<User>(
+      apiCall: () async {
+        return await _dio.post('/api/user/info');
+      },
+      parseSuccessData: (response) {
+        return User.fromJson(response.data['data']);
       },
     );
   }

@@ -47,11 +47,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         Token token = result.data;
         Fimber.d('resp: ${token.toString()}');
         Pref().setupToken(token);
-        yield LoginSuccessState(DateTime.now().millisecondsSinceEpoch);
+        yield LoginSuccessState();
       } else if (result is Error) {
         Fimber.d('error: ${result.error.toString()}');
-        yield LoginFailedState(
-            DateTime.now().millisecondsSinceEpoch, result.error);
+        yield LoginFailedState(result.error);
       }
     }
   }
