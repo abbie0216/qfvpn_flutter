@@ -10,11 +10,11 @@ String feedbackListRespToJson(FeedbackListResp data) => json.encode(data.toJson(
 
 class FeedbackListResp {
   FeedbackListResp({
-    required this.totalCount,
+    this.totalCount,
     required this.items,
   });
 
-  int totalCount;
+  int? totalCount;
   List<FeedbackItem> items;
 
   factory FeedbackListResp.fromJson(Map<String, dynamic> json) => FeedbackListResp(
@@ -36,6 +36,8 @@ class FeedbackItem {
     required this.status,
     required this.lastReplyContent,
     required this.lastReplyType,
+    required this.feedbackCategoryId,
+    required this.feedbackCategoryName,
 });
 
   int feedbackId;
@@ -44,6 +46,8 @@ class FeedbackItem {
   int status;
   String lastReplyContent;
   int lastReplyType;
+  int feedbackCategoryId;
+  String feedbackCategoryName;
 
   factory FeedbackItem.fromJson(Map<String, dynamic> json) => FeedbackItem(
     feedbackId: json['feedbackId'],
@@ -52,6 +56,8 @@ class FeedbackItem {
     status: json['status'],
     lastReplyContent: json['lastReplyContent'],
     lastReplyType: json['lastReplyType'],
+    feedbackCategoryId: json['feedbackCategoryId'],
+    feedbackCategoryName: json['feedbackCategoryName'],
   );
 
   Map<String, dynamic> toJson() => {
@@ -61,5 +67,7 @@ class FeedbackItem {
     'status': status,
     'lastReplyContent': lastReplyContent,
     'lastReplyType': lastReplyType,
+    'feedbackCategoryId': feedbackCategoryId,
+    'feedbackCategoryName': feedbackCategoryName,
   };
 }

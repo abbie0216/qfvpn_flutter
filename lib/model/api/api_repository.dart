@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
+import 'package:qfvpn/model/api/bean/feedback/detail_req.dart';
+import 'package:qfvpn/model/api/bean/feedback/detail_resp.dart';
 import 'package:qfvpn/model/api/bean/feedback/paging.dart';
 import 'package:qfvpn/model/api/bean/login/ChangePasswordReq.dart';
 import 'package:qfvpn/model/api/bean/login/RefreshTokenReq.dart';
@@ -224,6 +226,18 @@ class ApiRepository {
       },
       parseSuccessData: (response) {
         return FeedbackListResp.fromJson(response.data['data']);
+      },
+    );
+  }
+
+  Future<ApiResult<DetailResp>> fetchFeedbackDetail(DetailReq detailReq ) async {
+    return GenerateApiResult.from<DetailResp>(
+      apiCall: () async {
+        return await _dio.post('/api/feedback/detail',
+            data: json.encode(detailReq.toJson()));
+      },
+      parseSuccessData: (response) {
+        return DetailResp.fromJson(response.data['data']);
       },
     );
   }

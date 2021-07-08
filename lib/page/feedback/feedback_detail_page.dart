@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:qfvpn/bloc/feedback/feedback_bloc.dart';
-import 'package:qfvpn/bloc/feedback/feedback_state.dart';
+import 'package:flutter_fimber/flutter_fimber.dart';
+import 'package:qfvpn/bloc/feedback/feedback_detail_bloc.dart';
+import 'package:qfvpn/bloc/feedback/feedback_detail_event.dart';
+import 'package:qfvpn/bloc/feedback/feedback_detail_state.dart';
 
 import '../../r.dart';
 import '../../s.dart';
@@ -15,22 +17,31 @@ class FeedbackDetailPage extends StatefulWidget {
 }
 
 class _FeedbackDetailState extends State<FeedbackDetailPage> {
-  late FeedbackBloc _feedbackBloc;
+  late FeedbackDetailBloc _feedbackDetailBloc;
 
   @override
   void initState() {
     super.initState();
-    _feedbackBloc = BlocProvider.of<FeedbackBloc>(context);
+    _feedbackDetailBloc = BlocProvider.of<FeedbackDetailBloc>(context);
+    Future.delayed(Duration.zero,() {
+      dynamic obj = ModalRoute.of(context)!.settings.arguments;
+      var feedbackId = obj['feedbackId']; // 把接收到的參數存到變數
+      Fimber.d('@@feedbackId:$feedbackId');
+      _feedbackDetailBloc.add(FetchDetailEvent(feedbackId));
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<FeedbackBloc, FeedbackState>(
+    return BlocListener<FeedbackDetailBloc, FeedbackDetailState>(
       listener: (context, state) {
-        if (state is FeedbackInitState) {}
+        if (state is InitState) {
+        } else if (state is LoadedState) {
+
+        }
       },
-      child:
-          BlocBuilder<FeedbackBloc, FeedbackState>(builder: (context, state) {
+      child: BlocBuilder<FeedbackDetailBloc, FeedbackDetailState>(
+          builder: (context, state) {
         return Scaffold(
           backgroundColor: R.color.background_color(),
           resizeToAvoidBottomInset: false,
@@ -49,22 +60,30 @@ class _FeedbackDetailState extends State<FeedbackDetailPage> {
             backgroundColor: R.color.background_color(),
             centerTitle: true,
           ),
-          body: _buildBody(context),
+          body: _buildBody(context, state),
         );
       }),
     );
   }
 
-  Widget _buildBody(BuildContext context) {
-    return ListView(
-      children: [
-        _buildFeedbackItem(false),
-        SizedBox(height: 10),
-        _buildFeedbackItem(true),
-        SizedBox(height: 10),
-        _buildSatisfactionWidget()
-      ],
-    );
+  Widget _buildBody(BuildContext context, FeedbackDetailState state) {
+    if (state is InitState) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    } else if (state is LoadedState) {
+      return ListView(
+        children: [
+          _buildFeedbackItem(false),
+          SizedBox(height: 10),
+          _buildFeedbackItem(true),
+          SizedBox(height: 10),
+          _buildSatisfactionWidget()
+        ],
+      );
+    } else {
+      return Center(child: Text('Unknown state'));
+    }
   }
 
   Widget _buildFeedbackItem(bool isCS) {
@@ -169,8 +188,8 @@ class _FeedbackDetailState extends State<FeedbackDetailPage> {
                   S.of(context).feedback_detail_not_satisfied, false)),
           _buildDivider(),
           Expanded(
-              child: _buildSatisfactionItem(
-                  R.image.btn_soso_n(), S.of(context).feedback_detail_average, false)),
+              child: _buildSatisfactionItem(R.image.btn_soso_n(),
+                  S.of(context).feedback_detail_average, false)),
           _buildDivider(),
           Expanded(
               child: _buildSatisfactionItem(R.image.btn_sogood_n(),
@@ -181,8 +200,12 @@ class _FeedbackDetailState extends State<FeedbackDetailPage> {
   }
 
   Widget _buildSatisfactionItem(ImageProvider ip, String s, bool isSelect) {
-    var imgColor = isSelect? R.color.feedback_satisfaction_select(): R.color.text_color_alpha30();
-    var textColor = isSelect? R.color.feedback_satisfaction_select(): R.color.text_color_alpha50();
+    var imgColor = isSelect
+        ? R.color.feedback_satisfaction_select()
+        : R.color.text_color_alpha30();
+    var textColor = isSelect
+        ? R.color.feedback_satisfaction_select()
+        : R.color.text_color_alpha50();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [

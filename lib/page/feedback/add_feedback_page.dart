@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:qfvpn/bloc/feedback/feedback_bloc.dart';
-import 'package:qfvpn/bloc/feedback/feedback_state.dart';
+import 'package:qfvpn/bloc/feedback/add_feedback_bloc.dart';
+import 'package:qfvpn/bloc/feedback/add_feedback_state.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:qfvpn/page/feedback/feedback_type_bottom_sheet.dart';
 
@@ -21,7 +21,7 @@ class AddFeedbackPage extends StatefulWidget {
 }
 
 class _AddFeedbackState extends State<AddFeedbackPage> {
-  late FeedbackBloc _feedbackBloc;
+  late AddFeedbackBloc _addFeedbackBloc;
 
   int? _feedbackTypeIndex;
 
@@ -34,7 +34,7 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
   @override
   void initState() {
     super.initState();
-    _feedbackBloc = BlocProvider.of<FeedbackBloc>(context);
+    _addFeedbackBloc = BlocProvider.of<AddFeedbackBloc>(context);
   }
 
   @override
@@ -45,12 +45,12 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<FeedbackBloc, FeedbackState>(
+    return BlocListener<AddFeedbackBloc, AddFeedbackState>(
       listener: (context, state) {
-        if (state is FeedbackInitState) {}
+        if (state is InitState) {}
       },
       child:
-          BlocBuilder<FeedbackBloc, FeedbackState>(builder: (context, state) {
+          BlocBuilder<AddFeedbackBloc, AddFeedbackState>(builder: (context, state) {
         return Scaffold(
           backgroundColor: R.color.background_color(),
           resizeToAvoidBottomInset: false,
