@@ -9,6 +9,7 @@ import 'package:qfvpn/constants.dart';
 import 'package:qfvpn/model/api/bean/feedback/feedback_list_resp.dart';
 import 'package:qfvpn/page/feedback/add_feedback_page.dart';
 import 'package:qfvpn/page/feedback/feedback_detail_page.dart';
+import 'package:qfvpn/utility/convert.dart';
 
 import '../../r.dart';
 import '../../s.dart';
@@ -22,11 +23,10 @@ class FeedbackListPage extends StatefulWidget {
 
 class _FeedbackListState extends State<FeedbackListPage> {
   late FeedbackBloc _feedbackBloc;
-  FeedbackListResp? _feedbackListResp;
 
   var _pageKey;
   final PagingController<int, FeedbackItem> _pagingController =
-  PagingController(firstPageKey: 1);
+      PagingController(firstPageKey: 1);
 
   @override
   void initState() {
@@ -43,9 +43,7 @@ class _FeedbackListState extends State<FeedbackListPage> {
     return BlocListener<FeedbackBloc, FeedbackState>(
       listener: (context, state) {
         if (state is FeedbackInitState) {
-
-        } else if(state is LoadedState) {
-          _feedbackListResp = state.result;
+        } else if (state is LoadedState) {
           var newItems = state.result.items;
           final isLastPage = newItems.length < PAGE_SIZE;
           if (isLastPage) {
@@ -59,46 +57,51 @@ class _FeedbackListState extends State<FeedbackListPage> {
       child:
           BlocBuilder<FeedbackBloc, FeedbackState>(builder: (context, state) {
         return Scaffold(
-          backgroundColor: R.color.background_color(),
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            title: Text(S.of(context).feedback_list_title,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold)),
-            leading: IconButton(
-              icon:
-                  Icon(Icons.arrow_back_ios, color: R.color.text_blue_color()),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            actions: [
-              Padding(
-                padding: EdgeInsets.only(right: 12),
-                child: TextButton(
-                  onPressed: () => Navigator.of(context)
-                      .pushNamed((AddFeedbackPage).toString()),
-                  child: Text(
-                    S.of(context).add_feedback_title,
-                    style: TextStyle(color: Colors.black, fontSize: 14),
+            backgroundColor: R.color.background_color(),
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              title: Text(S.of(context).feedback_list_title,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold)),
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back_ios,
+                    color: R.color.text_blue_color()),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              actions: [
+                Padding(
+                  padding: EdgeInsets.only(right: 12),
+                  child: TextButton(
+                    onPressed: () => Navigator.of(context)
+                        .pushNamed((AddFeedbackPage).toString()),
+                    child: Text(
+                      S.of(context).add_feedback_title,
+                      style: TextStyle(color: Colors.black, fontSize: 14),
+                    ),
                   ),
                 ),
-              ),
-            ],
-            elevation: 0,
-            backgroundColor: R.color.background_color(),
-            centerTitle: true,
-          ),
-          body: RefreshIndicator(
+              ],
+              elevation: 0,
+              backgroundColor: R.color.background_color(),
+              centerTitle: true,
+            ),
+            body: RefreshIndicator(
               onRefresh: () => Future.sync(
-                    () => _pagingController.refresh(),
+                () => _pagingController.refresh(),
               ),
               child: PagedListView<int, FeedbackItem>.separated(
                 physics: BouncingScrollPhysics(),
                 padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
                 pagingController: _pagingController,
                 builderDelegate: PagedChildBuilderDelegate<FeedbackItem>(
-                  itemBuilder: (context, item, index) => _buildListItem(context, index)
+                  itemBuilder: (context, item, index) =>
+                      _buildListItem(context, item, index),
+                  noItemsFoundIndicatorBuilder: (_) =>
+                      _buildNoItemsFoundIndicator(),
+                  noMoreItemsIndicatorBuilder: (_) =>
+                      _buildNoMoreItemsIndicator(),
                 ),
                 separatorBuilder: (BuildContext context, int index) {
                   return Divider(
@@ -107,18 +110,17 @@ class _FeedbackListState extends State<FeedbackListPage> {
                   );
                 },
               ),
-          )
-        );
+            ));
       }),
     );
   }
 
-  Widget _buildListItem(BuildContext context, int index) {
+  Widget _buildListItem(BuildContext context, FeedbackItem item, int index) {
     return GestureDetector(
-      onTap: () => Navigator.of(context)
-          .pushNamed((FeedbackDetailPage).toString()),
+      onTap: () =>
+          Navigator.of(context).pushNamed((FeedbackDetailPage).toString()),
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 16),
+        padding: EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -130,33 +132,35 @@ class _FeedbackListState extends State<FeedbackListPage> {
             Row(
               children: [
                 SizedBox(width: 16),
-                _buildTimeItem(),
+                _buildTimeItem(item.createdAt),
                 Spacer(),
-                _buildFlag(context, index % 3 == 0),
+                _buildFlag(context, item),
               ],
             ),
             _buildDivider(),
-            _buildFeedbackTitle(),
+            _buildFeedbackTitle(item),
             SizedBox(height: 2),
-            _buildFeedbackContent(),
+            _buildFeedbackContent(item),
             SizedBox(height: 12),
-            _buildResponse(context, index % 3 == 0),
+            _buildResponse(context, item),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildTimeItem() {
+  Widget _buildTimeItem(DateTime date) {
     return Text(
-      '2018-03-20 20:20',
+      feedbackDateTimeDisplay(date.toIso8601String()),
       style: TextStyle(color: R.color.text_color_alpha50(), fontSize: 12),
     );
   }
 
-  Widget _buildFlag(BuildContext context, bool solved) {
-    var bg =
-        solved ? R.color.feedback_solved_flag_bg() : R.color.feedback_submit_flag_bg();
+  Widget _buildFlag(BuildContext context, FeedbackItem item) {
+    var solved = item.status == 2;
+    var bg = solved
+        ? R.color.feedback_solved_flag_bg()
+        : R.color.feedback_submit_flag_bg();
     var str =
         solved ? S.of(context).feedback_solved : S.of(context).feedback_submit;
     return Container(
@@ -181,7 +185,7 @@ class _FeedbackListState extends State<FeedbackListPage> {
     );
   }
 
-  Widget _buildFeedbackTitle() {
+  Widget _buildFeedbackTitle(FeedbackItem item) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Text('反馈标题',
@@ -191,13 +195,13 @@ class _FeedbackListState extends State<FeedbackListPage> {
     );
   }
 
-  Widget _buildFeedbackContent() {
+  Widget _buildFeedbackContent(FeedbackItem item) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Align(
         alignment: Alignment.centerLeft,
         child: Text(
-          '文字内容文字内容文字内容文字字内容文文字内容文字内容文字内容文字字内容文文字内容文字内容文字内容文字字内容文',
+          item.content,
           textAlign: TextAlign.start,
           overflow: TextOverflow.ellipsis,
           maxLines: 2,
@@ -207,9 +211,9 @@ class _FeedbackListState extends State<FeedbackListPage> {
     );
   }
 
-  Widget _buildResponse(BuildContext context, bool solved) {
+  Widget _buildResponse(BuildContext context, FeedbackItem item) {
     return Visibility(
-      visible: solved,
+      visible: item.lastReplyContent.isNotEmpty,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 16),
         padding: EdgeInsets.all(12),
@@ -219,11 +223,38 @@ class _FeedbackListState extends State<FeedbackListPage> {
           // fit: BoxFit.fill,
         ),
         child: Text(
-          '文字内容文字内容文字内容文字字内容文文字内容文字内容文字内容文字字内容文文字内容文字内容文字内容文字字内容文',
+          item.lastReplyContent,
           textAlign: TextAlign.start,
           overflow: TextOverflow.ellipsis,
           maxLines: 2,
           style: TextStyle(color: R.color.text_color_alpha50(), fontSize: 14),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNoItemsFoundIndicator() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(height: 60),
+        Image(image: R.image.img_empty()),
+        SizedBox(height: 10),
+        Text(
+          S.of(context).feedback_list_no_item,
+          style: TextStyle(color: R.color.text_color_alpha30(), fontSize: 14),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNoMoreItemsIndicator() {
+    return Padding(
+      padding: EdgeInsets.only(top: 40, bottom: 20),
+      child: Center(
+        child: Text(
+          S.of(context).feedback_list_end,
+          style: TextStyle(color: R.color.text_color_alpha30(), fontSize: 12),
         ),
       ),
     );

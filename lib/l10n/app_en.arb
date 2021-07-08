@@ -201,6 +201,8 @@
   "pay_result_retry_btn": "继续支付",
 
   "feedback_list_title": "意见反馈",
+  "feedback_list_no_item": "暂无反饋",
+  "feedback_list_end": "我是有底线的",
   "feedback_solved": "已解答",
   "feedback_submit": "已提交",
   "add_feedback_title": "添加反馈",
