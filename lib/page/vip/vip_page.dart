@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qfvpn/bloc/vip/vip_bloc.dart';
+import 'package:qfvpn/model/api/bean/product/product_list_result.dart';
 import 'package:qfvpn/page/home/home_page.dart';
 import 'package:qfvpn/page/pay/pay_page.dart';
 import 'package:qfvpn/page/vip/order_history_page.dart';
-import 'package:qfvpn/page/vip/vip_coupon_bottom_sheet.dart';
+import 'package:qfvpn/page/vip/product_selector.dart';
 import 'package:qfvpn/s.dart';
 import 'package:qfvpn/utility/pop_result.dart';
 import 'package:qfvpn/widget/selector_widget_button.dart';
@@ -24,7 +24,8 @@ class VipPage extends StatefulWidget {
 }
 
 class _VipPageState extends State<VipPage> {
-  int _selectedId = 0;
+  Items? _product;
+  Coupons? _coupons;
 
   @override
   Widget build(BuildContext context) {
@@ -63,11 +64,10 @@ class _VipPageState extends State<VipPage> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        buildMemberInfo(),
-                        buildPackageList(),
-                        buildCouponInfo(),
-                        buildPayBtn(),
-                        buildVipBenefits()
+                        _buildMemberInfo(),
+                        ProductSelector(_setSelectedProduct),
+                        _buildPayBtn(),
+                        _buildVipBenefits()
                       ],
                     ),
                   ),
@@ -78,7 +78,7 @@ class _VipPageState extends State<VipPage> {
         ));
   }
 
-  Widget buildMemberInfo() {
+  Widget _buildMemberInfo() {
     return Container(
       padding: EdgeInsets.only(bottom: 40, left: 40),
       decoration: BoxDecoration(
@@ -128,228 +128,7 @@ class _VipPageState extends State<VipPage> {
     );
   }
 
-  Widget buildPackageList() {
-    return NotificationListener<OverscrollIndicatorNotification>(
-      onNotification: (OverscrollIndicatorNotification overScroll) {
-        overScroll.disallowGlow();
-        return false;
-      },
-      child: Expanded(
-          child: Container(
-        margin: EdgeInsets.only(top: 20, bottom: 20, left: 28, right: 28),
-        child: ListView.separated(
-            itemBuilder: (context, index) {
-              return Stack(
-                children: [buildPackageMainItem(index), buildPackageTag(1)],
-              );
-            },
-            separatorBuilder: (context, index) {
-              return Container(
-                height: 6,
-              );
-            },
-            itemCount: 5),
-      )),
-    );
-  }
-
-  Widget buildPackageMainItem(int index) {
-    return Padding(
-      padding: EdgeInsets.only(top: 9),
-      child: OutlinedButton(
-          style: OutlinedButton.styleFrom(
-              padding:
-                  EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
-              splashFactory: NoSplash.splashFactory,
-              backgroundColor: _selectedId == index
-                  ? R.color.vip_package_selected_bg()
-                  : R.color.vip_package_unselected_bg(),
-              side: BorderSide(
-                  color: _selectedId == index
-                      ? R.color.vip_package_selected_border()
-                      : R.color.vip_package_unselected_border()),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(22),
-              )),
-          onPressed: () {
-            setState(() {
-              _selectedId = index;
-            });
-          },
-          child: Row(
-            children: [
-              Image(
-                  image: _selectedId == index
-                      ? R.image.btn_radio_p()
-                      : R.image.btn_radio_n()),
-              Padding(
-                padding: EdgeInsets.only(left: 8, right: 5),
-                child: Text(
-                  '360天VIP: ¥400',
-                  overflow: TextOverflow.fade,
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: R.color.vip_package_name_main_text(),
-                      fontWeight: FontWeight.w500),
-                ),
-              ),
-              Expanded(
-                  child: Text(
-                '(¥25/月)',
-                overflow: TextOverflow.fade,
-                style: TextStyle(
-                    fontSize: 12,
-                    color: R.color.vip_package_name_sub_text(),
-                    fontWeight: FontWeight.w500),
-              )),
-            ],
-          )),
-    );
-  }
-
-  Widget buildPackageTag(int type) {
-    return IndexedStack(
-      alignment: Alignment.centerRight,
-      index: type,
-      children: [
-        /** no tag **/
-        Container(),
-        /** new in tag + extra day tag **/
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Container(
-              width: 70,
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(top: 2, bottom: 2),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10)),
-                  color: R.color.vip_package_new_in_gift_tag_bg()),
-              child: Text(
-                S.of(context).vip_package_new_in_gift_tag,
-                style: TextStyle(
-                    fontSize: 10,
-                    color: R.color.vip_package_new_in_gift_tag_text(),
-                    fontWeight: FontWeight.w500),
-              ),
-            ),
-            Container(
-              width: 70,
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(top: 2, bottom: 2),
-              decoration: BoxDecoration(
-                  borderRadius:
-                      BorderRadius.only(bottomRight: Radius.circular(10)),
-                  color: R.color.vip_package_extra_day_gift_tag_bg()),
-              child: Text(
-                sprintf(S.of(context).vip_package_extra_day_gift_tag, [30]),
-                style: TextStyle(
-                    fontSize: 10,
-                    color: R.color.vip_package_extra_day_gift_tag_text(),
-                    fontWeight: FontWeight.w500),
-              ),
-            )
-          ],
-        ),
-        /** new in tag **/
-        Container(
-          width: 70,
-          alignment: Alignment.center,
-          padding: EdgeInsets.only(top: 2, bottom: 2),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10)),
-              color: R.color.vip_package_new_in_gift_tag_bg()),
-          child: Text(
-            S.of(context).vip_package_new_in_gift_tag,
-            style: TextStyle(
-                fontSize: 10,
-                color: R.color.vip_package_new_in_gift_tag_text(),
-                fontWeight: FontWeight.w500),
-          ),
-        ),
-        /** extra day tag **/
-        Container(
-          width: 70,
-          alignment: Alignment.center,
-          padding: EdgeInsets.only(top: 2, bottom: 2),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10)),
-              color: R.color.vip_package_extra_day_gift_tag_bg()),
-          child: Text(
-            sprintf(S.of(context).vip_package_extra_day_gift_tag, [30]),
-            style: TextStyle(
-                fontSize: 10,
-                color: R.color.vip_package_extra_day_gift_tag_text(),
-                fontWeight: FontWeight.w500),
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget buildCouponInfo() {
-    return Padding(
-      padding: EdgeInsets.only(left: 28, right: 28),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            S.of(context).vip_coupon_title,
-            style: TextStyle(
-                color: R.color.vip_subtitle_text(),
-                fontSize: 14,
-                fontWeight: FontWeight.bold),
-          ),
-          IndexedStack(
-            alignment: Alignment.centerRight,
-            index: 0,
-            children: [
-              TextButton(
-                  onPressed: () {
-                    showVipCouponBottomSheet();
-                  },
-                  style: TextButton.styleFrom(
-                      splashFactory: NoSplash.splashFactory),
-                  child: Text(
-                    sprintf(S.of(context).vip_coupon_unselected_desc, [1]),
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                        fontSize: 12,
-                        color: R.color.vip_coupon_state_text(),
-                        fontWeight: FontWeight.bold),
-                  )),
-              OutlinedButton(
-                  onPressed: () {
-                    showVipCouponBottomSheet();
-                  },
-                  style: ButtonStyle(
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(22))),
-                      backgroundColor: MaterialStateProperty.all(
-                          R.color.vip_coupon_state_bg()),
-                      side: MaterialStateProperty.all(
-                          BorderSide(color: R.color.vip_coupon_state_border())),
-                      overlayColor: MaterialStateProperty.all(
-                          R.color.vip_outline_btn_splash())),
-                  child: Text(
-                    sprintf(S.of(context).vip_coupon_selected_desc, [30, 24]),
-                    style: TextStyle(
-                        fontSize: 12, color: R.color.vip_coupon_state_text()),
-                  )),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget buildPayBtn() {
+  Widget _buildPayBtn() {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.only(left: 28, right: 28, top: 10, bottom: 20),
@@ -382,7 +161,7 @@ class _VipPageState extends State<VipPage> {
     );
   }
 
-  Widget buildVipBenefits() {
+  Widget _buildVipBenefits() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -483,11 +262,9 @@ class _VipPageState extends State<VipPage> {
     );
   }
 
-  void showVipCouponBottomSheet() {
-    showMaterialModalBottomSheet(
-        enableDrag: false,
-        context: context,
-        backgroundColor: Colors.transparent,
-        builder: (context) => VipCouponBottomSheet());
+  void _setSelectedProduct(Items product, Coupons? coupons){
+    _product = product;
+    _coupons = coupons;
   }
+
 }
