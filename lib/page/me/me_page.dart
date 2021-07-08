@@ -11,6 +11,8 @@ import 'package:qfvpn/page/login/login_page.dart';
 import 'package:qfvpn/page/me/points_page.dart';
 import 'package:qfvpn/page/setting/binding_page.dart';
 import 'package:qfvpn/page/setting/setting_page.dart';
+import 'package:qfvpn/widget/selector_widget_button.dart';
+import 'package:sprintf/sprintf.dart';
 
 import '../../r.dart';
 import '../../s.dart';
@@ -43,9 +45,7 @@ class _MePageState extends State<MePage> {
           backgroundColor: R.color.background_color(),
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            title: Text(S
-                .of(context)
-                .me_page_title,
+            title: Text(S.of(context).me_page_title,
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 16,
@@ -55,8 +55,9 @@ class _MePageState extends State<MePage> {
             backgroundColor: R.color.me_title_block_bg_color(),
             centerTitle: true,
             actions: <Widget>[
-              IconButton(
-                  icon: Image(image: R.image.btn_setting_n()),
+              SelectorWidgetButton(
+                  widgetN: Image(image: R.image.btn_setting_n()),
+                  widgetP: Image(image: R.image.btn_setting_p()),
                   onPressed: () {
                     Navigator.of(context).pushNamed((SettingPage).toString());
                   })
@@ -89,49 +90,53 @@ class _MePageState extends State<MePage> {
       }
 
       return Container(
-        height: MediaQuery
-            .of(context)
-            .size
-            .height * 0.18,
+        height: 120,
+        padding: EdgeInsets.only(bottom: 40, left: 40),
         decoration: BoxDecoration(
-          color: R.color.me_title_block_bg_color(),
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(60)),
-        ),
-        child: Align(
-            alignment: FractionalOffset(0.2, 0.2),
-            child: Row(mainAxisSize: MainAxisSize.min, children: [
-              Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle, color: R.color.background_color()),
-                child: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                  size: 60,
-                ),
+            color: R.color.vip_top_bg(),
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(60),
+                bottomRight: Radius.circular(60))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle, color: R.color.background_color()),
+              child: Icon(
+                Icons.person,
+                color: Colors.white,
+                size: 60,
               ),
-              SizedBox(width: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    S
-                        .of(context)
-                        .me_vip_time_label + vip_endAt,
-                    style: TextStyle(color: R.color.text_blue_color()),
+            ),
+            Expanded(
+                child: Container(
+                  padding: EdgeInsets.only(left: 19),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(bottom: 8),
+                        child: Text(
+                          sprintf(
+                              S.of(context).vip_expired_time_valid, [vip_endAt]),
+                          style:
+                          TextStyle(color: R.color.vip_expired_time_valid_text()),
+                        ),
+                      ),
+                      Text(
+                        sprintf(S.of(context).vip_id, [userID]),
+                        textAlign: TextAlign.left,
+                        style: TextStyle(color: R.color.vip_id_text()),
+                      )
+                    ],
                   ),
-                  SizedBox(height: 8),
-                  Text(
-                    S
-                        .of(context)
-                        .me_id_label + userID,
-                    style: TextStyle(color: Colors.black.withAlpha(51)),
-                  )
-                ],
-              )
-            ])),
+                ))
+          ],
+        ),
       );
     });
   }
@@ -143,10 +148,7 @@ class _MePageState extends State<MePage> {
         isBindEmail = state.userInfo.isBindEmail;
       }
       return Positioned(
-          top: MediaQuery
-              .of(context)
-              .size
-              .height * 0.18 - 24,
+          top: 120 - 24,
           child: Row(
             children: [
               TextButton(
@@ -160,21 +162,19 @@ class _MePageState extends State<MePage> {
                   ),
                   onPressed: () {
                     if (!isBindEmail) {
-                      Navigator.of(context)
-                          .pushNamed((BindingPage).toString());
+                      Navigator.of(context).pushNamed((BindingPage).toString());
                     }
                   },
                   child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Image(
-                            image: isBindEmail ? R.image.icon_linked() : R.image
-                                .icon_link()),
-                        Text(S
-                            .of(context)
-                            .me_bind_mail,
-                            style: TextStyle(
-                                color: Colors.white, fontSize: 14)),
+                            image: isBindEmail
+                                ? R.image.icon_linked()
+                                : R.image.icon_link()),
+                        Text(S.of(context).me_bind_mail,
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 14)),
                         Image(image: R.image.btn_next_white_n())
                       ])),
               SizedBox(width: 20),
@@ -190,9 +190,7 @@ class _MePageState extends State<MePage> {
                 onPressed: () {
                   Navigator.of(context).pushNamed((CouponPage).toString());
                 },
-                child: Text(S
-                    .of(context)
-                    .me_coupon,
+                child: Text(S.of(context).me_coupon,
                     style: TextStyle(color: Colors.white, fontSize: 14)),
               )
             ],
@@ -244,15 +242,13 @@ class _MePageState extends State<MePage> {
                                       text: TextSpan(
                                         children: [
                                           TextSpan(
-                                              text: S
-                                                  .of(context)
-                                                  .me_item_news,
+                                              text: S.of(context).me_item_news,
                                               style: TextStyle(
                                                   color: R.color
                                                       .text_gray_color())),
                                           WidgetSpan(
                                               alignment:
-                                              PlaceholderAlignment.middle,
+                                                  PlaceholderAlignment.middle,
                                               child: Padding(
                                                   padding: EdgeInsets.symmetric(
                                                       horizontal: 5),
@@ -291,9 +287,7 @@ class _MePageState extends State<MePage> {
                                     )),
                                 Expanded(
                                     flex: 10,
-                                    child: Text(S
-                                        .of(context)
-                                        .me_item_help,
+                                    child: Text(S.of(context).me_item_help,
                                         style: TextStyle(
                                             color: R.color.text_gray_color()))),
                                 Expanded(
@@ -325,9 +319,7 @@ class _MePageState extends State<MePage> {
                                     )),
                                 Expanded(
                                     flex: 8,
-                                    child: Text(S
-                                        .of(context)
-                                        .me_item_feedback,
+                                    child: Text(S.of(context).me_item_feedback,
                                         style: TextStyle(
                                             color: R.color.text_gray_color()))),
                                 Expanded(
@@ -343,9 +335,7 @@ class _MePageState extends State<MePage> {
                                                   Radius.circular(22)),
                                             ),
                                             child: Center(
-                                                child: Text(S
-                                                    .of(context)
-                                                    .news,
+                                                child: Text(S.of(context).news,
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 12)))))),
@@ -378,9 +368,7 @@ class _MePageState extends State<MePage> {
                                     )),
                                 Expanded(
                                     flex: 8,
-                                    child: Text(S
-                                        .of(context)
-                                        .me_item_about,
+                                    child: Text(S.of(context).me_item_about,
                                         style: TextStyle(
                                             color: R.color.text_gray_color()))),
                                 Expanded(
@@ -390,7 +378,7 @@ class _MePageState extends State<MePage> {
                                         child: Text(appVersion,
                                             style: TextStyle(
                                                 color:
-                                                R.color.text_blue_color(),
+                                                    R.color.text_blue_color(),
                                                 fontSize: 12)))),
                                 Expanded(
                                     flex: 1,
@@ -433,9 +421,7 @@ class _MePageState extends State<MePage> {
                               flex: 4,
                               child: Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 15),
-                                  child: Text(S
-                                      .of(context)
-                                      .me_get_vip,
+                                  child: Text(S.of(context).me_get_vip,
                                       textAlign: TextAlign.end,
                                       style: TextStyle(
                                           color: R.color.text_blue_color(),
@@ -457,9 +443,7 @@ class _MePageState extends State<MePage> {
                                         Navigator.of(context)
                                             .pushNamed((PointsPage).toString());
                                       },
-                                      child: Text(S
-                                          .of(context)
-                                          .go,
+                                      child: Text(S.of(context).go,
                                           style: TextStyle(
                                               color: R.color.text_blue_color(),
                                               fontSize: 14))))),
