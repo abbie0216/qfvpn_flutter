@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
-import 'package:qfvpn/model/api/HttpErrorException.dart';
 import 'package:qfvpn/model/api/bean/login/ChangePasswordReq.dart';
 import 'package:qfvpn/model/api/bean/login/RefreshTokenReq.dart';
 import 'package:qfvpn/model/api/bean/login/SendCodeReq.dart';
@@ -9,6 +9,7 @@ import 'package:qfvpn/model/api/bean/login/login_req.dart';
 import 'package:qfvpn/model/api/bean/node/node_list_result.dart';
 import 'package:qfvpn/model/api/bean/product/product_list_result.dart';
 import 'package:qfvpn/model/api/bean/token.dart';
+import 'package:qfvpn/model/api/generate_api_result.dart';
 
 import '../pref.dart';
 import 'api_result.dart';
@@ -18,8 +19,6 @@ import 'bean/login/SendCodeResp.dart';
 import 'bean/login/VerifyCodeReq.dart';
 import 'bean/login/register_req.dart';
 import 'bean/login/register_resp.dart';
-import 'package:dio/dio.dart';
-
 import 'bean/splash/version_resp.dart';
 
 class ApiRepository {
@@ -82,196 +81,119 @@ class ApiRepository {
   }
 
   Future<ApiResult<RegisterResp>> register(RegisterReq req) async {
-    try {
-      final response =
-          await _dio.post('/api/user/signup', data: json.encode(req.toJson()));
-      if (response.statusCode == 201) {
-        return ApiResult.success(RegisterResp.fromJson(response.data['data']));
-      } else {
-        return ApiResult.error(HttpErrorException(errorCode: response.data['errCode'], errorMsg: response.data['errMsg']));
-      }
-    } catch (error) {
-      return ApiResult.error(error);
-    }
+    return GenerateApiResult.from<RegisterResp>(
+      apiCall: () async {
+        return await _dio.post('/api/user/signup',
+            data: json.encode(req.toJson()));
+      },
+      parseSuccessData: (response) {
+        return RegisterResp.fromJson(response.data['data']);
+      },
+    );
   }
 
   Future<ApiResult<Token>> login(LoginReq loginReq) async {
-    try {
-      final response = await _dio.post('/api/user/login',
-          data: json.encode(loginReq.toJson()));
-
-      Fimber.d('response: ' + response.toString());
-      Fimber.d('status code: ' + response.statusCode.toString());
-
-      if (response.statusCode == 201) {
-        return ApiResult.success(Token.fromJson(response.data['data']));
-      } else {
-        Fimber.d('error: ' + response.data['errMsg']);
-        return ApiResult.error(HttpErrorException(errorCode: response.data['errCode'], errorMsg: response.data['errMsg']));
-      }
-    } catch (error) {
-      Fimber.d('error: ' + error.toString());
-      return ApiResult.error(error);
-    }
+    return GenerateApiResult.from<Token>(
+      apiCall: () async {
+        return await _dio.post('/api/user/login',
+            data: json.encode(loginReq.toJson()));
+      },
+      parseSuccessData: (response) {
+        return Token.fromJson(response.data['data']);
+      },
+    );
   }
 
   Future<ApiResult<VersionResp>> checkVersion() async {
-    try {
-      final response = await _dio.post('/api/version/check');
-
-      Fimber.d('response: ' + response.toString());
-      Fimber.d('status code: ' + response.statusCode.toString());
-
-      if (response.statusCode == 201) {
-        return ApiResult.success(VersionResp.fromJson(response.data['data']));
-      } else {
-        Fimber.d('error: ' + response.data['errCode']);
-        return ApiResult.error(HttpErrorException(errorCode: response.data['errCode'], errorMsg: response.data['errMsg']));
-      }
-    } catch (error) {
-      Fimber.d('error: ' + error.toString());
-      return ApiResult.error(error);
-    }
+    return GenerateApiResult.from<VersionResp>(
+      apiCall: () async {
+        return await _dio.post('/api/version/check');
+      },
+      parseSuccessData: (response) {
+        return VersionResp.fromJson(response.data['data']);
+      },
+    );
   }
 
   Future<ApiResult<RefreshTokenResp>> refreshToken(RefreshTokenReq req) async {
-    try {
-      final response = await _dio.post('/api/user/refreshToken',
-          data: json.encode(req.toJson()));
-
-      Fimber.d('response: ' + response.toString());
-      Fimber.d('status code: ' + response.statusCode.toString());
-
-      if (response.statusCode == 201) {
-        return ApiResult.success(
-            RefreshTokenResp.fromJson(response.data['data']));
-      } else {
-        Fimber.d('error: ' + response.data['errMsg']);
-        return ApiResult.error(HttpErrorException(errorCode: response.data['errCode'], errorMsg: response.data['errMsg']));
-      }
-    } catch (error) {
-      Fimber.d('error: ' + error.toString());
-      return ApiResult.error(error);
-    }
+    return GenerateApiResult.from<RefreshTokenResp>(
+      apiCall: () async {
+        return await _dio.post('/api/user/refreshToken',
+            data: json.encode(req.toJson()));
+      },
+      parseSuccessData: (response) {
+        return RefreshTokenResp.fromJson(response.data['data']);
+      },
+    );
   }
 
   Future<ApiResult<SendCodeResp>> sendCode(SendCodeReq req) async {
-    try {
-      final response = await _dio.post('/api/user/resetPassword/sendCode',
-          data: json.encode(req.toJson()));
-
-      Fimber.d('response: ' + response.toString());
-      Fimber.d('status code: ' + response.statusCode.toString());
-
-      if (response.statusCode == 201) {
-        return ApiResult.success(SendCodeResp.fromJson(response.data['data']));
-      } else {
-        Fimber.d('error: ' + response.data['errMsg']);
-        return ApiResult.error(HttpErrorException(errorCode: response.data['errCode'], errorMsg: response.data['errMsg']));
-      }
-    } catch (error) {
-      Fimber.d('error: ' + error.toString());
-      return ApiResult.error(error);
-    }
+    return GenerateApiResult.from<SendCodeResp>(
+      apiCall: () async {
+        return await _dio.post('/api/user/resetPassword/sendCode',
+            data: json.encode(req.toJson()));
+      },
+      parseSuccessData: (response) {
+        return SendCodeResp.fromJson(response.data['data']);
+      },
+    );
   }
 
   Future<ApiResult<bool>> verifyCode(VerifyCodeReq req) async {
-    try {
-      final response = await _dio.post('/api/user/resetPassword/verifyCode',
-          data: json.encode(req.toJson()));
-
-      Fimber.d('response: ' + response.toString());
-      Fimber.d('status code: ' + response.statusCode.toString());
-
-      if (response.statusCode == 201) {
-        return ApiResult.success(true);
-      } else {
-        Fimber.d('error: ' + response.data['errMsg']);
-        return ApiResult.error(HttpErrorException(errorCode: response.data['errCode'], errorMsg: response.data['errMsg']));
-      }
-    } catch (error) {
-      Fimber.d('error: ' + error.toString());
-      return ApiResult.error(error);
-    }
+    return GenerateApiResult.from<bool>(
+      apiCall: () async {
+        return await _dio.post('/api/user/resetPassword/verifyCode',
+            data: json.encode(req.toJson()));
+      },
+      parseSuccessData: (response) {
+        return true;
+      },
+    );
   }
 
   Future<ApiResult<bool>> resetPassword(ResetPasswordReq req) async {
-    try {
-      final response = await _dio.post('/api/user/resetPassword',
-          data: json.encode(req.toJson()));
-
-      Fimber.d('response: ' + response.toString());
-      Fimber.d('status code: ' + response.statusCode.toString());
-
-      if (response.statusCode == 201) {
-        return ApiResult.success(true);
-      } else {
-        Fimber.d('error: ' + response.data['errMsg']);
-        return ApiResult.error(HttpErrorException(errorCode: response.data['errCode'], errorMsg: response.data['errMsg']));
-      }
-    } catch (error) {
-      Fimber.d('error: ' + error.toString());
-      return ApiResult.error(error);
-    }
+    return GenerateApiResult.from<bool>(
+      apiCall: () async {
+        return _dio.post('/api/user/resetPassword',
+            data: json.encode(req.toJson()));
+      },
+      parseSuccessData: (response) {
+        return true;
+      },
+    );
   }
 
   Future<ApiResult<bool>> changePassword(ChangePasswordReq req) async {
-    try {
-      final response = await _dio.post('/api/user/changePassword',
-          data: json.encode(req.toJson()));
-
-      Fimber.d('response: ' + response.toString());
-      Fimber.d('status code: ' + response.statusCode.toString());
-
-      if (response.statusCode == 201) {
-        return ApiResult.success(true);
-      } else {
-        Fimber.d('error: ' + response.data['errMsg']);
-        return ApiResult.error(HttpErrorException(errorCode: response.data['errCode'], errorMsg: response.data['errMsg']));
-      }
-    } catch (error) {
-      Fimber.d('error: ' + error.toString());
-      return ApiResult.error(error);
-    }
+    return GenerateApiResult.from<bool>(
+      apiCall: () async {
+        return await _dio.post('/api/user/changePassword',
+            data: json.encode(req.toJson()));
+      },
+      parseSuccessData: (response) {
+        return true;
+      },
+    );
   }
 
-
   Future<ApiResult<NodeListResult>> fetchNodeList() async {
-    try {
-      final response = await _dio.post('/api/node/list');
-
-      Fimber.d('response: ' + response.toString());
-      Fimber.d('status code: ' + response.statusCode.toString());
-      if (response.statusCode == 201) {
-        return ApiResult.success(
-            NodeListResult.fromJson(response.data['data']));
-      } else {
-        Fimber.d('error: ' + response.data['errCode']);
-        return ApiResult.error(response);
-      }
-    } catch (error) {
-      Fimber.d('error: ' + error.toString());
-      return ApiResult.error(error);
-    }
+    return GenerateApiResult.from<NodeListResult>(
+      apiCall: () async {
+        return await _dio.post('/api/node/list');
+      },
+      parseSuccessData: (response) {
+        return NodeListResult.fromJson(response.data['data']);
+      },
+    );
   }
 
   Future<ApiResult<ProductListResult>> fetchProductList() async {
-    try {
-      final response = await _dio.post('/api/product/list');
-
-      Fimber.d('response: ' + response.toString());
-      Fimber.d('status code: ' + response.statusCode.toString());
-      if (response.statusCode == 201) {
-        return ApiResult.success(
-            ProductListResult.fromJson(response.data['data']));
-      } else {
-        Fimber.d('error: ' + response.data['errCode']);
-        return ApiResult.error(HttpErrorException(errorCode: response.data['errCode'], errorMsg: response.data['errMsg']));
-      }
-    } catch (error) {
-      Fimber.d('error: ' + error.toString());
-      return ApiResult.error(error);
-    }
+    return GenerateApiResult.from<ProductListResult>(
+      apiCall: () async {
+        return await _dio.post('/api/product/list');
+      },
+      parseSuccessData: (response) {
+        return ProductListResult.fromJson(response.data['data']);
+      },
+    );
   }
-
 }

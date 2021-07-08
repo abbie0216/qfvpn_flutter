@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 abstract class ApiResult<T> {
   static ApiResult<T> success<T>(T data) {
     return Success(data: data);
