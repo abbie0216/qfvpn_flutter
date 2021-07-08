@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:qfvpn/model/api/bean/login/ChangePasswordReq.dart';
@@ -6,6 +7,7 @@ import 'package:qfvpn/model/api/bean/login/RefreshTokenReq.dart';
 import 'package:qfvpn/model/api/bean/login/SendCodeReq.dart';
 import 'package:qfvpn/model/api/bean/login/login_req.dart';
 import 'package:qfvpn/model/api/bean/node/node_list_result.dart';
+import 'package:qfvpn/model/api/bean/splash/version_req.dart';
 import 'package:qfvpn/model/api/bean/token.dart';
 
 import '../pref.dart';
@@ -57,19 +59,14 @@ class ApiRepository {
         // for test change domain
       onError: (error, handler) async {
         if(error.message.contains('SocketException')) {
-          var options = error.requestOptions;
-          options.baseUrl = 'https://qfvpn.com';
-          options.headers = {
-            'accept': 'application/json',
-            'Content-Type': 'application/json'};
-          Fimber.d('@@ url = ${options.baseUrl}, ${options.uri}');
-          dio.options.baseUrl = options.baseUrl;
+          dio.options.baseUrl = 'https://qfvpn.com';
           dio.options.headers = {
             'accept': 'application/json',
             'Content-Type': 'application/json'
           };
-          dio.options.method = options.method;
-          var response = await dio.request(options.path);
+          dio.options.queryParameters = error.requestOptions.queryParameters;
+          dio.options.method = error.requestOptions.method;
+          var response = await dio.request(error.requestOptions.path, data: error.requestOptions.data);
           handler.resolve(response);
         } else {
           handler.next(error);
@@ -115,7 +112,15 @@ class ApiRepository {
 
   Future<ApiResult<VersionResp>> checkVersion() async {
     try {
-      final response = await _dio.post('/api/version/check');
+      var platform;
+      if(Platform.isAndroid) {
+        platform = 'Android';
+      } else {
+        platform = 'iOS';
+      }
+
+      final response = await _dio.post('/api/version/check',
+      data: json.encode(VersionReq(platform: platform)));
 
       Fimber.d('response: ' + response.toString());
       Fimber.d('status code: ' + response.statusCode.toString());
