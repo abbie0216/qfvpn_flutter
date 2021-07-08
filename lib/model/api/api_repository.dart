@@ -217,23 +217,14 @@ class ApiRepository {
   }
 
   Future<ApiResult<FeedbackListResp>> fetchFeedbackList(Paging paging) async {
-    try {
-      final response = await _dio.post('/api/feedback/list',
-          data: json.encode(paging.toJson()));
-
-      Fimber.d('response: ' + response.toString());
-      Fimber.d('status code: ' + response.statusCode.toString());
-
-      if (response.statusCode == 201) {
-        return ApiResult.success(
-            FeedbackListResp.fromJson(response.data['data']));
-      } else {
-        Fimber.d('error: ' + response.data['errCode']);
-        return ApiResult.error(response);
-      }
-    } catch (error) {
-      Fimber.d('error: ' + error.toString());
-      return ApiResult.error(error);
-    }
+    return GenerateApiResult.from<FeedbackListResp>(
+      apiCall: () async {
+        return await _dio.post('/api/feedback/list',
+            data: json.encode(paging.toJson()));
+      },
+      parseSuccessData: (response) {
+        return FeedbackListResp.fromJson(response.data['data']);
+      },
+    );
   }
 }
