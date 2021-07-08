@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
@@ -11,6 +12,8 @@ import 'package:qfvpn/page/login/login_page.dart';
 import 'package:qfvpn/page/me/points_page.dart';
 import 'package:qfvpn/page/setting/binding_page.dart';
 import 'package:qfvpn/page/setting/setting_page.dart';
+import 'package:qfvpn/widget/selector_widget_button.dart';
+import 'package:sprintf/sprintf.dart';
 
 import '../../r.dart';
 import '../../s.dart';
@@ -31,6 +34,7 @@ class _MePageState extends State<MePage> {
     super.initState();
     _meBloc = BlocProvider.of<MeBloc>(context);
     _meBloc.add(AppVersionEvent());
+    _meBloc.add(GetUserInfoEvent());
   }
 
   @override
@@ -52,8 +56,9 @@ class _MePageState extends State<MePage> {
             backgroundColor: R.color.me_title_block_bg_color(),
             centerTitle: true,
             actions: <Widget>[
-              IconButton(
-                  icon: Image(image: R.image.btn_setting_n()),
+              SelectorWidgetButton(
+                  widgetN: Image(image: R.image.btn_setting_n()),
+                  widgetP: Image(image: R.image.btn_setting_p()),
                   onPressed: () {
                     Navigator.of(context).pushNamed((SettingPage).toString());
                   })
@@ -73,100 +78,144 @@ class _MePageState extends State<MePage> {
   }
 
   Widget _buildAccountInfo() {
-    return BlocListener<MeBloc, MeState>(
-        listener: (context, state) {},
-        child: BlocBuilder<MeBloc, MeState>(builder: (context, state) {
-          return Container(
-            height: MediaQuery.of(context).size.height * 0.18,
-            decoration: BoxDecoration(
-              color: R.color.me_title_block_bg_color(),
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(60)),
+    var userID = '-';
+    var vip_endAt = '-';
+    return BlocBuilder<MeBloc, MeState>(builder: (context, state) {
+      if (state is UserInfoUpdatedState) {
+        userID = state.userInfo.userNo;
+        var date = state.userInfo.vipEndAt;
+        if (state.userInfo.vipEndAt.contains('T')) {
+          date = state.userInfo.vipEndAt.split('T')[0];
+        }
+        vip_endAt = date;
+      }
+
+      return Container(
+        height: 120,
+        padding: EdgeInsets.only(bottom: 40, left: 40),
+        decoration: BoxDecoration(
+            color: R.color.vip_top_bg(),
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(60),
+                bottomRight: Radius.circular(60))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle, color: R.color.background_color()),
+              child: Icon(
+                Icons.person,
+                color: Colors.white,
+                size: 60,
+              ),
             ),
-            child: Align(
-                alignment: FractionalOffset(0.2, 0.2),
-                child: Row(mainAxisSize: MainAxisSize.min, children: [
+            Expanded(
+                child: Container(
+              padding: EdgeInsets.only(left: 19),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
                   Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: R.color.background_color()),
-                    child: Icon(
-                      Icons.person,
-                      color: Colors.white,
-                      size: 60,
+                    padding: EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      sprintf(
+                          S.of(context).vip_expired_time_valid, [vip_endAt]),
+                      style: TextStyle(
+                          color: R.color.vip_expired_time_valid_text()),
                     ),
                   ),
-                  SizedBox(width: 20),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        S.of(context).me_vip_time_label + '-',
-                        style: TextStyle(color: R.color.text_blue_color()),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        S.of(context).me_id_label + '-',
-                        style: TextStyle(color: Colors.black.withAlpha(51)),
-                      )
-                    ],
-                  )
-                ])),
-          );
-        }));
+                  Row(children: [
+                    Text(
+                      sprintf(S.of(context).vip_id, [userID]),
+                      textAlign: TextAlign.left,
+                      style: TextStyle(color: R.color.vip_id_text()),
+                    ),
+                    GestureDetector(
+                        onTap: () {
+                          Clipboard.setData(ClipboardData(text: userID))
+                              .then((_) {
+                            ScaffoldMessenger.of(context)
+                              ..hideCurrentSnackBar()
+                              ..showSnackBar(SnackBar(
+                                  content: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(S.of(context).msg_copied),
+                                ],
+                              )));
+                          });
+                        },
+                        child: Image(image: R.image.btn_copy_n()))
+                  ])
+                ],
+              ),
+            ))
+          ],
+        ),
+      );
+    });
   }
 
   Widget _buildMailCouponButtons() {
-    return BlocListener<MeBloc, MeState>(
-        listener: (context, state) {},
-        child: BlocBuilder<MeBloc, MeState>(builder: (context, state) {
-          return Positioned(
-              top: MediaQuery.of(context).size.height * 0.18 - 24,
-              child: Row(
-                children: [
-                  TextButton(
-                      style: TextButton.styleFrom(
-                        minimumSize: Size(130, 44),
-                        backgroundColor: R.color.btn_blue_color(),
-                        elevation: 5.0,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(22)),
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context)
-                            .pushNamed((BindingPage).toString());
-                      },
-                      child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image(image: R.image.icon_link()),
-                            Text(S.of(context).me_bind_mail,
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 14)),
-                            Image(image: R.image.btn_next_white_n())
-                          ])),
-                  SizedBox(width: 20),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      minimumSize: Size(130, 44),
-                      backgroundColor: R.color.btn_blue_color(),
-                      elevation: 5.0,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(22)),
-                      ),
+    var isBindEmail = false;
+    return BlocBuilder<MeBloc, MeState>(builder: (context, state) {
+      if (state is UserInfoUpdatedState) {
+        isBindEmail = state.userInfo.isBindEmail;
+      }
+      return Positioned(
+          top: 120 - 24,
+          child: Row(
+            children: [
+              TextButton(
+                  style: TextButton.styleFrom(
+                    minimumSize: Size(130, 44),
+                    backgroundColor: R.color.btn_blue_color(),
+                    elevation: 5.0,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(22)),
                     ),
-                    onPressed: () {
-                      Navigator.of(context).pushNamed((CouponPage).toString());
-                    },
-                    child: Text(S.of(context).me_coupon,
-                        style: TextStyle(color: Colors.white, fontSize: 14)),
-                  )
-                ],
-              ));
-        }));
+                  ),
+                  onPressed: () {
+                    if (!isBindEmail) {
+                      Navigator.of(context).pushNamed((BindingPage).toString());
+                    }
+                  },
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image(
+                            image: isBindEmail
+                                ? R.image.icon_linked()
+                                : R.image.icon_link()),
+                        Text(S.of(context).me_bind_mail,
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 14)),
+                        Image(image: R.image.btn_next_white_n())
+                      ])),
+              SizedBox(width: 20),
+              TextButton(
+                style: TextButton.styleFrom(
+                  minimumSize: Size(130, 44),
+                  backgroundColor: R.color.btn_blue_color(),
+                  elevation: 5.0,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(22)),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pushNamed((CouponPage).toString());
+                },
+                child: Text(S.of(context).me_coupon,
+                    style: TextStyle(color: Colors.white, fontSize: 14)),
+              )
+            ],
+          ));
+    });
   }
 
   Widget _buildItemsRegion() {
@@ -327,7 +376,8 @@ class _MePageState extends State<MePage> {
                         height: 48,
                         child: GestureDetector(
                             onTap: () {
-                              Navigator.pushNamed(context, (AboutPage).toString());
+                              Navigator.pushNamed(
+                                  context, (AboutPage).toString());
                             },
                             child: Row(
                               children: [

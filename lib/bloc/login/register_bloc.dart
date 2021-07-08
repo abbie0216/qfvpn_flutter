@@ -1,13 +1,11 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:meta/meta.dart';
 import 'package:qfvpn/model/api/api_repository.dart';
 import 'package:qfvpn/model/api/api_result.dart';
-import 'package:qfvpn/model/api/bean/base_resp.dart';
 import 'package:qfvpn/model/api/bean/login/login_req.dart';
 import 'package:qfvpn/model/api/bean/login/register_req.dart';
 import 'package:qfvpn/model/api/bean/login/register_resp.dart';
@@ -49,7 +47,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         yield* login(email, password);
       } else if (result is Error){
         Fimber.d('error: ${result.error.toString()}');
-        yield RegisterFailedState(DateTime.now().millisecondsSinceEpoch, result.error);
+        yield RegisterFailedState(result.error);
       }
     }
   }
@@ -64,8 +62,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         yield LoginSuccessState();
       } else if (result is Error) {
         Fimber.d('error: ${result.error.toString()}');
-        yield LoginFailedState(
-            DateTime.now().millisecondsSinceEpoch, result.error);
+        yield LoginFailedState(result.error);
       }
   }
 }

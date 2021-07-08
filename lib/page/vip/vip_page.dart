@@ -80,6 +80,7 @@ class _VipPageState extends State<VipPage> {
 
   Widget _buildMemberInfo() {
     return Container(
+      height: 120,
       padding: EdgeInsets.only(bottom: 40, left: 40),
       decoration: BoxDecoration(
           color: R.color.vip_top_bg(),
@@ -105,6 +106,7 @@ class _VipPageState extends State<VipPage> {
             padding: EdgeInsets.only(left: 19),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   padding: EdgeInsets.only(bottom: 8),

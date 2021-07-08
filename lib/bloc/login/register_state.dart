@@ -19,24 +19,24 @@ class RegisterPWInvalidState extends RegisterState {
 }
 
 class RegisterFailedState extends RegisterState {
-  final int timeStamp;
+  final int _timeStamp = DateTime.now().millisecondsSinceEpoch;
   final dynamic error;
-  const RegisterFailedState(this.timeStamp, this.error): super();
+  RegisterFailedState(this.error): super();
 
   @override
-  List<Object> get props => [timeStamp];
+  List<Object> get props => [_timeStamp];
 }
 
 class RegisterSuccessState extends RegisterState {
 }
 
 class LoginFailedState extends RegisterState {
-  final int timeStamp;
+  final int _timeStamp = DateTime.now().millisecondsSinceEpoch;
   final dynamic errMsg;
-  const LoginFailedState(this.timeStamp, this.errMsg): super();
+  LoginFailedState(this.errMsg): super();
 
   @override
-  List<Object> get props => [timeStamp];
+  List<Object> get props => [_timeStamp];
 }
 
 class LoginSuccessState extends RegisterState {

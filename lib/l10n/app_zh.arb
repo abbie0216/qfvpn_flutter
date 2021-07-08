@@ -61,6 +61,8 @@
   "me_item_about": "关于赤兔加速器",
   "me_get_vip": "免费领取 VIP",
 
+  "msg_copied": "已复制",
+
   "setting_title": "设定",
   "setting_item_mail": "帐号邮箱",
   "setting_item_pw_change": "修改密码",
@@ -179,6 +181,8 @@
   "order_history_detail_repurchase" : "重新购买",
 
   "feedback_list_title": "意见反馈",
+  "feedback_list_no_item": "暂无反饋",
+  "feedback_list_end": "我是有底线的",
   "feedback_solved": "已解答",
   "feedback_submit": "已提交",
   "add_feedback_title": "添加反馈",

@@ -17,17 +17,17 @@ class LoginPWInvalidState extends LoginState {
 }
 
 class LoginFailedState extends LoginState {
-  final int timeStamp;
+  final int _timeStamp = DateTime.now().millisecondsSinceEpoch;
   final dynamic errMsg;
-  const LoginFailedState(this.timeStamp, this.errMsg);
+  LoginFailedState(this.errMsg);
 
   @override
-  List<Object> get props => [timeStamp];
+  List<Object> get props => [_timeStamp];
 }
 
 class LoginSuccessState extends LoginState {
-  final int timeStamp;
-  const LoginSuccessState(this.timeStamp);
+  final int _timeStamp = DateTime.now().millisecondsSinceEpoch;
+  LoginSuccessState();
   @override
-  List<Object> get props => [timeStamp];
+  List<Object> get props => [_timeStamp];
 }
