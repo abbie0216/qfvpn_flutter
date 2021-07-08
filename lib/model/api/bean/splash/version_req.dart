@@ -12,13 +12,6 @@ class VersionReq {
 
   String platform;
 
-  VersionReq copyWith({
-    required String platform,
-  }) =>
-      VersionReq(
-        platform: platform,
-      );
-
   factory VersionReq.fromJson(String str) => VersionReq.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());

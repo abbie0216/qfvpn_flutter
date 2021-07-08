@@ -122,7 +122,7 @@ class ApiRepository {
       }
 
       final response = await _dio.post('/api/version/check',
-      data: json.encode(VersionReq(platform: platform)));
+      data: VersionReq(platform: platform).toJson());
 
       Fimber.d('response: ' + response.toString());
       Fimber.d('status code: ' + response.statusCode.toString());
