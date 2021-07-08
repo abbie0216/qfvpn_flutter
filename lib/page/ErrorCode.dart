@@ -1,6 +1,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:qfvpn/model/api/HttpErrorException.dart';
 import 'package:qfvpn/model/api/bean/base_resp.dart';
 
 import '../s.dart';
@@ -21,8 +22,8 @@ class ErrorCode {
   }
 
   String getErrorMsg(dynamic resp) {
-    if (resp is Response) {
-        return errorTable[resp.data['errCode']] ?? S.of(context).error_unknown;
+    if (resp is HttpErrorException) {
+        return errorTable[resp.errorCode] ?? S.of(context).error_unknown;
     } else {
       return S.of(context).error_unknown;
     }

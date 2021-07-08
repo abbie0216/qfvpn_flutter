@@ -41,7 +41,7 @@ Future<void> main() async {
   Fimber.plantTree(DebugTree());
 
   var configProvider = ConfigProvider(
-    data: ConfigData(flavor: 'dev', apiBaseUrl: 'https://qfvpn.com'),
+    data: ConfigData(flavor: 'dev', apiBaseUrl: 'https://qfvpn1.com'),
     child: App(),
   );
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(

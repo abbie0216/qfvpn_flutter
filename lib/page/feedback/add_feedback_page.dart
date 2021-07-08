@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qfvpn/bloc/feedback/feedback_bloc.dart';
 import 'package:qfvpn/bloc/feedback/feedback_state.dart';
@@ -22,10 +23,24 @@ class AddFeedbackPage extends StatefulWidget {
 class _AddFeedbackState extends State<AddFeedbackPage> {
   late FeedbackBloc _feedbackBloc;
 
+  int? _feedbackTypeIndex;
+
+  final textController = TextEditingController();
+  int letterCount = 0;
+
+  final _picker = ImagePicker();
+  List<PickedFile>? _imageFileList;
+
   @override
   void initState() {
     super.initState();
     _feedbackBloc = BlocProvider.of<FeedbackBloc>(context);
+  }
+
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
   }
 
   @override
@@ -93,7 +108,9 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
             ),
             SizedBox(width: 14),
             Text(
-              S.of(context).add_feedback_select,
+              _feedbackTypeIndex == null
+                  ? S.of(context).add_feedback_select
+                  : _getFeedbackType(_feedbackTypeIndex ?? 0),
               style:
                   TextStyle(color: R.color.text_color_alpha30(), fontSize: 14),
             ),
@@ -104,8 +121,6 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
       ),
     );
   }
-
-  int letterCount = 0;
 
   Widget _buildInputItem(BuildContext context) {
     return Container(
@@ -137,6 +152,7 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
               onChanged: (text) => setState(() {
                 letterCount = text.length;
               }),
+              controller: textController,
             ),
           ),
           Align(
@@ -221,15 +237,17 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
           Positioned(
             top: 5,
             right: 5,
-            child: Image(image: R.image.btn_imgdelete_n()),
+            child: GestureDetector(
+              onTap: () => setState(() {
+                _imageFileList!.removeAt(index);
+              }),
+              child: Image(image: R.image.btn_imgdelete_n()),
+            ),
           ),
         ],
       ),
     );
   }
-
-  final _picker = ImagePicker();
-  late final PickedFile? pickedFile;
 
   Widget _buildAddImageItem() {
     return GestureDetector(
@@ -249,8 +267,6 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
     );
   }
 
-  List<PickedFile>? _imageFileList;
-
   void _onImageButtonPressed() async {
     try {
       final pickedFileList = await _picker.getMultiImage();
@@ -266,7 +282,7 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
 
   Widget _buildSubmitBtn() {
     return TextButton(
-      onPressed: null,
+      onPressed: () => _onSubmitPressed(),
       child: Container(
         height: 44,
         width: double.infinity,
@@ -290,11 +306,32 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
     );
   }
 
+  void _onSubmitPressed() {
+    Fimber.d('@@type ${_getFeedbackType(_feedbackTypeIndex!)}');
+    Fimber.d('@@input ${textController.text}');
+    Fimber.d('@@image $_imageFileList');
+  }
+
   void _showFeedbackTypeBottomSheet() {
     showMaterialModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        expand: false,
-        context: context,
-        builder: (context) => FeedbackTypeBottomSheet());
+      backgroundColor: Colors.transparent,
+      expand: false,
+      context: context,
+      builder: (context) => FeedbackTypeBottomSheet(index: _feedbackTypeIndex),
+    ).then((value) => setState(() {
+          _feedbackTypeIndex = value;
+        }));
+  }
+
+  String _getFeedbackType(int which) {
+    var arr = [
+      S.of(context).add_feedback_type_0,
+      S.of(context).add_feedback_type_1,
+      S.of(context).add_feedback_type_2,
+      S.of(context).add_feedback_type_3,
+      S.of(context).add_feedback_type_4,
+      S.of(context).add_feedback_type_5
+    ];
+    return arr[which];
   }
 }
