@@ -8,3 +8,4 @@ abstract class MeEvent extends Equatable {
 }
 
 class AppVersionEvent extends MeEvent {}
+class GetUserInfoEvent extends MeEvent {}

@@ -1,31 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
+import 'package:qfvpn/model/api/bean/product/product_list_result.dart';
 
 import '../../r.dart';
 import '../../s.dart';
 
-class VipCouponBottomSheet extends StatefulWidget {
+class CouponSelector extends StatefulWidget {
+  final List<Coupons> coupons;
+  final Coupons? selectedCoupon;
+
+  CouponSelector(this.coupons, this.selectedCoupon);
+
   @override
-  State<StatefulWidget> createState() => _VipCouponBottomSheetState();
+  State<StatefulWidget> createState() => _CouponSelectorState();
 }
 
-class _VipCouponBottomSheetState extends State<VipCouponBottomSheet> {
-  int _selectedId = 0;
+class _CouponSelectorState extends State<CouponSelector> {
+  Coupons? _selectedCoupon;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedCoupon = widget.selectedCoupon;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.5,
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(22))),
-      child: Column(
-        children: [buildTitle(), buildList(), buildNotUseBtn()],
-      ),
-    );
+    return WillPopScope(
+        onWillPop: () async {
+            Navigator.of(context).pop(widget.selectedCoupon);
+          return false;
+        },
+        child: Container(
+          height: MediaQuery.of(context).size.height * 0.5,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(22))),
+          child: Column(
+            children: [_buildTitle(), _buildList(), _buildNotUseBtn()],
+          ),
+        ));
   }
 
-  Widget buildTitle() {
+  Widget _buildTitle() {
     return Padding(
       padding: EdgeInsets.only(top: 16, bottom: 10),
       child: Row(
@@ -44,13 +62,16 @@ class _VipCouponBottomSheetState extends State<VipCouponBottomSheet> {
     );
   }
 
-  Widget buildList() {
+  Widget _buildList() {
     return Expanded(
       child: ListView.separated(
         physics: BouncingScrollPhysics(),
         padding: EdgeInsets.only(top: 0),
-        itemBuilder: buildListItem,
-        itemCount: 5,
+        itemBuilder: (context, index) {
+          var coupon = widget.coupons.elementAt(index);
+          return _buildListItem(context, coupon);
+        },
+        itemCount: widget.coupons.length,
         separatorBuilder: (BuildContext context, int index) {
           return Container(
             height: 8,
@@ -60,12 +81,12 @@ class _VipCouponBottomSheetState extends State<VipCouponBottomSheet> {
     );
   }
 
-  Widget buildListItem(context, int index) {
+  Widget _buildListItem(context, Coupons coupon) {
     return Stack(
       alignment: Alignment.center,
       children: [
         Image(
-          image: _selectedId == index
+          image: _selectedCoupon?.userCouponId == coupon.userCouponId
               ? R.image.img_coupon_used()
               : R.image.img_coupon_use(),
           width: 300,
@@ -85,21 +106,23 @@ class _VipCouponBottomSheetState extends State<VipCouponBottomSheet> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '¥14',
+                      '¥${coupon.reduceAmount}',
                       style: TextStyle(
                           fontSize: 40,
                           fontWeight: FontWeight.w500,
-                          color: _selectedId == index
+                          color: _selectedCoupon?.userCouponId ==
+                                  coupon.userCouponId
                               ? R.color.vip_coupon_selector_selected_main_text()
                               : R.color
                                   .vip_coupon_selector_unselected_main_text()),
                     ),
                     Text(
-                      '30 天套餐可用',
+                      coupon.thresholdText ?? '',
                       textAlign: TextAlign.right,
                       style: TextStyle(
                           fontSize: 12,
-                          color: _selectedId == index
+                          color: _selectedCoupon?.userCouponId ==
+                                  coupon.userCouponId
                               ? R.color.vip_coupon_selector_selected_sub_text()
                               : R.color
                                   .vip_coupon_selector_unselected_sub_text()),
@@ -117,22 +140,24 @@ class _VipCouponBottomSheetState extends State<VipCouponBottomSheet> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '2021/10/10-2022/10/10',
+                      _buildValidTimeText(coupon),
                       textAlign: TextAlign.left,
                       style: TextStyle(
                           fontSize: 12,
-                          color: _selectedId == index
+                          color: _selectedCoupon?.userCouponId ==
+                                  coupon.userCouponId
                               ? R.color.vip_coupon_selector_selected_sub_text()
                               : R.color
                                   .vip_coupon_selector_unselected_sub_text()),
                     ),
                     Text(
-                      '30 天优惠券',
+                      coupon.title ?? '',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: _selectedId == index
+                          color: _selectedCoupon?.userCouponId ==
+                                  coupon.userCouponId
                               ? R.color.vip_coupon_selector_selected_main_text()
                               : R.color
                                   .vip_coupon_selector_unselected_main_text()),
@@ -141,9 +166,9 @@ class _VipCouponBottomSheetState extends State<VipCouponBottomSheet> {
                     Row(
                       children: [
                         Spacer(),
-                        _selectedId == index
-                            ? buildAlreadyUseBtn(index)
-                            : buildUseBtn(index)
+                        _selectedCoupon?.userCouponId == coupon.userCouponId
+                            ? _buildAlreadyUseBtn(coupon)
+                            : _buildUseBtn(coupon)
                       ],
                     )
                   ],
@@ -154,13 +179,22 @@ class _VipCouponBottomSheetState extends State<VipCouponBottomSheet> {
     );
   }
 
-  Widget buildUseBtn(int index) {
+  String _buildValidTimeText(Coupons coupon) {
+    var dateFormat = DateFormat('yyyy/MM/dd');
+    var startTime = DateFormat('yyyy-MM-ddTHH:mm:ssZ')
+        .parse(coupon.validStartAt ?? '', true);
+    var endTime =
+        DateFormat('yyyy-MM-ddTHH:mm:ssZ').parse(coupon.validEndAt ?? '', true);
+    return '${dateFormat.format(startTime)}-${dateFormat.format(endTime)}';
+  }
+
+  Widget _buildUseBtn(Coupons coupons) {
     return ElevatedButton(
         onPressed: () {
           setState(() {
-            _selectedId = index;
-            Navigator.of(context).pop();
+            _selectedCoupon = coupons;
           });
+          Navigator.of(context).pop(coupons);
         },
         style: ButtonStyle(
             padding: MaterialStateProperty.all(EdgeInsets.zero),
@@ -176,13 +210,13 @@ class _VipCouponBottomSheetState extends State<VipCouponBottomSheet> {
         ));
   }
 
-  Widget buildAlreadyUseBtn(int index) {
+  Widget _buildAlreadyUseBtn(Coupons coupons) {
     return OutlinedButton(
         onPressed: () {
           setState(() {
-            _selectedId = index;
-            Navigator.of(context).pop();
+            _selectedCoupon = coupons;
           });
+          Navigator.of(context).pop(coupons);
         },
         style: ButtonStyle(
             padding: MaterialStateProperty.all(EdgeInsets.zero),
@@ -201,22 +235,23 @@ class _VipCouponBottomSheetState extends State<VipCouponBottomSheet> {
         ));
   }
 
-  Widget buildNotUseBtn() {
+  Widget _buildNotUseBtn() {
     return Container(
       width: 300,
-      margin: EdgeInsets.only(top: 30,bottom: 19),
+      margin: EdgeInsets.only(top: 30, bottom: 19),
       child: OutlinedButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pop(null);
           },
           style: ButtonStyle(
-              padding: MaterialStateProperty.all(EdgeInsets.only(top: 11,bottom: 11)),
+              padding: MaterialStateProperty.all(
+                  EdgeInsets.only(top: 11, bottom: 11)),
               shape: MaterialStateProperty.all(RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(22)))),
               side: MaterialStateProperty.all(BorderSide(
                   color: R.color.vip_coupon_selector_not_use_btn_border())),
               overlayColor:
-              MaterialStateProperty.all(R.color.vip_outline_btn_splash())),
+                  MaterialStateProperty.all(R.color.vip_outline_btn_splash())),
           child: Text(
             S.of(context).vip_coupon_selector_not_use_btn,
             style: TextStyle(
