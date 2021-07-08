@@ -23,6 +23,7 @@ import 'bean/login/register_resp.dart';
 import 'package:dio/dio.dart';
 
 import 'bean/splash/version_resp.dart';
+import 'bean/user/User.dart';
 
 class ApiRepository {
   late final String _baseUrl;
@@ -240,6 +241,23 @@ class ApiRepository {
     }
   }
 
+  Future<ApiResult<User>> getUserInfo() async {
+    try {
+      final response = await _dio.post('/api/user/info');
+
+      Fimber.d('response: ' + response.toString());
+      Fimber.d('status code: ' + response.statusCode.toString());
+      if (response.statusCode == 201) {
+        return ApiResult.success(User.fromJson(response.data['data']));
+      } else {
+        Fimber.d('error: ' + response.data['errMsg']);
+        return ApiResult.error(HttpErrorException(errorCode: response.data['errCode'], errorMsg: response.data['errMsg']));
+      }
+    } catch (error) {
+      Fimber.d('error: ' + error.toString());
+      return ApiResult.error(error);
+    }
+  }
 
   Future<ApiResult<NodeListResult>> fetchNodeList() async {
     try {
@@ -278,5 +296,6 @@ class ApiRepository {
       return ApiResult.error(error);
     }
   }
+
 
 }

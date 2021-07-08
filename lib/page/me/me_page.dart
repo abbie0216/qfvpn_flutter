@@ -31,6 +31,7 @@ class _MePageState extends State<MePage> {
     super.initState();
     _meBloc = BlocProvider.of<MeBloc>(context);
     _meBloc.add(AppVersionEvent());
+    _meBloc.add(GetUserInfoEvent());
   }
 
   @override
@@ -42,7 +43,9 @@ class _MePageState extends State<MePage> {
           backgroundColor: R.color.background_color(),
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            title: Text(S.of(context).me_page_title,
+            title: Text(S
+                .of(context)
+                .me_page_title,
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 16,
@@ -73,100 +76,128 @@ class _MePageState extends State<MePage> {
   }
 
   Widget _buildAccountInfo() {
-    return BlocListener<MeBloc, MeState>(
-        listener: (context, state) {},
-        child: BlocBuilder<MeBloc, MeState>(builder: (context, state) {
-          return Container(
-            height: MediaQuery.of(context).size.height * 0.18,
-            decoration: BoxDecoration(
-              color: R.color.me_title_block_bg_color(),
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(60)),
-            ),
-            child: Align(
-                alignment: FractionalOffset(0.2, 0.2),
-                child: Row(mainAxisSize: MainAxisSize.min, children: [
-                  Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: R.color.background_color()),
-                    child: Icon(
-                      Icons.person,
-                      color: Colors.white,
-                      size: 60,
-                    ),
+    var userID = '-';
+    var vip_endAt = '-';
+    return BlocBuilder<MeBloc, MeState>(builder: (context, state) {
+      if (state is UserInfoUpdatedState) {
+        userID = state.userInfo.userNo;
+        var date = state.userInfo.vipEndAt;
+        if (state.userInfo.vipEndAt.contains('T')) {
+          date = state.userInfo.vipEndAt.split('T')[0];
+        }
+        vip_endAt = date;
+      }
+
+      return Container(
+        height: MediaQuery
+            .of(context)
+            .size
+            .height * 0.18,
+        decoration: BoxDecoration(
+          color: R.color.me_title_block_bg_color(),
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(60)),
+        ),
+        child: Align(
+            alignment: FractionalOffset(0.2, 0.2),
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle, color: R.color.background_color()),
+                child: Icon(
+                  Icons.person,
+                  color: Colors.white,
+                  size: 60,
+                ),
+              ),
+              SizedBox(width: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    S
+                        .of(context)
+                        .me_vip_time_label + vip_endAt,
+                    style: TextStyle(color: R.color.text_blue_color()),
                   ),
-                  SizedBox(width: 20),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        S.of(context).me_vip_time_label + '-',
-                        style: TextStyle(color: R.color.text_blue_color()),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        S.of(context).me_id_label + '-',
-                        style: TextStyle(color: Colors.black.withAlpha(51)),
-                      )
-                    ],
+                  SizedBox(height: 8),
+                  Text(
+                    S
+                        .of(context)
+                        .me_id_label + userID,
+                    style: TextStyle(color: Colors.black.withAlpha(51)),
                   )
-                ])),
-          );
-        }));
+                ],
+              )
+            ])),
+      );
+    });
   }
 
   Widget _buildMailCouponButtons() {
-    return BlocListener<MeBloc, MeState>(
-        listener: (context, state) {},
-        child: BlocBuilder<MeBloc, MeState>(builder: (context, state) {
-          return Positioned(
-              top: MediaQuery.of(context).size.height * 0.18 - 24,
-              child: Row(
-                children: [
-                  TextButton(
-                      style: TextButton.styleFrom(
-                        minimumSize: Size(130, 44),
-                        backgroundColor: R.color.btn_blue_color(),
-                        elevation: 5.0,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(22)),
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context)
-                            .pushNamed((BindingPage).toString());
-                      },
-                      child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image(image: R.image.icon_link()),
-                            Text(S.of(context).me_bind_mail,
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 14)),
-                            Image(image: R.image.btn_next_white_n())
-                          ])),
-                  SizedBox(width: 20),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      minimumSize: Size(130, 44),
-                      backgroundColor: R.color.btn_blue_color(),
-                      elevation: 5.0,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(22)),
-                      ),
+    var isBindEmail = false;
+    return BlocBuilder<MeBloc, MeState>(builder: (context, state) {
+      if (state is UserInfoUpdatedState) {
+        isBindEmail = state.userInfo.isBindEmail;
+      }
+      return Positioned(
+          top: MediaQuery
+              .of(context)
+              .size
+              .height * 0.18 - 24,
+          child: Row(
+            children: [
+              TextButton(
+                  style: TextButton.styleFrom(
+                    minimumSize: Size(130, 44),
+                    backgroundColor: R.color.btn_blue_color(),
+                    elevation: 5.0,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(22)),
                     ),
-                    onPressed: () {
-                      Navigator.of(context).pushNamed((CouponPage).toString());
-                    },
-                    child: Text(S.of(context).me_coupon,
-                        style: TextStyle(color: Colors.white, fontSize: 14)),
-                  )
-                ],
-              ));
-        }));
+                  ),
+                  onPressed: () {
+                    if (!isBindEmail) {
+                      Navigator.of(context)
+                          .pushNamed((BindingPage).toString());
+                    }
+                  },
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image(
+                            image: isBindEmail ? R.image.icon_linked() : R.image
+                                .icon_link()),
+                        Text(S
+                            .of(context)
+                            .me_bind_mail,
+                            style: TextStyle(
+                                color: Colors.white, fontSize: 14)),
+                        Image(image: R.image.btn_next_white_n())
+                      ])),
+              SizedBox(width: 20),
+              TextButton(
+                style: TextButton.styleFrom(
+                  minimumSize: Size(130, 44),
+                  backgroundColor: R.color.btn_blue_color(),
+                  elevation: 5.0,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(22)),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pushNamed((CouponPage).toString());
+                },
+                child: Text(S
+                    .of(context)
+                    .me_coupon,
+                    style: TextStyle(color: Colors.white, fontSize: 14)),
+              )
+            ],
+          ));
+    });
   }
 
   Widget _buildItemsRegion() {
@@ -213,13 +244,15 @@ class _MePageState extends State<MePage> {
                                       text: TextSpan(
                                         children: [
                                           TextSpan(
-                                              text: S.of(context).me_item_news,
+                                              text: S
+                                                  .of(context)
+                                                  .me_item_news,
                                               style: TextStyle(
                                                   color: R.color
                                                       .text_gray_color())),
                                           WidgetSpan(
                                               alignment:
-                                                  PlaceholderAlignment.middle,
+                                              PlaceholderAlignment.middle,
                                               child: Padding(
                                                   padding: EdgeInsets.symmetric(
                                                       horizontal: 5),
@@ -258,7 +291,9 @@ class _MePageState extends State<MePage> {
                                     )),
                                 Expanded(
                                     flex: 10,
-                                    child: Text(S.of(context).me_item_help,
+                                    child: Text(S
+                                        .of(context)
+                                        .me_item_help,
                                         style: TextStyle(
                                             color: R.color.text_gray_color()))),
                                 Expanded(
@@ -290,7 +325,9 @@ class _MePageState extends State<MePage> {
                                     )),
                                 Expanded(
                                     flex: 8,
-                                    child: Text(S.of(context).me_item_feedback,
+                                    child: Text(S
+                                        .of(context)
+                                        .me_item_feedback,
                                         style: TextStyle(
                                             color: R.color.text_gray_color()))),
                                 Expanded(
@@ -306,7 +343,9 @@ class _MePageState extends State<MePage> {
                                                   Radius.circular(22)),
                                             ),
                                             child: Center(
-                                                child: Text(S.of(context).news,
+                                                child: Text(S
+                                                    .of(context)
+                                                    .news,
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 12)))))),
@@ -327,7 +366,8 @@ class _MePageState extends State<MePage> {
                         height: 48,
                         child: GestureDetector(
                             onTap: () {
-                              Navigator.pushNamed(context, (AboutPage).toString());
+                              Navigator.pushNamed(
+                                  context, (AboutPage).toString());
                             },
                             child: Row(
                               children: [
@@ -338,7 +378,9 @@ class _MePageState extends State<MePage> {
                                     )),
                                 Expanded(
                                     flex: 8,
-                                    child: Text(S.of(context).me_item_about,
+                                    child: Text(S
+                                        .of(context)
+                                        .me_item_about,
                                         style: TextStyle(
                                             color: R.color.text_gray_color()))),
                                 Expanded(
@@ -348,7 +390,7 @@ class _MePageState extends State<MePage> {
                                         child: Text(appVersion,
                                             style: TextStyle(
                                                 color:
-                                                    R.color.text_blue_color(),
+                                                R.color.text_blue_color(),
                                                 fontSize: 12)))),
                                 Expanded(
                                     flex: 1,
@@ -391,7 +433,9 @@ class _MePageState extends State<MePage> {
                               flex: 4,
                               child: Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 15),
-                                  child: Text(S.of(context).me_get_vip,
+                                  child: Text(S
+                                      .of(context)
+                                      .me_get_vip,
                                       textAlign: TextAlign.end,
                                       style: TextStyle(
                                           color: R.color.text_blue_color(),
@@ -413,7 +457,9 @@ class _MePageState extends State<MePage> {
                                         Navigator.of(context)
                                             .pushNamed((PointsPage).toString());
                                       },
-                                      child: Text(S.of(context).go,
+                                      child: Text(S
+                                          .of(context)
+                                          .go,
                                           style: TextStyle(
                                               color: R.color.text_blue_color(),
                                               fontSize: 14))))),
