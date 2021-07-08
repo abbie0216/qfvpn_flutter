@@ -47,6 +47,16 @@ class VpnBloc extends Bloc<VpnEvent, VpnState> {
       yield VpnStopState(DateTime.now().millisecondsSinceEpoch);
     } else if(event is VpnPermissionSuccessEvent) {
       yield VpnStartState(DateTime.now().millisecondsSinceEpoch);
+    } else if(event is VpnConnectProfileEditEvent) {
+      await _channel.invokeMethod('connectProfile',
+          { 'type':event.type,
+            'server':event.server,
+            'port' : event.port,
+            'cipher' : event.cipher,
+            'password' : event.password,
+            'udp' : event.udp
+          });
+      yield VpnLoadedState();
     }
   }
 }

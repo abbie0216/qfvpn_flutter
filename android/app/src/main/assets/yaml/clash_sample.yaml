@@ -216,12 +216,12 @@ proxies:
   #   origin auth_sha1_v4 auth_aes128_md5
   #   auth_aes128_sha1 auth_chain_a auth_chain_b
   - name: "ss1"
-    type: ss
-    server: 154.13.31.45
-    port: 8388
-    cipher: aes-128-gcm
-    password: "ppc2passwd"
-    udp: true
+    type: %s
+    server: %s
+    port: %s
+    cipher: %s
+    password: %s
+    udp: %s
 
 
 proxy-groups:
