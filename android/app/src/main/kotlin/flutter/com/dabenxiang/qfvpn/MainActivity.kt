@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
+import java.nio.charset.Charset
 import java.util.*
 
 
@@ -33,12 +34,14 @@ open class MainActivity : BaseActivity() {
     private val METHOD = "getFreeSpace"
     private val KEY = "packagename"
     private val DEFAULT_PROFILE = "defaultProfile"
+    private val CONNECT_PRODILE = "connectProfile"
     private val START_VPN = "startVPN"
     private val STOP_VPN = "stopVPN"
     private val CHECK_SERVER_RUNNING = "vpnRunning"
     private val INSTALL_APP = "installApp"
     private var channel: MethodChannel? = null
     private var apkPath = ""
+    private var defaultProfileUUID = ""
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -54,7 +57,9 @@ open class MainActivity : BaseActivity() {
                     result.success(1)
                 }
                 START_VPN -> {
-                    if(checkVPNisRunning()) {
+                    if(defaultProfileUUID.isEmpty()) {
+                        result.error("400001", "connect profile not set. ", null)
+                    } else if(checkVPNisRunning()) {
                         result.error("400000", "VPN server is running please stop ", null)
                     } else {
                         val statue = startVPN()
@@ -74,6 +79,18 @@ open class MainActivity : BaseActivity() {
                     if (apkPath != null) {
                         installApk(this, apkPath)
                     }
+                    result.success(1)
+                }
+                CONNECT_PRODILE -> {
+                    setConnectVPNProfile(
+                        call.argument<String>("type").toString(),
+                        call.argument<String>("server").toString(),
+                        call.argument<String>("port").toString(),
+                        call.argument<String>("cipher").toString(),
+                        call.argument<String>("password").toString(),
+                        call.argument<String>("udp").toString(),
+                    )
+                    result.success(1)
                 }
                 else -> result.notImplemented()
             }
@@ -90,24 +107,46 @@ open class MainActivity : BaseActivity() {
         }
     }
 
+    private fun setConnectVPNProfile(
+            type: String, server: String, port: String,
+            cipher: String, password: String, udp: String) {
+        launch(Dispatchers.IO) {
+            withProfile {
+                if(queryActive() != null) {
+                    val profile = queryActive()
+                    delete(profile!!.uuid);
+                }
+                val uuid: UUID = create(Profile.Type.File, "clash.yaml")
+                val target = getConfigFile(uuid.toString())
+                applicationContext.assets.list("yaml")?.map {
+                    val f =
+                            FileOutputStream(applicationContext.pendingDir.resolve(target.id).absoluteFile)
+                    val content = String.format(assets.open("yaml/".plus(it)).readBytes().toString(Charsets.UTF_8),
+                            type,
+                            server,
+                            port,
+                            cipher,
+                            "\"$password\"",
+                            udp
+                    )
+                    f.write(content.toByteArray())
+                }
+                val profile = queryByUUID(uuid)
+                patch(profile!!.uuid, profile.name, profile.source, profile.interval)
+
+                coroutineScope {
+                    commit(profile.uuid)
+                }
+                setActive(profile)
+            }
+        }
+    }
+
     private fun defaultProfile() {
         launch(Dispatchers.IO) {
             withProfile {
-                if(queryActive() == null) {
-                    val uuid: UUID = create(Profile.Type.File, "clash.yaml")
-                    val target = getConfigFile(uuid.toString())
-                    applicationContext.assets.list("yaml")?.map {
-                        val f =
-                                FileOutputStream(applicationContext.pendingDir.resolve(target.id).absoluteFile)
-                        assets.open("yaml/".plus(it)).copyTo(f)
-                    }
-                    val profile = queryByUUID(uuid)
-                    patch(profile!!.uuid, profile.name, profile.source, profile.interval)
-
-                    coroutineScope {
-                        commit(profile.uuid)
-                    }
-                    setActive(profile)
+                if(queryActive() != null) {
+                    defaultProfileUUID = queryActive()?.uuid.toString()
                 }
             }
         }
