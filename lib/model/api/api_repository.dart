@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_fimber/flutter_fimber.dart';
+import 'package:qfvpn/model/api/HttpErrorException.dart';
 import 'package:qfvpn/model/api/bean/login/ChangePasswordReq.dart';
 import 'package:qfvpn/model/api/bean/login/RefreshTokenReq.dart';
 import 'package:qfvpn/model/api/bean/login/SendCodeReq.dart';
@@ -86,7 +87,7 @@ class ApiRepository {
       if (response.statusCode == 201) {
         return ApiResult.success(RegisterResp.fromJson(response.data['data']));
       } else {
-        return ApiResult.error(response);
+        return ApiResult.error(HttpErrorException(errorCode: response.data['errCode'], errorMsg: response.data['errMsg']));
       }
     } catch (error) {
       return ApiResult.error(error);
@@ -104,8 +105,8 @@ class ApiRepository {
       if (response.statusCode == 201) {
         return ApiResult.success(Token.fromJson(response.data['data']));
       } else {
-        Fimber.d('error: ' + response.data['errCode']);
-        return ApiResult.error(response);
+        Fimber.d('error: ' + response.data['errMsg']);
+        return ApiResult.error(HttpErrorException(errorCode: response.data['errCode'], errorMsg: response.data['errMsg']));
       }
     } catch (error) {
       Fimber.d('error: ' + error.toString());
@@ -124,7 +125,7 @@ class ApiRepository {
         return ApiResult.success(VersionResp.fromJson(response.data['data']));
       } else {
         Fimber.d('error: ' + response.data['errCode']);
-        return ApiResult.error(response);
+        return ApiResult.error(HttpErrorException(errorCode: response.data['errCode'], errorMsg: response.data['errMsg']));
       }
     } catch (error) {
       Fimber.d('error: ' + error.toString());
@@ -144,8 +145,8 @@ class ApiRepository {
         return ApiResult.success(
             RefreshTokenResp.fromJson(response.data['data']));
       } else {
-        Fimber.d('error: ' + response.data['errCode']);
-        return ApiResult.error(response);
+        Fimber.d('error: ' + response.data['errMsg']);
+        return ApiResult.error(HttpErrorException(errorCode: response.data['errCode'], errorMsg: response.data['errMsg']));
       }
     } catch (error) {
       Fimber.d('error: ' + error.toString());
@@ -164,8 +165,8 @@ class ApiRepository {
       if (response.statusCode == 201) {
         return ApiResult.success(SendCodeResp.fromJson(response.data['data']));
       } else {
-        Fimber.d('error: ' + response.data['errCode']);
-        return ApiResult.error(response);
+        Fimber.d('error: ' + response.data['errMsg']);
+        return ApiResult.error(HttpErrorException(errorCode: response.data['errCode'], errorMsg: response.data['errMsg']));
       }
     } catch (error) {
       Fimber.d('error: ' + error.toString());
@@ -185,7 +186,7 @@ class ApiRepository {
         return ApiResult.success(true);
       } else {
         Fimber.d('error: ' + response.data['errMsg']);
-        return ApiResult.error(response);
+        return ApiResult.error(HttpErrorException(errorCode: response.data['errCode'], errorMsg: response.data['errMsg']));
       }
     } catch (error) {
       Fimber.d('error: ' + error.toString());
@@ -204,8 +205,8 @@ class ApiRepository {
       if (response.statusCode == 201) {
         return ApiResult.success(true);
       } else {
-        Fimber.d('error: ' + response.data['errCode']);
-        return ApiResult.error(response);
+        Fimber.d('error: ' + response.data['errMsg']);
+        return ApiResult.error(HttpErrorException(errorCode: response.data['errCode'], errorMsg: response.data['errMsg']));
       }
     } catch (error) {
       Fimber.d('error: ' + error.toString());
@@ -224,8 +225,8 @@ class ApiRepository {
       if (response.statusCode == 201) {
         return ApiResult.success(true);
       } else {
-        Fimber.d('error: ' + response.data['errCode']);
-        return ApiResult.error(response);
+        Fimber.d('error: ' + response.data['errMsg']);
+        return ApiResult.error(HttpErrorException(errorCode: response.data['errCode'], errorMsg: response.data['errMsg']));
       }
     } catch (error) {
       Fimber.d('error: ' + error.toString());
@@ -244,7 +245,7 @@ class ApiRepository {
         return ApiResult.success(NodeListResult.fromJson(response.data['data']));
       } else {
         Fimber.d('error: ' + response.data['errCode']);
-        return ApiResult.error(response);
+        return ApiResult.error(HttpErrorException(errorCode: response.data['errCode'], errorMsg: response.data['errMsg']));
       }
     } catch (error) {
       Fimber.d('error: ' + error.toString());
