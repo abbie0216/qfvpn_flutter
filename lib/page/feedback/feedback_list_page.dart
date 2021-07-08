@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:qfvpn/bloc/feedback/feedback_bloc.dart';
+import 'package:qfvpn/bloc/feedback/feedback_event.dart';
 import 'package:qfvpn/bloc/feedback/feedback_state.dart';
+import 'package:qfvpn/constants.dart';
+import 'package:qfvpn/model/api/bean/feedback/feedback_list_resp.dart';
 import 'package:qfvpn/page/feedback/add_feedback_page.dart';
 import 'package:qfvpn/page/feedback/feedback_detail_page.dart';
 
@@ -18,18 +22,39 @@ class FeedbackListPage extends StatefulWidget {
 
 class _FeedbackListState extends State<FeedbackListPage> {
   late FeedbackBloc _feedbackBloc;
+  FeedbackListResp? _feedbackListResp;
+
+  var _pageKey;
+  final PagingController<int, FeedbackItem> _pagingController =
+  PagingController(firstPageKey: 1);
 
   @override
   void initState() {
     super.initState();
     _feedbackBloc = BlocProvider.of<FeedbackBloc>(context);
+    _pagingController.addPageRequestListener((pageKey) {
+      _pageKey = pageKey;
+      _feedbackBloc.add(FetchFeedbackEvent(pageKey));
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<FeedbackBloc, FeedbackState>(
       listener: (context, state) {
-        if (state is FeedbackInitState) {}
+        if (state is FeedbackInitState) {
+
+        } else if(state is LoadedState) {
+          _feedbackListResp = state.result;
+          var newItems = state.result.items;
+          final isLastPage = newItems.length < PAGE_SIZE;
+          if (isLastPage) {
+            _pagingController.appendLastPage(newItems);
+          } else {
+            final nextPageKey = ++_pageKey;
+            _pagingController.appendPage(newItems, nextPageKey);
+          }
+        }
       },
       child:
           BlocBuilder<FeedbackBloc, FeedbackState>(builder: (context, state) {
@@ -64,18 +89,25 @@ class _FeedbackListState extends State<FeedbackListPage> {
             backgroundColor: R.color.background_color(),
             centerTitle: true,
           ),
-          body: ListView.separated(
-            physics: BouncingScrollPhysics(),
-            padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-            itemBuilder: _buildListItem,
-            itemCount: 30,
-            separatorBuilder: (BuildContext context, int index) {
-              return Divider(
-                height: 10,
-                color: Colors.transparent,
-              );
-            },
-          ),
+          body: RefreshIndicator(
+              onRefresh: () => Future.sync(
+                    () => _pagingController.refresh(),
+              ),
+              child: PagedListView<int, FeedbackItem>.separated(
+                physics: BouncingScrollPhysics(),
+                padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+                pagingController: _pagingController,
+                builderDelegate: PagedChildBuilderDelegate<FeedbackItem>(
+                  itemBuilder: (context, item, index) => _buildListItem(context, index)
+                ),
+                separatorBuilder: (BuildContext context, int index) {
+                  return Divider(
+                    height: 10,
+                    color: Colors.transparent,
+                  );
+                },
+              ),
+          )
         );
       }),
     );

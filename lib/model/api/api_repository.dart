@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_fimber/flutter_fimber.dart';
+import 'package:qfvpn/model/api/bean/feedback/paging.dart';
 import 'package:qfvpn/model/api/bean/login/ChangePasswordReq.dart';
 import 'package:qfvpn/model/api/bean/login/RefreshTokenReq.dart';
 import 'package:qfvpn/model/api/bean/login/SendCodeReq.dart';
@@ -10,6 +11,7 @@ import 'package:qfvpn/model/api/bean/token.dart';
 
 import '../pref.dart';
 import 'api_result.dart';
+import 'bean/feedback/feedback_list_resp.dart';
 import 'bean/login/RefreshTokenResp.dart';
 import 'bean/login/ResetPasswordReq.dart';
 import 'bean/login/SendCodeResp.dart';
@@ -42,40 +44,40 @@ class ApiRepository {
     ));
 
     dio.interceptors.add(LogInterceptor());
-    dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) async {
-        var token = await _pref.getToken();
-        if (token != null) {
-          options.headers['Authorization'] = 'Bearer ${token.accessToken}';
-        }
-        Fimber.d('headers: ${options.headers}');
-        Fimber.d('uri: ${options.uri}');
-        Fimber.d('data: ${options.data}');
-        Fimber.d('query: ${options.queryParameters}');
-        return handler.next(options);
-      },
-        // for test change domain
-      onError: (error, handler) async {
-        if(error.message.contains('SocketException')) {
-          var options = error.requestOptions;
-          options.baseUrl = 'https://qfvpn.com';
-          options.headers = {
-            'accept': 'application/json',
-            'Content-Type': 'application/json'};
-          Fimber.d('@@ url = ${options.baseUrl}, ${options.uri}');
-          dio.options.baseUrl = options.baseUrl;
-          dio.options.headers = {
-            'accept': 'application/json',
-            'Content-Type': 'application/json'
-          };
-          dio.options.method = options.method;
-          var response = await dio.request(options.path);
-          handler.resolve(response);
-        } else {
-          handler.next(error);
-        }
+    dio.interceptors
+        .add(InterceptorsWrapper(onRequest: (options, handler) async {
+      var token = await _pref.getToken();
+      if (token != null) {
+        options.headers['Authorization'] = 'Bearer ${token.accessToken}';
       }
-    ));
+      Fimber.d('headers: ${options.headers}');
+      Fimber.d('uri: ${options.uri}');
+      Fimber.d('data: ${options.data}');
+      Fimber.d('query: ${options.queryParameters}');
+      return handler.next(options);
+    },
+            // for test change domain
+            onError: (error, handler) async {
+      if (error.message.contains('SocketException')) {
+        var options = error.requestOptions;
+        options.baseUrl = 'https://qfvpn.com';
+        options.headers = {
+          'accept': 'application/json',
+          'Content-Type': 'application/json'
+        };
+        Fimber.d('@@ url = ${options.baseUrl}, ${options.uri}');
+        dio.options.baseUrl = options.baseUrl;
+        dio.options.headers = {
+          'accept': 'application/json',
+          'Content-Type': 'application/json'
+        };
+        dio.options.method = options.method;
+        var response = await dio.request(options.path);
+        handler.resolve(response);
+      } else {
+        handler.next(error);
+      }
+    }));
     return dio;
   }
 
@@ -233,7 +235,6 @@ class ApiRepository {
     }
   }
 
-
   Future<ApiResult<NodeListResult>> fetchNodeList() async {
     try {
       final response = await _dio.post('/api/node/list');
@@ -241,7 +242,8 @@ class ApiRepository {
       Fimber.d('response: ' + response.toString());
       Fimber.d('status code: ' + response.statusCode.toString());
       if (response.statusCode == 201) {
-        return ApiResult.success(NodeListResult.fromJson(response.data['data']));
+        return ApiResult.success(
+            NodeListResult.fromJson(response.data['data']));
       } else {
         Fimber.d('error: ' + response.data['errCode']);
         return ApiResult.error(response);
@@ -252,4 +254,24 @@ class ApiRepository {
     }
   }
 
+  Future<ApiResult<FeedbackListResp>> fetchFeedbackList(Paging paging) async {
+    try {
+      final response = await _dio.post('/api/feedback/list',
+          data: json.encode(paging.toJson()));
+
+      Fimber.d('response: ' + response.toString());
+      Fimber.d('status code: ' + response.statusCode.toString());
+
+      if (response.statusCode == 201) {
+        return ApiResult.success(
+            FeedbackListResp.fromJson(response.data['data']));
+      } else {
+        Fimber.d('error: ' + response.data['errCode']);
+        return ApiResult.error(response);
+      }
+    } catch (error) {
+      Fimber.d('error: ' + error.toString());
+      return ApiResult.error(error);
+    }
+  }
 }
