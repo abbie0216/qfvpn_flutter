@@ -23,6 +23,7 @@ import 'bean/login/SendCodeResp.dart';
 import 'bean/login/VerifyCodeReq.dart';
 import 'bean/login/register_req.dart';
 import 'bean/login/register_resp.dart';
+import 'bean/order/orders_list_resp.dart';
 import 'bean/splash/version_resp.dart';
 import 'bean/user/User.dart';
 
@@ -227,4 +228,17 @@ class ApiRepository {
       },
     );
   }
+
+  Future<ApiResult<OrdersListResp>> fetchOrdersList(Paging paging) async {
+    return GenerateApiResult.from<OrdersListResp>(
+      apiCall: () async {
+        return await _dio.post('/api/order/list',
+          data: json.encode(paging.toJson()));
+        },
+      parseSuccessData: (response) {
+        return OrdersListResp.fromJson(response.data['data']);
+      }
+    );
+  }
+
 }
