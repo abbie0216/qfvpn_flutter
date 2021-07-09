@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qfvpn/bloc/home/option_btn_bloc.dart';
-import 'package:qfvpn/model/api/bean/node/node_list_result.dart';
+import 'package:qfvpn/model/api/bean/node/node_list_resp.dart';
 import 'package:qfvpn/utility/flag_res_map.dart';
 import 'package:qfvpn/widget/ink_wrapper.dart';
 
