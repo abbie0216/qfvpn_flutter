@@ -143,11 +143,13 @@ class _VipPageState extends State<VipPage> {
               backgroundColor:
                   MaterialStateProperty.all(R.color.vip_pay_btn_bg())),
           onPressed: () {
-            Navigator.of(context)
-                .pushNamed((PayPage).toString())
-                .then((results) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PayPage(_product, _coupons)),
+            ).then((results) {
               if (results is PopResult) {
-                if(results.toPage == (HomePage).toString()) {
+                if (results.toPage == (HomePage).toString()) {
                   widget.goToMainPage(0);
                 }
               }
@@ -264,9 +266,8 @@ class _VipPageState extends State<VipPage> {
     );
   }
 
-  void _setSelectedProduct(Items product, Coupons? coupons){
+  void _setSelectedProduct(Items product, Coupons? coupons) {
     _product = product;
     _coupons = coupons;
   }
-
 }
