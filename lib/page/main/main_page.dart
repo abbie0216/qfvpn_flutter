@@ -27,7 +27,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     if (pages.isEmpty) {
-      pages = [HomePage(), VipPage(goToMainPage), MePage()];
+      pages = [HomePage(), VipPage(goToMainPage), MePage(goToMainPage)];
     }
 
     return Scaffold(

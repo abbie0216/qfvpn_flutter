@@ -171,7 +171,7 @@ class _CouponPageState extends State<CouponPage> {
                         onPress: () {
                           if (!used) {
                             // go to use
-                            Navigator.pop(context);
+                            Navigator.pop(context, item);
                           }
                         }))
                 ],
