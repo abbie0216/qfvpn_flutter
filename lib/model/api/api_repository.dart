@@ -54,7 +54,11 @@ class ApiRepository {
     ));
 
     dio.interceptors.add(LogInterceptor(
-      request: false, responseHeader: false
+        request: true,
+        requestHeader: true,
+        requestBody: true,
+        responseHeader: true,
+        responseBody: true
     ));
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {

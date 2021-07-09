@@ -264,10 +264,20 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage> with Wi
               top: 40, right: 0,
               child: SelectorWidgetButton(
                 onPressed: () {
-                  Clipboard.setData(ClipboardData(text: orderNum));
-                  AppUtils.showToast(
-                      sprintf(S.of(context).order_history_detail_order_copy,
-                          [orderNumber]));
+                  Clipboard.setData(ClipboardData(text: orderNum))
+                  .then((_) {
+                    ScaffoldMessenger.of(context)
+                        ..hideCurrentSnackBar()
+                        ..showSnackBar(SnackBar(
+                        content: Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(sprintf(S.of(context).order_history_detail_order_copy,
+                                [orderNumber])),
+                          ],
+                      )));
+                    });
                 },
                 widgetN: Image(image: R.image.btn_copy_n(),),
                 widgetP: Image(image: R.image.btn_copy_p(),),
@@ -544,7 +554,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage> with Wi
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                _detail.paymentName,
+                _detail.paymentName ?? '',
                 style: TextStyle(
                     color: R.color.text_color_alpha50(),
                     fontSize: 16,

@@ -40,15 +40,15 @@ class OrderDetailResp {
   int discountAmount;
   int couponAmount;
   String actualAmount;
-  String paymentName;
-  String paymentCode;
+  String? paymentName;
+  String? paymentCode;
   DateTime payAt;
   DateTime createdAt;
   int status;
   String statusLabel;
   List<AvailablePayment> availablePayments;
   DateTime expireAt;
-  String actualPaidAmount;
+  String? actualPaidAmount;
 
   factory OrderDetailResp.fromJson(Map<String, dynamic> json) => OrderDetailResp(
     orderNo: json['orderNo'],
