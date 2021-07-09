@@ -54,6 +54,7 @@
   "me_bind_mail": "绑定邮箱",
   "me_coupon": "我的优惠券",
   "me_vip_time_label": "VIP 有效期限至：",
+  "me_vip_time_expired": "VIP已到期",
   "me_id_label": "ID：",
   "me_item_news": "我的消息",
   "me_item_help": "帮助中心",

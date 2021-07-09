@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
+import 'package:intl/intl.dart';
 import 'package:qfvpn/bloc/me/me_bloc.dart';
 import 'package:qfvpn/page/feedback/feedback_list_page.dart';
 import 'package:qfvpn/page/login/login_page.dart';
@@ -79,15 +80,19 @@ class _MePageState extends State<MePage> {
 
   Widget _buildAccountInfo() {
     var userID = '-';
-    var vip_endAt = '-';
+    var vip_endAt = '${S.of(context).me_vip_time_label} -';
+    var isVipExpired = false;
     return BlocBuilder<MeBloc, MeState>(builder: (context, state) {
       if (state is UserInfoUpdatedState) {
         userID = state.userInfo.userNo;
-        var date = state.userInfo.vipEndAt;
-        if (state.userInfo.vipEndAt.contains('T')) {
-          date = state.userInfo.vipEndAt.split('T')[0];
+        if (state.userInfo.isVip) {
+          if (state.userInfo.isVipExpired) {
+            isVipExpired = true;
+            vip_endAt = S.of(context).me_vip_time_expired;
+          } else {
+            vip_endAt = '${S.of(context).me_vip_time_label} ${DateFormat('yyyy-MM-dd').format(DateTime.parse(state.userInfo.vipEndAt))}';
+          }
         }
-        vip_endAt = date;
       }
 
       return Container(
@@ -122,10 +127,9 @@ class _MePageState extends State<MePage> {
                   Container(
                     padding: EdgeInsets.only(bottom: 8),
                     child: Text(
-                      sprintf(
-                          S.of(context).vip_expired_time_valid, [vip_endAt]),
+                      vip_endAt,
                       style: TextStyle(
-                          color: R.color.vip_expired_time_valid_text()),
+                          color: isVipExpired? R.color.vip_expired_time_invalid_text() : R.color.vip_expired_time_valid_text()),
                     ),
                   ),
                   Row(children: [

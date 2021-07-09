@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
+import 'package:qfvpn/model/api/bean/user/UserCouponListResp.dart';
 import 'package:qfvpn/model/api/bean/feedback/detail_req.dart';
 import 'package:qfvpn/model/api/bean/feedback/detail_resp.dart';
 import 'package:qfvpn/model/api/bean/feedback/paging.dart';
@@ -192,6 +193,18 @@ class ApiRepository {
       },
       parseSuccessData: (response) {
         return User.fromJson(response.data['data']);
+      },
+    );
+  }
+
+  Future<ApiResult<UserCouponListResp>> fetchUserCouponList(Paging req) async {
+    return GenerateApiResult.from<UserCouponListResp>(
+      apiCall: () async {
+        return await _dio.post('/api/coupon/userCouponList',
+            data: json.encode(req.toJson()));
+      },
+      parseSuccessData: (response) {
+        return UserCouponListResp.fromJson(response.data['data']);
       },
     );
   }
