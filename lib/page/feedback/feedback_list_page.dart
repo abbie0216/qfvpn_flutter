@@ -139,8 +139,8 @@ class _FeedbackListState extends State<FeedbackListPage> {
               ],
             ),
             _buildDivider(),
-            _buildFeedbackTitle(item),
-            SizedBox(height: 2),
+            _buildFeedbackType(item),
+            SizedBox(height: 8),
             _buildFeedbackContent(item),
             SizedBox(height: 12),
             _buildResponse(context, item),
@@ -186,10 +186,10 @@ class _FeedbackListState extends State<FeedbackListPage> {
     );
   }
 
-  Widget _buildFeedbackTitle(FeedbackItem item) {
+  Widget _buildFeedbackType(FeedbackItem item) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
-      child: Text('反馈标题',
+      child: Text(item.feedbackCategoryName,
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
           style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
