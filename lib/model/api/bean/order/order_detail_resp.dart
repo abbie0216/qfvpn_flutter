@@ -20,12 +20,15 @@ class OrderDetailResp {
     required this.discountAmount,
     required this.couponAmount,
     required this.actualAmount,
+    required this.paymentName,
+    required this.paymentCode,
     required this.payAt,
     required this.createdAt,
     required this.status,
     required this.statusLabel,
     required this.availablePayments,
     required this.expireAt,
+    required this.actualPaidAmount
   });
 
   String orderNo;
@@ -37,12 +40,15 @@ class OrderDetailResp {
   int discountAmount;
   int couponAmount;
   String actualAmount;
+  String paymentName;
+  String paymentCode;
   DateTime payAt;
   DateTime createdAt;
   int status;
   String statusLabel;
   List<AvailablePayment> availablePayments;
   DateTime expireAt;
+  String actualPaidAmount;
 
   factory OrderDetailResp.fromJson(Map<String, dynamic> json) => OrderDetailResp(
     orderNo: json['orderNo'],
@@ -54,12 +60,15 @@ class OrderDetailResp {
     discountAmount: json['discountAmount'],
     couponAmount: json['couponAmount'],
     actualAmount: json['actualAmount'],
+    paymentName: json['paymentName'],
+    paymentCode: json['paymentCode'],
     payAt: DateTime.parse(json['payAt']),
     createdAt: DateTime.parse(json['createdAt']),
     status: json['status'],
     statusLabel: json['statusLabel'],
     availablePayments: List<AvailablePayment>.from(json['availablePayments'].map((x) => AvailablePayment.fromJson(x))),
     expireAt: DateTime.parse(json['expireAt']),
+    actualPaidAmount: json['actualPaidAmount'],
   );
 
   Map<String, dynamic> toJson() => {
@@ -72,12 +81,15 @@ class OrderDetailResp {
     'discountAmount': discountAmount,
     'couponAmount': couponAmount,
     'actualAmount': actualAmount,
+    'paymentName': paymentName,
+    'paymentCode': paymentCode,
     'payAt': payAt.toIso8601String(),
     'createdAt': createdAt.toIso8601String(),
     'status': status,
     'statusLabel': statusLabel,
     'availablePayments': List<dynamic>.from(availablePayments.map((x) => x.toJson())),
     'expireAt': expireAt.toIso8601String(),
+    'actualPaidAmount': actualPaidAmount,
   };
 }
 

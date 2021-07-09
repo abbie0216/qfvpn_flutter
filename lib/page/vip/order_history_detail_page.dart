@@ -72,7 +72,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage> with Wi
             case 1:
               _painState = PainState.UNPAID;
               setState(() {
-                _timer ??= Timer.periodic(Duration(seconds: 5), (timer) {
+                _timer ??= Timer.periodic(Duration(minutes: 2), (timer) {
                     _orderHistoryDetailBloc.add(
                         FetchOrderDetailEvent(_detail.orderNo));
                   });
@@ -544,7 +544,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage> with Wi
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "支付宝",
+                _detail.paymentName,
                 style: TextStyle(
                     color: R.color.text_color_alpha50(),
                     fontSize: 16,
