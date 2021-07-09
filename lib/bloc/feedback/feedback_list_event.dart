@@ -1,14 +1,14 @@
 import 'package:equatable/equatable.dart';
 
-abstract class FeedbackEvent extends Equatable {
+abstract class FeedbackListEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
 
-class FetchFeedbackEvent extends FeedbackEvent {
+class FetchListEvent extends FeedbackListEvent {
   final int pageNo;
 
-  FetchFeedbackEvent(this.pageNo);
+  FetchListEvent(this.pageNo);
 
   @override
   List<Object> get props => [pageNo];

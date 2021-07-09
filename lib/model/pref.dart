@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'api/bean/node/node_list_result.dart';
+import 'api/bean/node/node_list_resp.dart';
 import 'api/bean/token.dart';
 
 class Pref {

@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:qfvpn/bloc/feedback/feedback_bloc.dart';
-import 'package:qfvpn/bloc/feedback/feedback_event.dart';
-import 'package:qfvpn/bloc/feedback/feedback_state.dart';
+import 'package:qfvpn/bloc/feedback/feedback_list_bloc.dart';
+import 'package:qfvpn/bloc/feedback/feedback_list_event.dart';
+import 'package:qfvpn/bloc/feedback/feedback_list_state.dart';
 import 'package:qfvpn/constants.dart';
 import 'package:qfvpn/model/api/bean/feedback/feedback_list_resp.dart';
 import 'package:qfvpn/page/feedback/add_feedback_page.dart';
@@ -22,7 +22,7 @@ class FeedbackListPage extends StatefulWidget {
 }
 
 class _FeedbackListState extends State<FeedbackListPage> {
-  late FeedbackBloc _feedbackBloc;
+  late FeedbackListBloc _feedbackBloc;
 
   var _pageKey;
   final PagingController<int, FeedbackItem> _pagingController =
@@ -31,18 +31,18 @@ class _FeedbackListState extends State<FeedbackListPage> {
   @override
   void initState() {
     super.initState();
-    _feedbackBloc = BlocProvider.of<FeedbackBloc>(context);
+    _feedbackBloc = BlocProvider.of<FeedbackListBloc>(context);
     _pagingController.addPageRequestListener((pageKey) {
       _pageKey = pageKey;
-      _feedbackBloc.add(FetchFeedbackEvent(pageKey));
+      _feedbackBloc.add(FetchListEvent(pageKey));
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<FeedbackBloc, FeedbackState>(
+    return BlocListener<FeedbackListBloc, FeedbackListState>(
       listener: (context, state) {
-        if (state is FeedbackInitState) {
+        if (state is InitState) {
         } else if (state is LoadedState) {
           var newItems = state.result.items;
           final isLastPage = newItems.length < PAGE_SIZE;
@@ -54,8 +54,8 @@ class _FeedbackListState extends State<FeedbackListPage> {
           }
         }
       },
-      child:
-          BlocBuilder<FeedbackBloc, FeedbackState>(builder: (context, state) {
+      child: BlocBuilder<FeedbackListBloc, FeedbackListState>(
+          builder: (context, state) {
         return Scaffold(
             backgroundColor: R.color.background_color(),
             resizeToAvoidBottomInset: false,
@@ -117,8 +117,9 @@ class _FeedbackListState extends State<FeedbackListPage> {
 
   Widget _buildListItem(BuildContext context, FeedbackItem item, int index) {
     return GestureDetector(
-      onTap: () =>
-          Navigator.of(context).pushNamed((FeedbackDetailPage).toString()),
+      onTap: () => Navigator.of(context).pushNamed(
+          (FeedbackDetailPage).toString(),
+          arguments: {'feedbackId': item.feedbackId}),
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
@@ -138,8 +139,8 @@ class _FeedbackListState extends State<FeedbackListPage> {
               ],
             ),
             _buildDivider(),
-            _buildFeedbackTitle(item),
-            SizedBox(height: 2),
+            _buildFeedbackType(item),
+            SizedBox(height: 8),
             _buildFeedbackContent(item),
             SizedBox(height: 12),
             _buildResponse(context, item),
@@ -185,10 +186,10 @@ class _FeedbackListState extends State<FeedbackListPage> {
     );
   }
 
-  Widget _buildFeedbackTitle(FeedbackItem item) {
+  Widget _buildFeedbackType(FeedbackItem item) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
-      child: Text('反馈标题',
+      child: Text(item.feedbackCategoryName,
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
           style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),

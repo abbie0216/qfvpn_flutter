@@ -1,16 +1,16 @@
 import 'package:equatable/equatable.dart';
 import 'package:qfvpn/model/api/bean/feedback/feedback_list_resp.dart';
 
-abstract class FeedbackState extends Equatable {
-  const FeedbackState();
+abstract class FeedbackListState extends Equatable {
+  const FeedbackListState();
 
   @override
   List<Object> get props => [];
 }
 
-class FeedbackInitState extends FeedbackState {}
+class InitState extends FeedbackListState {}
 
-class LoadedState extends FeedbackState {
+class LoadedState extends FeedbackListState {
   final FeedbackListResp result;
   LoadedState(this.result):super();
 

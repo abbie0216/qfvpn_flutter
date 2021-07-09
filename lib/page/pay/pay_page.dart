@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/bloc/pay/pay_bloc.dart';
+import 'package:qfvpn/model/api/bean/product/product_list_resp.dart';
 import 'package:qfvpn/page/pay/pay_result_page.dart';
 import 'package:qfvpn/utility/pop_result.dart';
 import 'package:qfvpn/widget/selector_widget_button.dart';
+import 'package:sprintf/sprintf.dart';
 
 import '../../r.dart';
 import '../../s.dart';
 
 class PayPage extends StatefulWidget {
+  final Items? product;
+  final Coupons? coupon;
+
+  PayPage(this.product, this.coupon);
+
   @override
   State<StatefulWidget> createState() => _PayPageState();
 }
@@ -53,15 +60,15 @@ class _PayPageState extends State<PayPage> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        buildPayInfo(),
-                        buildPayHint(),
+                        _buildPayInfo(),
+                        _buildPayHint(),
                         Spacer(),
                         Divider(
                           color: R.color.pay_divider_2_bg(),
                           thickness: 1,
                           height: 1,
                         ),
-                        buildPayButton()
+                        _buildPayButton()
                       ],
                     ),
                   ),
@@ -72,7 +79,7 @@ class _PayPageState extends State<PayPage> {
         ));
   }
 
-  Widget buildPayInfo() {
+  Widget _buildPayInfo() {
     return Container(
       margin: EdgeInsets.only(left: 16, right: 16, bottom: 20),
       padding: EdgeInsets.only(top: 10, bottom: 34),
@@ -87,7 +94,7 @@ class _PayPageState extends State<PayPage> {
             child: Row(
               children: [
                 Text(
-                  '30 天 VIP',
+                  widget.product?.itemName ?? '',
                   style: TextStyle(
                       fontSize: 14, color: R.color.pay_info_item_title_text()),
                 ),
@@ -95,7 +102,7 @@ class _PayPageState extends State<PayPage> {
                 Expanded(
                     flex: 100,
                     child: Text(
-                      '¥100.00',
+                      '¥${widget.product?.price ?? '0'}',
                       style: TextStyle(
                           fontSize: 14,
                           color: R.color.pay_info_item_value_text()),
@@ -124,7 +131,7 @@ class _PayPageState extends State<PayPage> {
                 Expanded(
                     flex: 100,
                     child: Text(
-                      S.of(context).pay_info_coupon_not_available,
+                      _getCouponText(),
                       style: TextStyle(
                           fontSize: 14,
                           color: R.color.pay_info_item_value_text()),
@@ -153,7 +160,7 @@ class _PayPageState extends State<PayPage> {
                 Expanded(
                     flex: 100,
                     child: Text(
-                      '¥9.00',
+                      _getTotalAmountText(),
                       style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -267,7 +274,7 @@ class _PayPageState extends State<PayPage> {
     );
   }
 
-  Widget buildPayHint() {
+  Widget _buildPayHint() {
     return Padding(
       padding: EdgeInsets.only(left: 40, right: 40),
       child: Text(
@@ -280,7 +287,7 @@ class _PayPageState extends State<PayPage> {
     );
   }
 
-  Widget buildPayButton() {
+  Widget _buildPayButton() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -296,7 +303,7 @@ class _PayPageState extends State<PayPage> {
             child: Padding(
           padding: EdgeInsets.only(top: 13),
           child: Text(
-            '¥9.00',
+            _getTotalAmountText(),
             style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w500,
@@ -347,5 +354,20 @@ class _PayPageState extends State<PayPage> {
             ))
       ],
     );
+  }
+
+  String _getCouponText() {
+    if (widget.product?.coupons?.isEmpty == true) {
+      return S.of(context).pay_info_coupon_not_available;
+    } else {
+      return '-¥${widget.coupon?.reduceAmount??'0'}';
+    }
+  }
+
+  String _getTotalAmountText() {
+    var productPrice = double.parse(widget.product?.price??'0');
+    var reduceAmount = double.parse(widget.coupon?.reduceAmount??'0');
+    var totalAmount = productPrice - reduceAmount;
+    return sprintf('¥%.2f',[totalAmount]);
   }
 }

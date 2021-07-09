@@ -1,4 +1,4 @@
-import 'package:qfvpn/model/api/bean/node/node_list_result.dart';
+import 'package:qfvpn/model/api/bean/node/node_list_resp.dart';
 
 class OptionBtnInfo {
   int optionMode;

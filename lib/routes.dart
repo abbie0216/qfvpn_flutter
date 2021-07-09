@@ -42,5 +42,4 @@ final Map<String, WidgetBuilder> routes = {
   (AddFeedbackPage).toString(): (context) => AddFeedbackPage(),
   (FeedbackDetailPage).toString(): (context) => FeedbackDetailPage(),
   (AboutPage).toString(): (context) => AboutPage(),
-  (PayPage).toString(): (context) => PayPage(),
 };

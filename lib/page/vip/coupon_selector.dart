@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
-import 'package:qfvpn/model/api/bean/product/product_list_result.dart';
+import 'package:qfvpn/model/api/bean/product/product_list_resp.dart';
 
 import '../../r.dart';
 import '../../s.dart';

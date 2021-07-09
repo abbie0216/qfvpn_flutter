@@ -10,7 +10,7 @@ abstract class LineSelectorState extends Equatable {
 class InitState extends LineSelectorState {}
 
 class LoadedState extends LineSelectorState {
-  final NodeListResult result;
+  final NodeListResp result;
 
   const LoadedState(this.result) : super();
 
