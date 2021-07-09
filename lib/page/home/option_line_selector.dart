@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/bloc/home/line_selector_bloc.dart';
-import 'package:qfvpn/model/api/bean/node/node_list_result.dart';
+import 'package:qfvpn/model/api/bean/node/node_list_resp.dart';
 import 'package:qfvpn/model/pref.dart';
 import 'package:qfvpn/utility/flag_res_map.dart';
 

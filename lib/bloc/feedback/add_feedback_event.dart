@@ -1,8 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-abstract class FeedbackEvent extends Equatable {
-  const FeedbackEvent();
-
+abstract class AddFeedbackEvent extends Equatable {
   @override
   List<Object> get props => [];
 }

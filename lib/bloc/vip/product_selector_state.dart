@@ -10,7 +10,7 @@ abstract class ProductSelectorState extends Equatable {
 class InitState extends ProductSelectorState {}
 
 class LoadedState extends ProductSelectorState {
-  final ProductListResult result;
+  final ProductListResp result;
   LoadedState(this.result) : super();
 
   @override

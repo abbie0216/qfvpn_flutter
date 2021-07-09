@@ -45,6 +45,8 @@ class _VpnBtnState extends State<VpnBtn> with TickerProviderStateMixin {
     _blueDotAnim = Tween(begin: 1.0, end: 0.0).animate(_blueDotAnimController);
     _redDotAnim = Tween(begin: 0.0, end: 1.0).animate(_blueDotAnimController);
     _vpnBloc = BlocProvider.of<VpnBloc>(context);
+    // for test
+    _vpnBloc.add(VpnConnectProfileEditEvent('ss', '154.13.31.48', '8388', 'aes-128-gcm', 'ppc2passwd', 'true'));
     _vpnBloc.add(VpnFetchEvent());
     super.initState();
   }

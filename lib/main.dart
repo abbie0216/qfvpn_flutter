@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:qfvpn/bloc/feedback/feedback_bloc.dart';
+import 'package:qfvpn/bloc/feedback/add_feedback_bloc.dart';
+import 'package:qfvpn/bloc/feedback/feedback_detail_bloc.dart';
+import 'package:qfvpn/bloc/feedback/feedback_list_bloc.dart';
 import 'package:qfvpn/bloc/home/option_btn_bloc.dart';
 import 'package:qfvpn/bloc/home/vpn_bloc.dart';
 import 'package:qfvpn/bloc/login/register_bloc.dart';
@@ -139,7 +141,15 @@ class App extends StatelessWidget {
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
               BlocProvider(
-                  create: (context) => FeedbackBloc(
+                  create: (context) => FeedbackListBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
+                  create: (context) => FeedbackDetailBloc(
+                      apiRepository:
+                      RepositoryProvider.of<ApiRepository>(context))),
+              BlocProvider(
+                  create: (context) => AddFeedbackBloc(
                       apiRepository:
                       RepositoryProvider.of<ApiRepository>(context))),
               BlocProvider(

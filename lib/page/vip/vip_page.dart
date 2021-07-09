@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qfvpn/bloc/vip/vip_bloc.dart';
-import 'package:qfvpn/model/api/bean/product/product_list_result.dart';
+import 'package:qfvpn/model/api/bean/product/product_list_resp.dart';
 import 'package:qfvpn/page/home/home_page.dart';
 import 'package:qfvpn/page/pay/pay_page.dart';
 import 'package:qfvpn/page/vip/order_history_page.dart';

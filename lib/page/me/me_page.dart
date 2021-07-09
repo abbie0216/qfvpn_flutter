@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
@@ -113,28 +114,47 @@ class _MePageState extends State<MePage> {
             ),
             Expanded(
                 child: Container(
-                  padding: EdgeInsets.only(left: 19),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(bottom: 8),
-                        child: Text(
-                          sprintf(
-                              S.of(context).vip_expired_time_valid, [vip_endAt]),
-                          style:
-                          TextStyle(color: R.color.vip_expired_time_valid_text()),
-                        ),
-                      ),
-                      Text(
-                        sprintf(S.of(context).vip_id, [userID]),
-                        textAlign: TextAlign.left,
-                        style: TextStyle(color: R.color.vip_id_text()),
-                      )
-                    ],
+              padding: EdgeInsets.only(left: 19),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      sprintf(
+                          S.of(context).vip_expired_time_valid, [vip_endAt]),
+                      style: TextStyle(
+                          color: R.color.vip_expired_time_valid_text()),
+                    ),
                   ),
-                ))
+                  Row(children: [
+                    Text(
+                      sprintf(S.of(context).vip_id, [userID]),
+                      textAlign: TextAlign.left,
+                      style: TextStyle(color: R.color.vip_id_text()),
+                    ),
+                    GestureDetector(
+                        onTap: () {
+                          Clipboard.setData(ClipboardData(text: userID))
+                              .then((_) {
+                            ScaffoldMessenger.of(context)
+                              ..hideCurrentSnackBar()
+                              ..showSnackBar(SnackBar(
+                                  content: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(S.of(context).msg_copied),
+                                ],
+                              )));
+                          });
+                        },
+                        child: Image(image: R.image.btn_copy_n()))
+                  ])
+                ],
+              ),
+            ))
           ],
         ),
       );

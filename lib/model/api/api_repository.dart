@@ -3,18 +3,22 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
+import 'package:qfvpn/model/api/bean/feedback/detail_req.dart';
+import 'package:qfvpn/model/api/bean/feedback/detail_resp.dart';
+import 'package:qfvpn/model/api/bean/feedback/paging.dart';
 import 'package:qfvpn/model/api/bean/login/ChangePasswordReq.dart';
 import 'package:qfvpn/model/api/bean/login/RefreshTokenReq.dart';
 import 'package:qfvpn/model/api/bean/login/SendCodeReq.dart';
 import 'package:qfvpn/model/api/bean/login/login_req.dart';
-import 'package:qfvpn/model/api/bean/node/node_list_result.dart';
+import 'package:qfvpn/model/api/bean/node/node_list_resp.dart';
 import 'package:qfvpn/model/api/bean/splash/version_req.dart';
-import 'package:qfvpn/model/api/bean/product/product_list_result.dart';
+import 'package:qfvpn/model/api/bean/product/product_list_resp.dart';
 import 'package:qfvpn/model/api/bean/token.dart';
 import 'package:qfvpn/model/api/generate_api_result.dart';
 
 import '../pref.dart';
 import 'api_result.dart';
+import 'bean/feedback/feedback_list_resp.dart';
 import 'bean/login/RefreshTokenResp.dart';
 import 'bean/login/ResetPasswordReq.dart';
 import 'bean/login/SendCodeResp.dart';
@@ -192,24 +196,48 @@ class ApiRepository {
     );
   }
 
-  Future<ApiResult<NodeListResult>> fetchNodeList() async {
-    return GenerateApiResult.from<NodeListResult>(
+  Future<ApiResult<NodeListResp>> fetchNodeList() async {
+    return GenerateApiResult.from<NodeListResp>(
       apiCall: () async {
         return await _dio.post('/api/node/list');
       },
       parseSuccessData: (response) {
-        return NodeListResult.fromJson(response.data['data']);
+        return NodeListResp.fromJson(response.data['data']);
       },
     );
   }
 
-  Future<ApiResult<ProductListResult>> fetchProductList() async {
-    return GenerateApiResult.from<ProductListResult>(
+  Future<ApiResult<ProductListResp>> fetchProductList() async {
+    return GenerateApiResult.from<ProductListResp>(
       apiCall: () async {
         return await _dio.post('/api/product/list');
       },
       parseSuccessData: (response) {
-        return ProductListResult.fromJson(response.data['data']);
+        return ProductListResp.fromJson(response.data['data']);
+      },
+    );
+  }
+
+  Future<ApiResult<FeedbackListResp>> fetchFeedbackList(Paging paging) async {
+    return GenerateApiResult.from<FeedbackListResp>(
+      apiCall: () async {
+        return await _dio.post('/api/feedback/list',
+            data: json.encode(paging.toJson()));
+      },
+      parseSuccessData: (response) {
+        return FeedbackListResp.fromJson(response.data['data']);
+      },
+    );
+  }
+
+  Future<ApiResult<DetailResp>> fetchFeedbackDetail(DetailReq detailReq ) async {
+    return GenerateApiResult.from<DetailResp>(
+      apiCall: () async {
+        return await _dio.post('/api/feedback/detail',
+            data: json.encode(detailReq.toJson()));
+      },
+      parseSuccessData: (response) {
+        return DetailResp.fromJson(response.data['data']);
       },
     );
   }

@@ -1,16 +1,16 @@
 /// items : [{"productId":4,"price":"400.00","itemName":"360天VIP","monthPrice":"25.00","isNewCustomer":false,"extraDays":360,"coupons":[]},{"productId":5,"price":"40.00","itemName":"30天VIP","monthPrice":"40.00","isNewCustomer":false,"extraDays":0,"coupons":[{"userCouponId":67,"couponId":1,"status":0,"statusLabel":"未使用","title":"30天优惠券","reduceAmount":"10","minThreshold":"0","thresholdText":"30天VIP可用","validStartAt":"2021-06-11T08:36:27.456Z","validEndAt":"2021-07-11T08:36:27.456Z"},{"userCouponId":68,"couponId":1,"status":0,"statusLabel":"未使用","title":"30天优惠券","reduceAmount":"10","minThreshold":"0","thresholdText":"30天VIP可用","validStartAt":"2021-06-11T08:36:27.456Z","validEndAt":"2021-07-11T08:36:27.456Z"},{"userCouponId":69,"couponId":1,"status":0,"statusLabel":"未使用","title":"30天优惠券","reduceAmount":"10","minThreshold":"0","thresholdText":"30天VIP可用","validStartAt":"2021-06-11T08:36:27.456Z","validEndAt":"2021-07-11T08:36:27.456Z"}]},{"productId":3,"price":"240.00","itemName":"180天VIP","monthPrice":"28.00","isNewCustomer":false,"extraDays":181,"coupons":[{"userCouponId":73,"couponId":3,"status":0,"statusLabel":"未使用","title":"180天优惠券","reduceAmount":"40","minThreshold":"0","thresholdText":"180天VIP可用","validStartAt":"2021-06-11T08:39:24.754Z","validEndAt":"2021-07-11T08:39:24.754Z"},{"userCouponId":74,"couponId":3,"status":0,"statusLabel":"未使用","title":"180天优惠券","reduceAmount":"40","minThreshold":"0","thresholdText":"180天VIP可用","validStartAt":"2021-06-11T08:39:24.754Z","validEndAt":"2021-07-11T08:39:24.754Z"},{"userCouponId":75,"couponId":3,"status":0,"statusLabel":"未使用","title":"180天优惠券","reduceAmount":"40","minThreshold":"0","thresholdText":"180天VIP可用","validStartAt":"2021-06-11T08:39:24.754Z","validEndAt":"2021-07-11T08:39:24.754Z"},{"userCouponId":76,"couponId":3,"status":0,"statusLabel":"未使用","title":"180天优惠券","reduceAmount":"40","minThreshold":"0","thresholdText":"180天VIP可用","validStartAt":"2021-06-11T08:39:24.754Z","validEndAt":"2021-07-11T08:39:24.754Z"},{"userCouponId":77,"couponId":3,"status":0,"statusLabel":"未使用","title":"180天优惠券","reduceAmount":"40","minThreshold":"0","thresholdText":"180天VIP可用","validStartAt":"2021-06-11T08:39:24.754Z","validEndAt":"2021-07-11T08:39:24.754Z"}]},{"productId":2,"price":"120.00","itemName":"90天VIP","monthPrice":"30.00","isNewCustomer":false,"extraDays":90,"coupons":[{"userCouponId":70,"couponId":2,"status":0,"statusLabel":"未使用","title":"90天优惠券","reduceAmount":"20","minThreshold":"0","thresholdText":"90天VIP可用","validStartAt":"2021-06-11T08:37:06.509Z","validEndAt":"2021-07-11T08:37:06.509Z"},{"userCouponId":71,"couponId":2,"status":0,"statusLabel":"未使用","title":"90天优惠券","reduceAmount":"20","minThreshold":"0","thresholdText":"90天VIP可用","validStartAt":"2021-06-11T08:37:06.509Z","validEndAt":"2021-07-11T08:37:06.509Z"},{"userCouponId":72,"couponId":2,"status":0,"statusLabel":"未使用","title":"90天优惠券","reduceAmount":"20","minThreshold":"0","thresholdText":"90天VIP可用","validStartAt":"2021-06-11T08:37:06.509Z","validEndAt":"2021-07-11T08:37:06.509Z"}]}]
 
-class ProductListResult {
+class ProductListResp {
   List<Items>? _items;
 
   List<Items>? get items => _items;
 
-  ProductListResult({
+  ProductListResp({
       List<Items>? items}){
     _items = items;
 }
 
-  ProductListResult.fromJson(dynamic json) {
+  ProductListResp.fromJson(dynamic json) {
     if (json['items'] != null) {
       _items = [];
       json['items'].forEach((v) {
