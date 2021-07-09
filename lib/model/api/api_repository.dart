@@ -24,6 +24,8 @@ import 'bean/login/VerifyCodeReq.dart';
 import 'bean/login/register_req.dart';
 import 'bean/login/register_resp.dart';
 import 'bean/order/orders_list_resp.dart';
+import 'bean/order/order_detail_req.dart';
+import 'bean/order/order_detail_resp.dart';
 import 'bean/splash/version_resp.dart';
 import 'bean/user/User.dart';
 
@@ -48,7 +50,9 @@ class ApiRepository {
       },
     ));
 
-    dio.interceptors.add(LogInterceptor());
+    dio.interceptors.add(LogInterceptor(
+      request: false, responseHeader: false
+    ));
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
         var token = await _pref.getToken();
@@ -238,6 +242,18 @@ class ApiRepository {
       parseSuccessData: (response) {
         return OrdersListResp.fromJson(response.data['data']);
       }
+    );
+  }
+
+  Future<ApiResult<OrderDetailResp>> fetchOrderDetail(OrderDetailReq req) async {
+    return GenerateApiResult.from<OrderDetailResp>(
+        apiCall: () async {
+          return await _dio.post('/api/order/detail',
+              data: json.encode(req.toJson()));
+        },
+        parseSuccessData: (response) {
+          return OrderDetailResp.fromJson(response.data['data']);
+        }
     );
   }
 

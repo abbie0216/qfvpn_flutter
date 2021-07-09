@@ -38,7 +38,18 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<OrderHistoryBloc, OrderHistoryState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is LoadedState) {
+          var newItems = state.result.items;
+          final isLastPage = newItems.length < PAGE_SIZE;
+          if (isLastPage) {
+            _pagingController.appendLastPage(newItems);
+          } else {
+            final nextPageKey = ++_pageKey;
+            _pagingController.appendPage(newItems, nextPageKey);
+          }
+        }
+      },
       child: BlocBuilder<OrderHistoryBloc, OrderHistoryState>(
         builder: (context, state) {
           return Theme(
@@ -71,47 +82,27 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
   }
 
   Widget _buildContentView() {
-    var isEmpty = false;
-    return BlocListener<OrderHistoryBloc, OrderHistoryState>(
-      listener: (context, state) {
-        if (state is LoadedState) {
-          var newItems = state.result.items;
-          final isLastPage = newItems.length < PAGE_SIZE;
-          if (isLastPage) {
-            _pagingController.appendLastPage(newItems);
-          } else {
-            final nextPageKey = ++_pageKey;
-            _pagingController.appendPage(newItems, nextPageKey);
+    return RefreshIndicator(
+      onRefresh: () => Future.sync(
+              () => _pagingController.refresh()
+      ),
+      child: PagedListView<int, OrderItem>.separated(
+          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          pagingController: _pagingController,
+          builderDelegate: PagedChildBuilderDelegate<OrderItem>(
+            itemBuilder: (context, item, index) =>
+                _buildItem(context, item, index),
+            noItemsFoundIndicatorBuilder: (_) =>
+                _buildNoItemsFoundIndicator(),
+            noMoreItemsIndicatorBuilder: (_) =>
+                _buildNoMoreItemsIndicator(),
+          ),
+          separatorBuilder: (BuildContext context, int index) {
+            return Divider(
+              height: 10,
+              color: Colors.transparent,
+            );
           }
-        }
-      },
-      child: BlocBuilder<OrderHistoryBloc, OrderHistoryState>(
-        builder: (context, state) {
-          return RefreshIndicator(
-            onRefresh: () => Future.sync(
-                    () => _pagingController.refresh()
-            ),
-            child: PagedListView<int, OrderItem>.separated(
-                physics: BouncingScrollPhysics(),
-
-                pagingController: _pagingController,
-                builderDelegate: PagedChildBuilderDelegate<OrderItem>(
-                  itemBuilder: (context, item, index) =>
-                      _buildItem(context, item, index),
-                  noItemsFoundIndicatorBuilder: (_) =>
-                      _buildNoItemsFoundIndicator(),
-                  noMoreItemsIndicatorBuilder: (_) =>
-                      _buildNoMoreItemsIndicator(),
-                ),
-                separatorBuilder: (BuildContext context, int index) {
-                  return Divider(
-                    height: 10,
-                    color: Colors.transparent,
-                  );
-                }
-            ),
-          );
-        },
       ),
     );
   }
@@ -255,7 +246,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
         Image(image: R.image.img_empty()),
         SizedBox(height: 10),
         Text(
-          S.of(context).feedback_list_no_item,
+          S.of(context).order_history_empty,
           style: TextStyle(color: R.color.text_color_alpha30(), fontSize: 14),
         ),
       ],

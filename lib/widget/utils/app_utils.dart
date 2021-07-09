@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:package_info/package_info.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -161,16 +162,16 @@ class AppUtils {
   //   return result;
   // }
   //
-  // static void showToast(String content) {
-  //   Fluttertoast.showToast(
-  //       msg: content,
-  //       toastLength: Toast.LENGTH_LONG,
-  //       gravity: ToastGravity.BOTTOM,
-  //       timeInSecForIos: 3,
-  //       backgroundColor: Colors.white,
-  //       textColor: Colors.black,
-  //       fontSize: 15.0);
-  // }
+  static void showToast(String content) {
+    Fluttertoast.showToast(
+        msg: content,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 3,
+        backgroundColor: Colors.white,
+        textColor: Colors.black,
+        fontSize: 15.0);
+  }
 }
 
 class VersionInfo {
