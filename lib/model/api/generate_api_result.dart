@@ -12,8 +12,8 @@ class GenerateApiResult<T> {
     try {
       final response = await apiCall.call();
 
-      Fimber.d('response: ' + response.toString());
-      Fimber.d('status code: ' + response.statusCode.toString());
+      // Fimber.d('response: ' + response.toString());
+      // Fimber.d('status code: ' + response.statusCode.toString());
 
       if (response.statusCode == 201) {
         return ApiResult.success(parseSuccessData.call(response));
