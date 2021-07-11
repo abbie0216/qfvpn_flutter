@@ -92,7 +92,7 @@ class _FeedbackListState extends State<FeedbackListPage> {
                 () => _pagingController.refresh(),
               ),
               child: PagedListView<int, FeedbackItem>.separated(
-                physics: BouncingScrollPhysics(),
+                physics: AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
                 pagingController: _pagingController,
                 builderDelegate: PagedChildBuilderDelegate<FeedbackItem>(
