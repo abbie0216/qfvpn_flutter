@@ -16,6 +16,7 @@ import 'package:qfvpn/model/api/bean/login/RefreshTokenReq.dart';
 import 'package:qfvpn/model/api/bean/login/SendCodeReq.dart';
 import 'package:qfvpn/model/api/bean/login/login_req.dart';
 import 'package:qfvpn/model/api/bean/node/node_list_resp.dart';
+import 'package:qfvpn/model/api/bean/points/PointsInfoResp.dart';
 import 'package:qfvpn/model/api/bean/product/product_list_resp.dart';
 import 'package:qfvpn/model/api/bean/splash/version_req.dart';
 import 'package:qfvpn/model/api/bean/token.dart';
@@ -35,6 +36,7 @@ import 'bean/login/register_resp.dart';
 import 'bean/order/order_detail_req.dart';
 import 'bean/order/order_detail_resp.dart';
 import 'bean/order/orders_list_resp.dart';
+import 'bean/points/PointsInfoResp.dart';
 import 'bean/splash/version_resp.dart';
 import 'bean/user/User.dart';
 
@@ -366,4 +368,28 @@ class ApiRepository {
       },
     );
   }
+
+  Future<ApiResult<PointsInfoResp>> fetchPointsInfo() async {
+    return GenerateApiResult.from<PointsInfoResp>(
+      apiCall: () async {
+        return await _dio.post('/api/point/info');
+      },
+      parseSuccessData: (response) {
+        return PointsInfoResp.fromJson(response.data['data']);
+      },
+    );
+  }
+
+  Future<ApiResult<bool>> checkIn() async {
+    return GenerateApiResult.from<bool>(
+      apiCall: () async {
+        return await _dio.post('/api/point/task/signin');
+      },
+      parseSuccessData: (response) {
+        return true;
+      },
+    );
+  }
+
+
 }
