@@ -96,6 +96,7 @@
   "points_task_mail_msg": "升级帐号绑定邮箱，积分+%d",
   "points_task_invite_msg": "按实际发放不限次数",
   "points_exchange_title": "积分兑换",
+  "points_exchange_success": "兑换成功",
   "to_invite": "去邀请",
   "points_detail_title": "积分明细",
 
