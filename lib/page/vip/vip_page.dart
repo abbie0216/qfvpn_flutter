@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:qfvpn/bloc/vip/vip_bloc.dart';
 import 'package:qfvpn/model/api/bean/product/product_list_resp.dart';
 import 'package:qfvpn/page/home/home_page.dart';
@@ -24,15 +25,41 @@ class VipPage extends StatefulWidget {
 }
 
 class _VipPageState extends State<VipPage> {
+  late VipBloc _vipBloc;
   Items? _product;
   Coupons? _coupons;
+  var userID = '-';
+  var vip_endAt = '';
+  var isVipExpired = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _vipBloc = BlocProvider.of<VipBloc>(context);
+    _vipBloc.add(GetUserInfoEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
+    vip_endAt = '${S.of(context).me_vip_time_label} -';
+
     return BlocListener<VipBloc, VipState>(
         listener: (context, state) {},
         child: BlocBuilder<VipBloc, VipState>(
           builder: (context, state) {
+            if (state is UserInfoUpdatedState) {
+              userID = state.userInfo.userNo;
+              if (state.userInfo.isVip) {
+                if (state.userInfo.isVipExpired) {
+                  isVipExpired = true;
+                  vip_endAt = S.of(context).me_vip_time_expired;
+                } else {
+                  vip_endAt =
+                  '${S.of(context).me_vip_time_label} ${DateFormat('yyyy-MM-dd').format(DateTime.parse(state.userInfo.vipEndAt))}';
+                }
+              }
+            }
+
             return Theme(
               data: ThemeData(primaryColor: R.color.vip_app_bar_bg()),
               child: Scaffold(
@@ -111,14 +138,15 @@ class _VipPageState extends State<VipPage> {
                 Container(
                   padding: EdgeInsets.only(bottom: 8),
                   child: Text(
-                    sprintf(
-                        S.of(context).vip_expired_time_valid, ['2021-02-02']),
+                    vip_endAt,
                     style:
-                        TextStyle(color: R.color.vip_expired_time_valid_text()),
+                        TextStyle(color: isVipExpired
+                            ? R.color.vip_expired_time_invalid_text()
+                            : R.color.vip_expired_time_valid_text()),
                   ),
                 ),
                 Text(
-                  sprintf(S.of(context).vip_id, ['95279527']),
+                    sprintf(S.of(context).vip_id, [userID]),
                   textAlign: TextAlign.left,
                   style: TextStyle(color: R.color.vip_id_text()),
                 )
