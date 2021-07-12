@@ -17,3 +17,11 @@ class LoadedState extends FeedbackDetailState {
   @override
   List<Object> get props => [result];
 }
+
+class ErrorState extends FeedbackDetailState {
+  final String error;
+  ErrorState(this.error):super();
+
+  @override
+  List<Object> get props => [error];
+}

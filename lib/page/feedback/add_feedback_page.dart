@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qfvpn/bloc/feedback/add_feedback_bloc.dart';
+import 'package:qfvpn/bloc/feedback/add_feedback_event.dart';
 import 'package:qfvpn/bloc/feedback/add_feedback_state.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:qfvpn/page/feedback/feedback_type_bottom_sheet.dart';
@@ -29,7 +30,7 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
   int letterCount = 0;
 
   final _picker = ImagePicker();
-  List<PickedFile>? _imageFileList;
+  List<PickedFile> _imageFileList = <PickedFile>[];
 
   @override
   void initState() {
@@ -47,10 +48,13 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
   Widget build(BuildContext context) {
     return BlocListener<AddFeedbackBloc, AddFeedbackState>(
       listener: (context, state) {
-        if (state is InitState) {}
+        if (state is InitState) {
+        } else if(state is LoadedState) {
+          Navigator.of(context).pop();
+        }
       },
-      child:
-          BlocBuilder<AddFeedbackBloc, AddFeedbackState>(builder: (context, state) {
+      child: BlocBuilder<AddFeedbackBloc, AddFeedbackState>(
+          builder: (context, state) {
         return Scaffold(
           backgroundColor: R.color.background_color(),
           resizeToAvoidBottomInset: false,
@@ -201,7 +205,7 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
   }
 
   Widget _buildImageList() {
-    var size = _imageFileList?.length ?? 0;
+    var size = _imageFileList.length;
     return ListView.separated(
       padding: EdgeInsets.only(right: size == 0 ? 0 : 10),
       shrinkWrap: true,
@@ -231,7 +235,7 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8.0),
-            child: Image.file(File(_imageFileList![index].path),
+            child: Image.file(File(_imageFileList[index].path),
                 fit: BoxFit.cover, width: 80, height: 80),
           ),
           Positioned(
@@ -239,7 +243,7 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
             right: 5,
             child: GestureDetector(
               onTap: () => setState(() {
-                _imageFileList!.removeAt(index);
+                _imageFileList.removeAt(index);
               }),
               child: Image(image: R.image.btn_imgdelete_n()),
             ),
@@ -271,7 +275,7 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
     try {
       final pickedFileList = await _picker.getMultiImage();
       setState(() {
-        _imageFileList = pickedFileList;
+        _imageFileList = pickedFileList ?? <PickedFile>[];
       });
     } catch (e) {
       setState(() {
@@ -310,6 +314,10 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
     Fimber.d('@@type ${_getFeedbackType(_feedbackTypeIndex!)}');
     Fimber.d('@@input ${textController.text}');
     Fimber.d('@@image $_imageFileList');
+    var filePathList = <String>[];
+    _imageFileList.forEach((element) => filePathList.add(element.path));
+    _addFeedbackBloc.add(CreateEvent(
+        textController.text, (_feedbackTypeIndex ?? 0) + 1, filePathList));
   }
 
   void _showFeedbackTypeBottomSheet() {

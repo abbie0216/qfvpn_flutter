@@ -166,7 +166,7 @@ class AppUtils {
   //       msg: content,
   //       toastLength: Toast.LENGTH_LONG,
   //       gravity: ToastGravity.BOTTOM,
-  //       timeInSecForIos: 3,
+  //       timeInSecForIosWeb: 3,
   //       backgroundColor: Colors.white,
   //       textColor: Colors.black,
   //       fontSize: 15.0);

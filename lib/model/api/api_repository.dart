@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
+import 'package:qfvpn/model/api/bean/feedback/create_feedback_req.dart';
 import 'package:qfvpn/model/api/bean/feedback/detail_req.dart';
 import 'package:qfvpn/model/api/bean/feedback/detail_resp.dart';
 import 'package:qfvpn/model/api/bean/feedback/paging.dart';
@@ -12,20 +13,25 @@ import 'package:qfvpn/model/api/bean/login/RefreshTokenReq.dart';
 import 'package:qfvpn/model/api/bean/login/SendCodeReq.dart';
 import 'package:qfvpn/model/api/bean/login/login_req.dart';
 import 'package:qfvpn/model/api/bean/node/node_list_resp.dart';
-import 'package:qfvpn/model/api/bean/splash/version_req.dart';
 import 'package:qfvpn/model/api/bean/product/product_list_resp.dart';
+import 'package:qfvpn/model/api/bean/splash/version_req.dart';
 import 'package:qfvpn/model/api/bean/token.dart';
+import 'package:qfvpn/model/api/bean/user/UserCouponListResp.dart';
 import 'package:qfvpn/model/api/generate_api_result.dart';
 
 import '../pref.dart';
 import 'api_result.dart';
 import 'bean/feedback/feedback_list_resp.dart';
+import 'bean/feedback/feedback_upload_resp.dart';
 import 'bean/login/RefreshTokenResp.dart';
 import 'bean/login/ResetPasswordReq.dart';
 import 'bean/login/SendCodeResp.dart';
 import 'bean/login/VerifyCodeReq.dart';
 import 'bean/login/register_req.dart';
 import 'bean/login/register_resp.dart';
+import 'bean/order/order_detail_req.dart';
+import 'bean/order/order_detail_resp.dart';
+import 'bean/order/orders_list_resp.dart';
 import 'bean/splash/version_resp.dart';
 import 'bean/user/User.dart';
 
@@ -50,7 +56,12 @@ class ApiRepository {
       },
     ));
 
-    dio.interceptors.add(LogInterceptor());
+    dio.interceptors.add(LogInterceptor(
+        request: true,
+        requestHeader: true,
+        requestBody: true,
+        responseHeader: true,
+        responseBody: true));
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
         var token = await _pref.getToken();
@@ -197,6 +208,18 @@ class ApiRepository {
     );
   }
 
+  Future<ApiResult<UserCouponListResp>> fetchUserCouponList(Paging req) async {
+    return GenerateApiResult.from<UserCouponListResp>(
+      apiCall: () async {
+        return await _dio.post('/api/coupon/userCouponList',
+            data: json.encode(req.toJson()));
+      },
+      parseSuccessData: (response) {
+        return UserCouponListResp.fromJson(response.data['data']);
+      },
+    );
+  }
+
   Future<ApiResult<NodeListResp>> fetchNodeList() async {
     return GenerateApiResult.from<NodeListResp>(
       apiCall: () async {
@@ -231,7 +254,7 @@ class ApiRepository {
     );
   }
 
-  Future<ApiResult<DetailResp>> fetchFeedbackDetail(DetailReq detailReq ) async {
+  Future<ApiResult<DetailResp>> fetchFeedbackDetail(DetailReq detailReq) async {
     return GenerateApiResult.from<DetailResp>(
       apiCall: () async {
         return await _dio.post('/api/feedback/detail',
@@ -241,6 +264,55 @@ class ApiRepository {
         return DetailResp.fromJson(response.data['data']);
       },
     );
+  }
+
+  Future<ApiResult<void>> createFeedback(CreateFeedbackReq req) async {
+    return GenerateApiResult.from<void>(
+      apiCall: () async {
+        return await _dio.post('/api/feedback/create',
+            data: json.encode(req.toJson()));
+      },
+      parseSuccessData: (response) {
+        return null;
+      },
+    );
+  }
+
+  Future<ApiResult<FeedbackUploadResp>> uploadAttachment(
+      String filePath) async {
+    _dio.options.headers['Content-Type'] = 'multipart/form-data';
+    var formData =
+        FormData.fromMap({'file': await MultipartFile.fromFile(filePath)});
+    try {
+      var response =
+          await _dio.post('/api/feedback/uploadAttachment', data: formData);
+      return ApiResult.success(
+          FeedbackUploadResp.fromJson(response.data['data']));
+    } catch (error) {
+      Fimber.d('error: ' + error.toString());
+      return ApiResult.error(error);
+    } finally {
+      _dio.options.headers['Content-Type'] = 'application/json';
+    }
+  }
+
+  Future<ApiResult<OrdersListResp>> fetchOrdersList(Paging paging) async {
+    return GenerateApiResult.from<OrdersListResp>(apiCall: () async {
+      return await _dio.post('/api/order/list',
+          data: json.encode(paging.toJson()));
+    }, parseSuccessData: (response) {
+      return OrdersListResp.fromJson(response.data['data']);
+    });
+  }
+
+  Future<ApiResult<OrderDetailResp>> fetchOrderDetail(
+      OrderDetailReq req) async {
+    return GenerateApiResult.from<OrderDetailResp>(apiCall: () async {
+      return await _dio.post('/api/order/detail',
+          data: json.encode(req.toJson()));
+    }, parseSuccessData: (response) {
+      return OrderDetailResp.fromJson(response.data['data']);
+    });
   }
 
   Future<ApiResult<InviteInfoResp>> fetchInviteInfo() async {

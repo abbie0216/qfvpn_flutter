@@ -31,7 +31,7 @@ class DetailResp {
   int surveyScore;
   DateTime createdAt;
   List<dynamic> images;
-  List<dynamic> replies;
+  List<Reply> replies;
   bool isCanReply;
   bool isCanSurvey;
 
@@ -44,7 +44,7 @@ class DetailResp {
     surveyScore: json['surveyScore'],
     createdAt: DateTime.parse(json['createdAt']),
     images: List<dynamic>.from(json['images'].map((x) => x)),
-    replies: List<dynamic>.from(json['replies'].map((x) => x)),
+    replies: List<Reply>.from(json['replies'].map((x) => Reply.fromJson(x))),
     isCanReply: json['isCanReply'],
     isCanSurvey: json['isCanSurvey'],
   );
@@ -58,8 +58,48 @@ class DetailResp {
     'surveyScore': surveyScore,
     'createdAt': createdAt.toIso8601String(),
     'images': List<dynamic>.from(images.map((x) => x)),
-    'replies': List<dynamic>.from(replies.map((x) => x)),
+    'replies': List<dynamic>.from(replies.map((x) => x.toJson())),
     'isCanReply': isCanReply,
     'isCanSurvey': isCanSurvey,
+  };
+}
+
+class Reply {
+  Reply({
+    required this.feedbackReplyId,
+    required this.content,
+    required this.createdAt,
+    required this.opName,
+    required this.opProfileImage,
+    required this.type,
+    required this.attachments,
+  });
+
+  int feedbackReplyId;
+  String content;
+  DateTime createdAt;
+  String opName;
+  String opProfileImage;
+  int type;
+  List<dynamic> attachments;
+
+  factory Reply.fromJson(Map<String, dynamic> json) => Reply(
+    feedbackReplyId: json['feedbackReplyId'],
+    content: json['content'],
+    createdAt: DateTime.parse(json['createdAt']),
+    opName: json['opName'],
+    opProfileImage: json['opProfileImage'],
+    type: json['type'],
+    attachments: List<dynamic>.from(json['attachments'].map((x) => x)),
+  );
+
+  Map<String, dynamic> toJson() => {
+    'feedbackReplyId': feedbackReplyId,
+    'content': content,
+    'createdAt': createdAt.toIso8601String(),
+    'opName': opName,
+    'opProfileImage': opProfileImage,
+    'type': type,
+    'attachments': List<dynamic>.from(attachments.map((x) => x)),
   };
 }

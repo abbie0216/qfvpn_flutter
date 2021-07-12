@@ -5,6 +5,8 @@ import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:qfvpn/bloc/feedback/feedback_detail_bloc.dart';
 import 'package:qfvpn/bloc/feedback/feedback_detail_event.dart';
 import 'package:qfvpn/bloc/feedback/feedback_detail_state.dart';
+import 'package:qfvpn/model/api/bean/feedback/detail_resp.dart';
+import 'package:qfvpn/utility/convert.dart';
 
 import '../../r.dart';
 import '../../s.dart';
@@ -18,17 +20,23 @@ class FeedbackDetailPage extends StatefulWidget {
 
 class _FeedbackDetailState extends State<FeedbackDetailPage> {
   late FeedbackDetailBloc _feedbackDetailBloc;
+  final textController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _feedbackDetailBloc = BlocProvider.of<FeedbackDetailBloc>(context);
-    Future.delayed(Duration.zero,() {
+    Future.delayed(Duration.zero, () {
       dynamic obj = ModalRoute.of(context)!.settings.arguments;
       var feedbackId = obj['feedbackId']; // 把接收到的參數存到變數
-      Fimber.d('@@feedbackId:$feedbackId');
       _feedbackDetailBloc.add(FetchDetailEvent(feedbackId));
     });
+  }
+
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
   }
 
   @override
@@ -36,9 +44,7 @@ class _FeedbackDetailState extends State<FeedbackDetailPage> {
     return BlocListener<FeedbackDetailBloc, FeedbackDetailState>(
       listener: (context, state) {
         if (state is InitState) {
-        } else if (state is LoadedState) {
-
-        }
+        } else if (state is LoadedState) {}
       },
       child: BlocBuilder<FeedbackDetailBloc, FeedbackDetailState>(
           builder: (context, state) {
@@ -72,13 +78,15 @@ class _FeedbackDetailState extends State<FeedbackDetailPage> {
         child: CircularProgressIndicator(),
       );
     } else if (state is LoadedState) {
+      var item = state.result;
       return ListView(
         children: [
-          _buildFeedbackItem(false),
+          _buildFeedbackItem(false, item),
           SizedBox(height: 10),
-          _buildFeedbackItem(true),
+          _buildReplyList(item),
           SizedBox(height: 10),
-          _buildSatisfactionWidget()
+          _buildReplyWidget(item),
+          _buildSatisfactionWidget(item),
         ],
       );
     } else {
@@ -86,73 +94,62 @@ class _FeedbackDetailState extends State<FeedbackDetailPage> {
     }
   }
 
-  Widget _buildFeedbackItem(bool isCS) {
+  Widget _buildFeedbackItem(bool isCS, DetailResp item) {
     return Container(
       padding: EdgeInsets.all(20),
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildItemTitle(isCS),
+          _buildFeedbackType(item.categoryName),
           SizedBox(height: 10),
-          _buildContentItem(),
+          _buildContentWidget(item.content),
           SizedBox(height: 10),
-          _buildImageList(),
-          SizedBox(height: 10),
-          _buildTimeItem(),
+          _buildImageList(item.images),
+          SizedBox(height: 20),
+          _buildTimeItem(
+              feedbackDateTimeDisplay(item.createdAt.toIso8601String())),
         ],
       ),
     );
   }
 
-  Widget _buildItemTitle(bool isCS) {
-    return isCS
-        ? Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image(image: R.image.img_service()),
-              SizedBox(width: 8),
-              Text('客服MM 晓薇',
-                  style: TextStyle(
-                      color: R.color.text_blue_color(),
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold)),
-            ],
-          )
-        : Text('反馈标题',
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-                fontWeight: FontWeight.bold));
+  Widget _buildFeedbackType(String type) {
+    return Text(type,
+        style: TextStyle(
+            color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold));
   }
 
-  Widget _buildContentItem() {
+  Widget _buildContentWidget(String content) {
     return Text(
-      '文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字',
+      content,
       textAlign: TextAlign.start,
       style: TextStyle(color: R.color.text_color_alpha80(), fontSize: 14),
     );
   }
 
-  Widget _buildImageList() {
-    return Container(
-      height: 80,
-      child: ListView.separated(
-        shrinkWrap: true,
-        itemBuilder: _buildImageItem,
-        itemCount: 2,
-        scrollDirection: Axis.horizontal,
-        separatorBuilder: (BuildContext context, int index) {
-          return Divider(
-            indent: 10,
-            color: Colors.transparent,
-          );
-        },
+  Widget _buildImageList(List<dynamic> images) {
+    return Visibility(
+      visible: images.isNotEmpty,
+      child: Container(
+        height: 80,
+        child: ListView.separated(
+          shrinkWrap: true,
+          itemBuilder: (context, index) => _buildImageItem(images[index]),
+          itemCount: images.length,
+          scrollDirection: Axis.horizontal,
+          separatorBuilder: (BuildContext context, int index) {
+            return Divider(
+              indent: 10,
+              color: Colors.transparent,
+            );
+          },
+        ),
       ),
     );
   }
 
-  Widget _buildImageItem(BuildContext context, int index) {
+  Widget _buildImageItem(dynamic image) {
     return Container(
       height: 80,
       width: 80,
@@ -165,36 +162,92 @@ class _FeedbackDetailState extends State<FeedbackDetailPage> {
     );
   }
 
-  Widget _buildTimeItem() {
+  Widget _buildTimeItem(String time) {
     return Text(
-      '2018-03-20 20:20',
+      time,
       style: TextStyle(color: R.color.text_color_alpha50(), fontSize: 12),
     );
   }
 
-  Widget _buildSatisfactionWidget() {
+  Widget _buildReplyList(DetailResp item) {
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: ClampingScrollPhysics(),
+      itemBuilder: (context, index) => _buildReplyItem(item.replies[index]),
+      itemCount: item.replies.length,
+      separatorBuilder: (BuildContext context, int index) {
+        return Divider(
+          indent: 10,
+          color: Colors.transparent,
+        );
+      },
+    );
+  }
+
+  Widget _buildReplyItem(Reply item) {
     return Container(
-      height: 80,
-      margin: EdgeInsets.all(20),
-      padding: EdgeInsets.symmetric(vertical: 14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      child: Row(
+      padding: EdgeInsets.all(20),
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-              child: _buildSatisfactionItem(R.image.btn_notgood_n(),
-                  S.of(context).feedback_detail_not_satisfied, false)),
-          _buildDivider(),
-          Expanded(
-              child: _buildSatisfactionItem(R.image.btn_soso_n(),
-                  S.of(context).feedback_detail_average, false)),
-          _buildDivider(),
-          Expanded(
-              child: _buildSatisfactionItem(R.image.btn_sogood_n(),
-                  S.of(context).feedback_detail_satisfied, true)),
+          _buildReplyTitle(item),
+          SizedBox(height: 10),
+          _buildContentWidget(item.content),
+          SizedBox(height: 10),
+          _buildImageList(item.attachments),
+          SizedBox(height: 10),
+          _buildTimeItem(
+              feedbackDateTimeDisplay(item.createdAt.toIso8601String())),
         ],
+      ),
+    );
+  }
+
+  Widget _buildReplyTitle(Reply item) {
+    return Visibility(
+      visible: true, //確認: 如何判斷是否為op
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image(image: R.image.img_service()),
+          SizedBox(width: 8),
+          Text(item.opName,
+              style: TextStyle(
+                  color: R.color.text_blue_color(),
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSatisfactionWidget(DetailResp item) {
+    return Visibility(
+      visible: item.isCanSurvey,
+      child: Container(
+        height: 80,
+        margin: EdgeInsets.all(20),
+        padding: EdgeInsets.symmetric(vertical: 14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+                child: _buildSatisfactionItem(R.image.btn_notgood_n(),
+                    S.of(context).feedback_detail_not_satisfied, false)),
+            _buildDivider(),
+            Expanded(
+                child: _buildSatisfactionItem(R.image.btn_soso_n(),
+                    S.of(context).feedback_detail_average, false)),
+            _buildDivider(),
+            Expanded(
+                child: _buildSatisfactionItem(R.image.btn_sogood_n(),
+                    S.of(context).feedback_detail_satisfied, true)),
+          ],
+        ),
       ),
     );
   }
@@ -226,5 +279,90 @@ class _FeedbackDetailState extends State<FeedbackDetailPage> {
       width: 2,
       color: R.color.background_color(),
     );
+  }
+
+  Widget _buildReplyWidget(DetailResp item) {
+    return Visibility(
+      visible: item.isCanSurvey,
+      child: Row(
+        children: [
+          _buildCameraBtn(),
+          Expanded(child: _buildInputWidget()),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCameraBtn() {
+    return Container(
+      height: 42,
+      width: 42,
+      margin: EdgeInsets.only(left: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(22)),
+      ),
+      child: Center(child: Image(image: R.image.btn_camera_n())),
+    );
+  }
+
+  Widget _buildInputWidget() {
+    return Container(
+      height: 42,
+      margin: EdgeInsets.only(left: 6, right: 10),
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(22)),
+      ),
+      child: Row(
+        children: [
+          Expanded(child: _buildTextField()),
+          _buildSubmitBtn(textController.text.length >= 2),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTextField() {
+    return TextField(
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        hintText: S.of(context).feedback_detail_reply_hint,
+        hintStyle: TextStyle(color: R.color.text_color_alpha30(), fontSize: 14),
+      ),
+      controller: textController,
+    );
+  }
+
+  Widget _buildSubmitBtn(bool visible) {
+    return Visibility(
+      visible: visible,
+      child: TextButton(
+        onPressed: () => _onSubmitPressed(),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          height: 30,
+          decoration: BoxDecoration(
+            color: R.color.feedback_submit_btn_bg(),
+            borderRadius: BorderRadius.all(Radius.circular(22)),
+            // fit: BoxFit.fill,
+          ),
+          child: Center(
+            child: Text(
+              S.of(context).feedback_detail_reply_send,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _onSubmitPressed() {
+    Fimber.d('@@input ${textController.text}');
   }
 }

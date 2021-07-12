@@ -8,3 +8,13 @@ abstract class AddFeedbackState extends Equatable {
 }
 
 class InitState extends AddFeedbackState {}
+
+class LoadedState extends AddFeedbackState {}
+
+class ErrorState extends AddFeedbackState {
+  final String error;
+  ErrorState(this.error):super();
+
+  @override
+  List<Object> get props => [error];
+}

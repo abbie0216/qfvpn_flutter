@@ -1,15 +1,22 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:intl/intl.dart';
 import 'package:qfvpn/bloc/vip/order_history_detail_bloc.dart';
+import 'package:qfvpn/model/api/bean/order/order_detail_resp.dart';
 import 'package:qfvpn/widget/selector_widget_button.dart';
+import 'package:qfvpn/widget/utils/app_utils.dart';
 import 'package:sprintf/sprintf.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../../r.dart';
 import '../../s.dart';
 import '../../utility/convert.dart';
 
-enum PainState { UNPAID, PAID, CLOSED }
+enum PainState { INIT, UNPAID, PAID, CLOSED }
 
 // ignore: must_be_immutable
 class OrderHistoryDetailPage extends StatefulWidget {
@@ -21,25 +28,71 @@ class OrderHistoryDetailPage extends StatefulWidget {
   State<StatefulWidget> createState() => _OrderHistoryDetailPageState(orderNumber: orderNumber);
 }
 
-class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
-  final PainState _painState = PainState.UNPAID;
+class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage> with WidgetsBindingObserver {
+  late OrderHistoryDetailBloc _orderHistoryDetailBloc;
+  late PainState _painState = PainState.INIT;
+  late OrderDetailResp _detail;
   static const PAY_WAY_NONE = -1;
   static const PAY_WAY_WX = 0;
   static const PAY_WAY_ALI = 1;
   int _selectedPayWay = PAY_WAY_NONE;
   String orderNumber;
+  Timer? _timer;
 
   _OrderHistoryDetailPageState({required this.orderNumber});
 
   @override
   void initState() {
+    super.initState();
+    _orderHistoryDetailBloc = BlocProvider.of<OrderHistoryDetailBloc>(context);
 
+    _orderHistoryDetailBloc.add(FetchOrderDetailEvent(orderNumber));
+    WidgetsBinding.instance!.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance!.removeObserver(this);
+    if(_timer != null || _timer!.isActive) _timer!.cancel();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    Fimber.d('app lifecycle state $state');
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<OrderHistoryDetailBloc, OrderHistoryDetailState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if(state is LoadedState) {
+          _detail = state.result;
+          switch(_detail.status) {
+            case 1:
+              _painState = PainState.UNPAID;
+              setState(() {
+                _timer ??= Timer.periodic(Duration(minutes: 2), (timer) {
+                    _orderHistoryDetailBloc.add(
+                        FetchOrderDetailEvent(_detail.orderNo));
+                  });
+              });
+              break;
+            case 2:
+              _painState = PainState.PAID;
+              setState(() {
+                if (_timer != null && _timer!.isActive) _timer!.cancel();
+              });
+              break;
+            case 3:
+              _painState = PainState.CLOSED;
+              setState(() {
+                if (_timer != null && _timer!.isActive) _timer!.cancel();
+              });
+              break;
+          }
+        }
+      },
       child: BlocBuilder<OrderHistoryDetailBloc, OrderHistoryDetailState>(
         builder: (context, state) {
           return Theme(
@@ -63,7 +116,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
                         fontWeight: FontWeight.bold)),
               ),
               backgroundColor: R.color.order_history_bg_color(),
-              body: _buildContentView(),
+              body: _painState == PainState.INIT ? _InitContentView() : _buildContentView(_detail),
             ),
           );
         },
@@ -71,7 +124,21 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
     );
   }
 
-  Widget _buildContentView() {
+  Widget _InitContentView() {
+    return Center(
+      child: Container(
+        color: Colors.transparent,
+        width: 48.0,
+        height: 48.0,
+        child: SpinKitRing(
+          lineWidth: 5.0,
+          size: 80.0, color: Color(0xff6569ee),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContentView(OrderDetailResp detail) {
     return BlocListener<OrderHistoryDetailBloc, OrderHistoryDetailState>(
         listener: (context, state) {},
         child: BlocBuilder<OrderHistoryDetailBloc, OrderHistoryDetailState>(
@@ -80,9 +147,9 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _stateContentView(),
-                _orderContentView("360天VIP", orderNumber),
-                _orderDetailContentView(),
+                _stateContentView(detail),
+                _orderContentView(detail.productName, detail.orderNo),
+                _orderDetailContentView(detail),
                 Spacer(),
                 _buttonContentView(),
               ],
@@ -92,7 +159,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
     );
   }
 
-  Widget _stateContentView() {
+  Widget _stateContentView(OrderDetailResp detail) {
     var image;
     var bg;
     var title;
@@ -102,19 +169,21 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
         image = R.image.ico_close();
         bg = R.color.order_history_text_expiry();
         title = S.of(context).order_history_detail_close_status;
-        expiryDate = "";
+        expiryDate = '';
         break;
       case PainState.PAID:
         image = R.image.ico_success();
         bg = R.color.order_history_statue_paid();
         title = S.of(context).order_history_detail_paid_status;
-        expiryDate = "";
+        expiryDate = '';
         break;
       case PainState.UNPAID:
         image = R.image.ico_deferment();
         bg = R.color.order_history_statue_unpaid();
         title = S.of(context).order_history_detail_unpaid_status;
-        expiryDate = sprintf(S.of(context).order_history_detail_expiry_date, [dateTimeDisplay('2021-07-01T09:07:40.617Z')]);
+        expiryDate = sprintf(S.of(context).order_history_detail_expiry_date, [dateTimeDisplay(detail.expireAt.toIso8601String(), 'MM/dd HH:mm')]);
+        break;
+      case PainState.INIT:
         break;
     }
     return Container(
@@ -195,7 +264,20 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
               top: 40, right: 0,
               child: SelectorWidgetButton(
                 onPressed: () {
-                  debugPrint(hashCode.toString());
+                  Clipboard.setData(ClipboardData(text: orderNum))
+                  .then((_) {
+                    ScaffoldMessenger.of(context)
+                        ..hideCurrentSnackBar()
+                        ..showSnackBar(SnackBar(
+                        content: Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(sprintf(S.of(context).order_history_detail_order_copy,
+                                [orderNumber])),
+                          ],
+                      )));
+                    });
                 },
                 widgetN: Image(image: R.image.btn_copy_n(),),
                 widgetP: Image(image: R.image.btn_copy_p(),),
@@ -206,8 +288,10 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
     );
   }
 
-  Widget _orderDetailContentView() {
+  Widget _orderDetailContentView(OrderDetailResp detail) {
     switch(_painState) {
+      case PainState.INIT:
+        return Container();
       case PainState.CLOSED:
         return Container(
           width: double.infinity,
@@ -254,7 +338,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "下单时间",
+               S.of(context).order_history_detail_order_time,
                 style: TextStyle(
                     color: R.color.text_color_alpha30(),
                     fontSize: 14,
@@ -265,7 +349,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "2021-03-20 20:01",
+                dateTimeDisplay(_detail.createdAt.toIso8601String(), 'yyyy-MM-dd HH:mm'),
                 style: TextStyle(
                     color: R.color.text_color_alpha50(),
                     fontSize: 16,
@@ -282,7 +366,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "支付方式",
+                S.of(context).order_history_detail_payment_methods,
                 style: TextStyle(
                     color: R.color.text_color_alpha30(),
                     fontSize: 14,
@@ -293,7 +377,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "未选择",
+                '未选择',
                 style: TextStyle(
                     color: R.color.text_color_alpha50(),
                     fontSize: 16,
@@ -310,7 +394,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "原价",
+                S.of(context).order_history_detail_original_price,
                 style: TextStyle(
                     color: R.color.text_color_alpha30(),
                     fontSize: 14,
@@ -321,7 +405,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "¥288",
+                S.of(context).order_history_detail_payment_currency + _detail.amount,
                 style: TextStyle(
                     color: R.color.text_color_alpha50(),
                     fontSize: 16,
@@ -338,7 +422,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "优惠信息",
+                S.of(context).order_history_detail_discount,
                 style: TextStyle(
                     color: R.color.text_color_alpha30(),
                     fontSize: 14,
@@ -349,7 +433,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "- ¥35",
+                S.of(context).order_history_detail_discount_currency + _detail.discountAmount.toString(),
                 style: TextStyle(
                     color: R.color.text_color_alpha50(),
                     fontSize: 16,
@@ -373,14 +457,14 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             TextSpan(
                 children: [
                   TextSpan(
-                    text: "实付金额：",
+                    text: S.of(context).order_history_detail_actual_amount,
                     style: TextStyle(
                         color: R.color.text_color_alpha50(),
                         fontSize: 18,
                         fontWeight: FontWeight.normal),
                   ),
                   TextSpan(
-                    text: "¥253",
+                    text: S.of(context).order_history_detail_payment_currency+_detail.actualAmount,
                     style: TextStyle(
                         color: R.color.text_blue_color(),
                         fontSize: 18,
@@ -404,7 +488,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "下单时间",
+                S.of(context).order_history_detail_order_time,
                 style: TextStyle(
                     color: R.color.text_color_alpha30(),
                     fontSize: 14,
@@ -415,7 +499,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "2021-03-20 20:01",
+                dateTimeDisplay(_detail.createdAt.toIso8601String(), 'yyyy-MM-dd HH:mm'),
                 style: TextStyle(
                     color: R.color.text_color_alpha50(),
                     fontSize: 16,
@@ -442,7 +526,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "2021-03-20 20:01",
+                dateTimeDisplay(_detail.payAt.toIso8601String(), 'yyyy-MM-dd HH:mm'),
                 style: TextStyle(
                     color: R.color.text_color_alpha50(),
                     fontSize: 16,
@@ -459,7 +543,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "支付方式",
+                S.of(context).order_history_detail_payment_methods,
                 style: TextStyle(
                     color: R.color.text_color_alpha30(),
                     fontSize: 14,
@@ -470,7 +554,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "支付宝",
+                _detail.paymentName ?? '',
                 style: TextStyle(
                     color: R.color.text_color_alpha50(),
                     fontSize: 16,
@@ -487,7 +571,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "原价",
+                S.of(context).order_history_detail_original_price,
                 style: TextStyle(
                     color: R.color.text_color_alpha30(),
                     fontSize: 14,
@@ -498,7 +582,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "¥288",
+                S.of(context).order_history_detail_payment_currency + _detail.amount,
                 style: TextStyle(
                     color: R.color.text_color_alpha50(),
                     fontSize: 16,
@@ -515,7 +599,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "优惠信息",
+                S.of(context).order_history_detail_discount,
                 style: TextStyle(
                     color: R.color.text_color_alpha30(),
                     fontSize: 14,
@@ -526,7 +610,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "- ¥35",
+                S.of(context).order_history_detail_discount_currency + _detail.discountAmount.toString(),
                 style: TextStyle(
                     color: R.color.text_color_alpha50(),
                     fontSize: 16,
@@ -550,14 +634,14 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             TextSpan(
                 children: [
                   TextSpan(
-                    text: "实付金额：",
+                    text: S.of(context).order_history_detail_actual_amount,
                     style: TextStyle(
                         color: R.color.text_color_alpha50(),
                         fontSize: 18,
                         fontWeight: FontWeight.normal),
                   ),
                   TextSpan(
-                    text: "¥253",
+                    text: S.of(context).order_history_detail_payment_currency + _detail.actualAmount,
                     style: TextStyle(
                         color: R.color.text_blue_color(),
                         fontSize: 18,
@@ -581,7 +665,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "下单时间",
+                S.of(context).order_history_detail_order_time,
                 style: TextStyle(
                     color: R.color.text_color_alpha30(),
                     fontSize: 14,
@@ -592,7 +676,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "2021-03-20 20:01",
+                dateTimeDisplay(_detail.createdAt.toIso8601String(), 'yyyy-MM-dd HH:mm'),
                 style: TextStyle(
                     color: R.color.text_color_alpha50(),
                     fontSize: 16,
@@ -609,7 +693,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "原价",
+                S.of(context).order_history_detail_original_price,
                 style: TextStyle(
                     color: R.color.text_color_alpha30(),
                     fontSize: 14,
@@ -620,7 +704,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "¥288",
+                S.of(context).order_history_detail_payment_currency + _detail.amount,
                 style: TextStyle(
                     color: R.color.text_color_alpha50(),
                     fontSize: 16,
@@ -637,7 +721,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "优惠信息",
+                S.of(context).order_history_detail_discount,
                 style: TextStyle(
                     color: R.color.text_color_alpha30(),
                     fontSize: 14,
@@ -648,7 +732,7 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 15),
               child: Text(
-                "- ¥35",
+                S.of(context).order_history_detail_discount_currency + _detail.discountAmount.toString(),
                 style: TextStyle(
                     color: R.color.text_color_alpha50(),
                     fontSize: 16,
@@ -672,14 +756,14 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
             TextSpan(
                 children: [
                   TextSpan(
-                    text: "实付金额：",
+                    text: S.of(context).order_history_detail_actual_amount,
                     style: TextStyle(
                         color: R.color.text_color_alpha50(),
                         fontSize: 18,
                         fontWeight: FontWeight.normal),
                   ),
                   TextSpan(
-                    text: "¥253",
+                    text: S.of(context).order_history_detail_payment_currency+_detail.actualAmount,
                     style: TextStyle(
                         color: R.color.text_blue_color(),
                         fontSize: 18,
@@ -790,6 +874,9 @@ class _OrderHistoryDetailPageState extends State<OrderHistoryDetailPage>{
         return _paidButtonView();
       case PainState.UNPAID:
         return _unpaidButtonView();
+      case PainState.INIT:
+        return Container();
+        break;
     }
   }
 

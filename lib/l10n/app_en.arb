@@ -54,6 +54,7 @@
   "me_bind_mail": "绑定邮箱",
   "me_coupon": "我的优惠券",
   "me_vip_time_label": "VIP 有效期限至：",
+  "me_vip_time_expired": "VIP已到期",
   "me_id_label": "ID：",
   "me_item_news": "我的消息",
   "me_item_help": "帮助中心",
@@ -184,6 +185,15 @@
   "order_history_detail_close_status" : "订单关闭",
   "order_history_detail_expiry_date" : "请在 %s 内完成付款",
   "order_history_detail_repurchase" : "重新购买",
+  "order_history_detail_order_time" : "下单时间",
+  "order_history_detail_payment_methods" : "支付方式",
+  "order_history_detail_original_price" : "原价",
+  "order_history_detail_discount" : "优惠信息",
+  "order_history_detail_discount_currency" : "- ¥",
+  "order_history_detail_payment_currency" : "¥",
+  "order_history_detail_actual_amount": "实付金额：",
+  "order_history_detail_order_copy" : "订单号 %s 已复制",
+
 
   "pay_title": "支付",
   "pay_info_coupon_title": "优惠券",
@@ -226,6 +236,8 @@
   "feedback_detail_not_satisfied": "不满意",
   "feedback_detail_average": "一般",
   "feedback_detail_satisfied": "满意",
+  "feedback_detail_reply_hint": "请补充描述（至少 2 个字）",
+  "feedback_detail_reply_send": "传送",
 
   "error_pw_too_short": "密码长度必须在6-15字符之间",
   "error_user_already_exists": "用户已经存在",
