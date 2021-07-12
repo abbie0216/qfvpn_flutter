@@ -30,7 +30,7 @@ class DetailResp {
   String statusText;
   int surveyScore;
   DateTime createdAt;
-  List<dynamic> images;
+  List<Attachment> images;
   List<Reply> replies;
   bool isCanReply;
   bool isCanSurvey;
@@ -43,7 +43,7 @@ class DetailResp {
     statusText: json['statusText'],
     surveyScore: json['surveyScore'],
     createdAt: DateTime.parse(json['createdAt']),
-    images: List<dynamic>.from(json['images'].map((x) => x)),
+    images: List<Attachment>.from(json['images'].map((x) => Attachment.fromJson(x))),
     replies: List<Reply>.from(json['replies'].map((x) => Reply.fromJson(x))),
     isCanReply: json['isCanReply'],
     isCanSurvey: json['isCanSurvey'],
@@ -64,6 +64,27 @@ class DetailResp {
   };
 }
 
+class Attachment {
+  Attachment({
+    required this.attachmentId,
+    required this.url,
+  });
+
+  int attachmentId;
+  String url;
+
+  factory Attachment.fromJson(Map<String, dynamic> json) => Attachment(
+    attachmentId: json['attachmentId'],
+    url: json['url'],
+  );
+
+  Map<String, dynamic> toJson() => {
+    'attachmentId': attachmentId,
+    'url': url,
+  };
+}
+
+
 class Reply {
   Reply({
     required this.feedbackReplyId,
@@ -81,7 +102,7 @@ class Reply {
   String opName;
   String opProfileImage;
   int type;
-  List<dynamic> attachments;
+  List<Attachment> attachments;
 
   factory Reply.fromJson(Map<String, dynamic> json) => Reply(
     feedbackReplyId: json['feedbackReplyId'],
@@ -90,7 +111,7 @@ class Reply {
     opName: json['opName'],
     opProfileImage: json['opProfileImage'],
     type: json['type'],
-    attachments: List<dynamic>.from(json['attachments'].map((x) => x)),
+    attachments: List<Attachment>.from(json['attachments'].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {

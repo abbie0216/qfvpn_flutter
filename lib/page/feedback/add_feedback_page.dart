@@ -49,13 +49,15 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
     return BlocListener<AddFeedbackBloc, AddFeedbackState>(
       listener: (context, state) {
         if (state is InitState) {
-        } else if(state is CreateSuccessState) {
+        } else if (state is LoadingState) {
+          _showLoadingDialog();
+        } else if (state is LoadedState) {
+          Navigator.pop(context);
+        } else if (state is CreateSuccessState) {
           _showSnakeBar('Create success.');
           Navigator.of(context).pop();
-        } else if(state is CreateErrorState) {
-          _showSnakeBar(state.error);
-        } else if(state is LoadingState) {
-
+        } else if (state is CreateErrorState) {
+          _showSnakeBar('Create error: ${state.error}');
         }
       },
       child: BlocBuilder<AddFeedbackBloc, AddFeedbackState>(
@@ -120,8 +122,11 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
               _feedbackTypeIndex == null
                   ? S.of(context).add_feedback_select
                   : _getFeedbackType(_feedbackTypeIndex ?? 0),
-              style:
-                  TextStyle(color: R.color.text_color_alpha30(), fontSize: 14),
+              style: TextStyle(
+                  color: _feedbackTypeIndex == null
+                      ? R.color.text_color_alpha30()
+                      : R.color.text_color_alpha80(),
+                  fontSize: 14),
             ),
             Spacer(),
             Image(image: R.image.btn_dropdown_n()),
@@ -316,6 +321,14 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
   }
 
   void _onSubmitPressed() {
+    if (_feedbackTypeIndex == null) {
+      _showSnakeBar(S.of(context).add_feedback_type_error);
+      return;
+    }
+    if (textController.text.isEmpty) {
+      _showSnakeBar(S.of(context).add_feedback_content_error);
+      return;
+    }
     Fimber.d('@@type ${_getFeedbackType(_feedbackTypeIndex!)}');
     Fimber.d('@@input ${textController.text}');
     Fimber.d('@@image $_imageFileList');
@@ -353,10 +366,29 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
       ..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(
           content: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(msg),
-            ],
-          )));
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(msg),
+        ],
+      )));
+  }
+
+  void _showLoadingDialog() {
+    var alert = AlertDialog(
+      content: Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text('Loading...')),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

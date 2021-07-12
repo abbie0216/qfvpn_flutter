@@ -15,6 +15,7 @@ class AddFeedbackBloc extends Bloc<AddFeedbackEvent, AddFeedbackState> {
 
   @override
   Stream<AddFeedbackState> mapEventToState(AddFeedbackEvent event) async* {
+    yield LoadingState();
     if (event is CreateEvent) {
       ApiResult result = await createFeedback(event);
       if (result is Success) {
@@ -25,6 +26,7 @@ class AddFeedbackBloc extends Bloc<AddFeedbackEvent, AddFeedbackState> {
         yield CreateErrorState(result.error);
       }
     }
+    yield LoadedState();
   }
 
   Future<ApiResult<void>> createFeedback(CreateEvent event) async {
