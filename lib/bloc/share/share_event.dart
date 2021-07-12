@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of 'share_bloc.dart';
 
 abstract class ShareEvent extends Equatable {
   const ShareEvent();
@@ -7,4 +7,4 @@ abstract class ShareEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ShareFetchEvent extends ShareEvent {}
+class ShareInfoFetchEvent extends ShareEvent {}

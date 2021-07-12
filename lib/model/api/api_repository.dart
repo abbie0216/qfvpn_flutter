@@ -6,6 +6,7 @@ import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:qfvpn/model/api/bean/feedback/detail_req.dart';
 import 'package:qfvpn/model/api/bean/feedback/detail_resp.dart';
 import 'package:qfvpn/model/api/bean/feedback/paging.dart';
+import 'package:qfvpn/model/api/bean/invite/invite_info_resp.dart';
 import 'package:qfvpn/model/api/bean/login/ChangePasswordReq.dart';
 import 'package:qfvpn/model/api/bean/login/RefreshTokenReq.dart';
 import 'package:qfvpn/model/api/bean/login/SendCodeReq.dart';
@@ -238,6 +239,17 @@ class ApiRepository {
       },
       parseSuccessData: (response) {
         return DetailResp.fromJson(response.data['data']);
+      },
+    );
+  }
+
+  Future<ApiResult<InviteInfoResp>> fetchInviteInfo() async {
+    return GenerateApiResult.from<InviteInfoResp>(
+      apiCall: () async {
+        return await _dio.post('/api/invite/info');
+      },
+      parseSuccessData: (response) {
+        return InviteInfoResp.fromJson(response.data['data']);
       },
     );
   }
