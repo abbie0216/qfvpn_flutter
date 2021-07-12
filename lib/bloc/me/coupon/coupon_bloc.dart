@@ -7,7 +7,7 @@ import 'package:meta/meta.dart';
 import 'package:qfvpn/model/api/api_repository.dart';
 import 'package:qfvpn/model/api/api_result.dart';
 import 'package:qfvpn/model/api/bean/user/UserCouponListResp.dart';
-import 'package:qfvpn/model/api/bean/feedback/paging.dart';
+import 'package:qfvpn/model/api/bean/paging.dart';
 
 import '../../../constants.dart';
 

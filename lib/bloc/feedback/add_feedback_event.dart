@@ -5,6 +5,8 @@ abstract class AddFeedbackEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class FetchCategoryList extends AddFeedbackEvent {}
+
 class CreateEvent extends AddFeedbackEvent {
   final String content;
   final int categoryId;

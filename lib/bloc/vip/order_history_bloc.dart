@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:qfvpn/model/api/api_repository.dart';
 import 'package:qfvpn/model/api/api_result.dart';
-import 'package:qfvpn/model/api/bean/feedback/paging.dart';
+import 'package:qfvpn/model/api/bean/paging.dart';
 import 'package:qfvpn/constants.dart';
 import 'package:qfvpn/model/api/bean/order/orders_list_resp.dart';
 

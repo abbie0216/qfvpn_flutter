@@ -3,11 +3,13 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
+import 'package:qfvpn/model/api/bean/feedback/category_list_resp.dart';
 import 'package:qfvpn/model/api/bean/feedback/create_feedback_req.dart';
+import 'package:qfvpn/model/api/bean/feedback/take_survey_req.dart';
 import 'package:qfvpn/model/api/bean/user/UserCouponListResp.dart';
 import 'package:qfvpn/model/api/bean/feedback/detail_req.dart';
 import 'package:qfvpn/model/api/bean/feedback/detail_resp.dart';
-import 'package:qfvpn/model/api/bean/feedback/paging.dart';
+import 'package:qfvpn/model/api/bean/paging.dart';
 import 'package:qfvpn/model/api/bean/login/ChangePasswordReq.dart';
 import 'package:qfvpn/model/api/bean/login/RefreshTokenReq.dart';
 import 'package:qfvpn/model/api/bean/login/SendCodeReq.dart';
@@ -20,8 +22,9 @@ import 'package:qfvpn/model/api/generate_api_result.dart';
 
 import '../pref.dart';
 import 'api_result.dart';
+import 'bean/feedback/create_reply_req.dart';
 import 'bean/feedback/feedback_list_resp.dart';
-import 'bean/feedback/feedback_upload_resp.dart';
+import 'bean/feedback/upload_attachment_resp.dart';
 import 'bean/login/RefreshTokenResp.dart';
 import 'bean/login/ResetPasswordReq.dart';
 import 'bean/login/SendCodeResp.dart';
@@ -241,6 +244,17 @@ class ApiRepository {
     );
   }
 
+  Future<ApiResult<CategoryListResp>> fetchCategoryList() async {
+    return GenerateApiResult.from<CategoryListResp>(
+      apiCall: () async {
+        return await _dio.post('/api/feedback/categoryList');
+      },
+      parseSuccessData: (response) {
+        return CategoryListResp.fromJson(response.data['data']);
+      },
+    );
+  }
+
   Future<ApiResult<FeedbackListResp>> fetchFeedbackList(Paging paging) async {
     return GenerateApiResult.from<FeedbackListResp>(
       apiCall: () async {
@@ -277,22 +291,49 @@ class ApiRepository {
     );
   }
 
-  Future<ApiResult<FeedbackUploadResp>> uploadAttachment(
-      String filePath) async {
+  Future<ApiResult<UploadAttachmentResp>> uploadAttachment(String filePath,
+      {bool isReply = false}) async {
     _dio.options.headers['Content-Type'] = 'multipart/form-data';
     var formData =
         FormData.fromMap({'file': await MultipartFile.fromFile(filePath)});
+    var path = isReply
+        ? '/api/feedbackReply/uploadAttachment'
+        : '/api/feedback/uploadAttachment';
     try {
       var response =
-          await _dio.post('/api/feedback/uploadAttachment', data: formData);
+          await _dio.post(path, data: formData);
       return ApiResult.success(
-          FeedbackUploadResp.fromJson(response.data['data']));
+          UploadAttachmentResp.fromJson(response.data['data']));
     } catch (error) {
       Fimber.d('error: ' + error.toString());
       return ApiResult.error(error);
     } finally {
       _dio.options.headers['Content-Type'] = 'application/json';
     }
+  }
+
+  Future<ApiResult<void>> takeSurvey(TakeSurveyReq req) async {
+    return GenerateApiResult.from<void>(
+      apiCall: () async {
+        return await _dio.post('/api/feedback/takeSurvey',
+            data: json.encode(req.toJson()));
+      },
+      parseSuccessData: (response) {
+        return null;
+      },
+    );
+  }
+
+  Future<ApiResult<void>> createReply(CreateReplyReq req) async {
+    return GenerateApiResult.from<void>(
+      apiCall: () async {
+        return await _dio.post('/api/feedbackReply/create',
+            data: json.encode(req.toJson()));
+      },
+      parseSuccessData: (response) {
+        return null;
+      },
+    );
   }
 
   Future<ApiResult<OrdersListResp>> fetchOrdersList(Paging paging) async {

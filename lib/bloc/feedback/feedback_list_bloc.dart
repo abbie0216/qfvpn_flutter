@@ -6,7 +6,7 @@ import 'package:qfvpn/constants.dart';
 import 'package:qfvpn/model/api/api_repository.dart';
 import 'package:qfvpn/model/api/api_result.dart';
 import 'package:qfvpn/model/api/bean/feedback/feedback_list_resp.dart';
-import 'package:qfvpn/model/api/bean/feedback/paging.dart';
+import 'package:qfvpn/model/api/bean/paging.dart';
 
 class FeedbackListBloc extends Bloc<FeedbackListEvent, FeedbackListState> {
   final ApiRepository apiRepository;

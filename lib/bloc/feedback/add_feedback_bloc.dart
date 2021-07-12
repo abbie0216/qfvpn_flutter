@@ -3,7 +3,7 @@ import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:qfvpn/model/api/api_repository.dart';
 import 'package:qfvpn/model/api/api_result.dart';
 import 'package:qfvpn/model/api/bean/feedback/create_feedback_req.dart';
-import 'package:qfvpn/model/api/bean/feedback/feedback_upload_resp.dart';
+import 'package:qfvpn/model/api/bean/feedback/upload_attachment_resp.dart';
 
 import 'add_feedback_event.dart';
 import 'add_feedback_state.dart';
@@ -19,22 +19,22 @@ class AddFeedbackBloc extends Bloc<AddFeedbackEvent, AddFeedbackState> {
       ApiResult result = await createFeedback(event);
       if (result is Success) {
         Fimber.d('Success');
-        yield LoadedState();
+        yield CreateSuccessState();
       } else if (result is Error) {
         Fimber.d('Error: ${result.error}');
-        yield ErrorState(result.error);
+        yield CreateErrorState(result.error);
       }
     }
   }
 
   Future<ApiResult<void>> createFeedback(CreateEvent event) async {
     var attachmentIdList = <int>[];
-    var att = <Future<ApiResult<FeedbackUploadResp>>>[];
+    var att = <Future<ApiResult<UploadAttachmentResp>>>[];
     event.filePathList
         .forEach((element) => att.add(apiRepository.uploadAttachment(element)));
     await Future.wait(att).then((value) => {
       value.forEach((result) {
-        if (result is Success<FeedbackUploadResp>) {
+        if (result is Success<UploadAttachmentResp>) {
           attachmentIdList.add(result.data!.attachmentId);
         } else if (result is Error) {
           Fimber.d('uploadAttachment Error: $result}');
