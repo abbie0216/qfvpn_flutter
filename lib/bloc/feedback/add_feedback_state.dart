@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:qfvpn/model/api/bean/feedback/category_list_resp.dart';
 
 abstract class AddFeedbackState extends Equatable {
   const AddFeedbackState();
@@ -9,11 +10,32 @@ abstract class AddFeedbackState extends Equatable {
 
 class InitState extends AddFeedbackState {}
 
-class LoadedState extends AddFeedbackState {}
+class LoadingState extends AddFeedbackState {}
 
-class ErrorState extends AddFeedbackState {
+class CreateSuccessState extends AddFeedbackState {}
+
+class CreateErrorState extends AddFeedbackState {
   final String error;
-  ErrorState(this.error):super();
+
+  CreateErrorState(this.error):super();
+
+  @override
+  List<Object> get props => [error];
+}
+
+class CategoryListLoadedState extends AddFeedbackState {
+  final CategoryListResp result;
+
+  CategoryListLoadedState(this.result):super();
+
+  @override
+  List<Object> get props => [result];
+}
+
+class CategoryListErrorState extends AddFeedbackState {
+  final String error;
+
+  CategoryListErrorState(this.error):super();
 
   @override
   List<Object> get props => [error];

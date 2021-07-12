@@ -44,7 +44,7 @@ class _FeedbackDetailState extends State<FeedbackDetailPage> {
     return BlocListener<FeedbackDetailBloc, FeedbackDetailState>(
       listener: (context, state) {
         if (state is InitState) {
-        } else if (state is LoadedState) {}
+        } else if (state is DetailLoadedState) {}
       },
       child: BlocBuilder<FeedbackDetailBloc, FeedbackDetailState>(
           builder: (context, state) {
@@ -77,7 +77,7 @@ class _FeedbackDetailState extends State<FeedbackDetailPage> {
       return Center(
         child: CircularProgressIndicator(),
       );
-    } else if (state is LoadedState) {
+    } else if (state is DetailLoadedState) {
       var item = state.result;
       return ListView(
         children: [

@@ -10,17 +10,41 @@ abstract class FeedbackDetailState extends Equatable {
 
 class InitState extends FeedbackDetailState {}
 
-class LoadedState extends FeedbackDetailState {
+class DetailLoadedState extends FeedbackDetailState {
   final DetailResp result;
-  LoadedState(this.result):super();
+
+  DetailLoadedState(this.result) : super();
 
   @override
   List<Object> get props => [result];
 }
 
-class ErrorState extends FeedbackDetailState {
+class DetailErrorState extends FeedbackDetailState {
   final String error;
-  ErrorState(this.error):super();
+
+  DetailErrorState(this.error) : super();
+
+  @override
+  List<Object> get props => [error];
+}
+
+class CreateReplySuccessState extends FeedbackDetailState {}
+
+class CreateReplyErrorState extends FeedbackDetailState {
+  final String error;
+
+  CreateReplyErrorState(this.error) : super();
+
+  @override
+  List<Object> get props => [error];
+}
+
+class TakeSurveySuccessState extends FeedbackDetailState {}
+
+class TakeSurveyErrorState extends FeedbackDetailState {
+  final String error;
+
+  TakeSurveyErrorState(this.error) : super();
 
   @override
   List<Object> get props => [error];

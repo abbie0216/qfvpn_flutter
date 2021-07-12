@@ -49,8 +49,13 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
     return BlocListener<AddFeedbackBloc, AddFeedbackState>(
       listener: (context, state) {
         if (state is InitState) {
-        } else if(state is LoadedState) {
+        } else if(state is CreateSuccessState) {
+          _showSnakeBar('Create success.');
           Navigator.of(context).pop();
+        } else if(state is CreateErrorState) {
+          _showSnakeBar(state.error);
+        } else if(state is LoadingState) {
+
         }
       },
       child: BlocBuilder<AddFeedbackBloc, AddFeedbackState>(
@@ -341,5 +346,17 @@ class _AddFeedbackState extends State<AddFeedbackPage> {
       S.of(context).add_feedback_type_5
     ];
     return arr[which];
+  }
+
+  void _showSnakeBar(String msg) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(msg),
+            ],
+          )));
   }
 }
