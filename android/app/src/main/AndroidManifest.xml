@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
@@ -16,6 +17,7 @@
        android:name=".App"
         android:label="qfvpn"
         android:icon="@mipmap/ic_launcher"
+       android:requestLegacyExternalStorage="true"
         tools:targetApi="n">
         <activity
             android:name=".MainActivity"

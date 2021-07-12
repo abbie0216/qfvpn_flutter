@@ -1,8 +1,14 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:qfvpn/bloc/share/share_bloc.dart';
-import 'package:qfvpn/bloc/share/share_state.dart';
+import 'package:qfvpn/model/api/bean/invite/invite_info_resp.dart';
 import 'package:qfvpn/page/sharedetail/share_detail_page.dart';
 import 'package:qfvpn/r.dart';
 import 'package:qfvpn/s.dart';
@@ -20,11 +26,13 @@ class SharePage extends StatefulWidget {
 
 class _SharePageState extends State<SharePage> {
   late ShareBloc _shareBloc;
+  GlobalKey globalKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
     _shareBloc = BlocProvider.of<ShareBloc>(context);
+    _shareBloc.add(ShareInfoFetchEvent());
   }
 
   @override
@@ -62,54 +70,32 @@ class _SharePageState extends State<SharePage> {
                     ],
                   ),
                   body: SafeArea(
-                      child: Container(
-                          color: R.color.share_bg_bottom(),
-                          child: NotificationListener<
-                              OverscrollIndicatorNotification>(
-                            onNotification:
-                                (OverscrollIndicatorNotification overScroll) {
-                              overScroll.disallowGlow();
-                              return false;
-                            },
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  buildInviteCodeTopImage(),
-                                  buildInviteCodeInfo(),
-                                  buildInviteButtons(),
-                                  buildInviteRule()
-                                ],
-                              ),
-                            ),
-                          )))));
+                      child: state is LoadedState
+                          ? Container(
+                              color: R.color.share_bg_bottom(),
+                              child: NotificationListener<
+                                  OverscrollIndicatorNotification>(
+                                onNotification: (OverscrollIndicatorNotification
+                                    overScroll) {
+                                  overScroll.disallowGlow();
+                                  return false;
+                                },
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      _buildInviteCodeTopImage(),
+                                      _buildInviteCodeInfo(state.result),
+                                      _buildInviteButtons(state.result),
+                                      _buildInviteRule()
+                                    ],
+                                  ),
+                                ),
+                              ))
+                          : Container())));
         }));
   }
 
-  Widget buildTopBar() {
-    return Container(
-      color: R.color.share_bg_top(),
-      padding: EdgeInsets.only(left: 16, right: 16),
-      height: 56,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Image(image: R.image.btn_back_white_n()),
-          TextButton(
-              style: ButtonStyle(splashFactory: NoSplash.splashFactory),
-              onPressed: () {
-                Navigator.of(context).pushNamed((ShareDetailPage).toString());
-              },
-              child: Text(
-                S.of(context).share_invite_detail_btn,
-                style: TextStyle(color: R.color.share_invite_detail_btn_text()),
-              ))
-        ],
-      ),
-    );
-  }
-
-  Widget buildInviteCodeTopImage() {
+  Widget _buildInviteCodeTopImage() {
     return Stack(
       children: [
         Container(
@@ -148,7 +134,7 @@ class _SharePageState extends State<SharePage> {
     );
   }
 
-  Widget buildInviteCodeInfo() {
+  Widget _buildInviteCodeInfo(InviteInfoResp inviteInfo) {
     return Container(
         width: double.infinity,
         margin: EdgeInsets.only(left: 20, right: 20),
@@ -160,16 +146,19 @@ class _SharePageState extends State<SharePage> {
         child: Column(
           children: [
             /** qr code **/
-            Container(
-              margin: EdgeInsets.only(top: 16, bottom: 30),
-              width: 140,
-              height: 140,
-              decoration: BoxDecoration(
-                  color: R.color.share_top_rec_bg(),
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  border: Border.all(color: R.color.share_qr_code_border())),
-              child: QrImage(
-                data: '1234567890',
+            RepaintBoundary(
+              key: globalKey,
+              child: Container(
+                margin: EdgeInsets.only(top: 16, bottom: 30),
+                width: 140,
+                height: 140,
+                decoration: BoxDecoration(
+                    color: R.color.share_top_rec_bg(),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    border: Border.all(color: R.color.share_qr_code_border())),
+                child: QrImage(
+                  data: inviteInfo.inviteUrl ?? '',
+                ),
               ),
             ),
             /** earn point hint **/
@@ -220,7 +209,7 @@ class _SharePageState extends State<SharePage> {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              'JUSTICE',
+                              inviteInfo.inviteCode ?? '',
                               style: TextStyle(
                                   color: R.color.share_invite_code_text(),
                                   fontSize: 18,
@@ -231,11 +220,12 @@ class _SharePageState extends State<SharePage> {
                       )),
                       ElevatedButton(
                         onPressed: () {
-                          Clipboard.setData(ClipboardData(text: 'JUSTICE'))
+                          Clipboard.setData(ClipboardData(
+                                  text: inviteInfo.inviteCode ?? ''))
                               .then((value) {
-                                //todo fix snack bar style
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('copied!')));
+                            //todo fix snack bar style
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(S.of(context).share_copy_toast)));
                           });
                         },
                         style: ButtonStyle(
@@ -258,7 +248,7 @@ class _SharePageState extends State<SharePage> {
         ));
   }
 
-  Widget buildInviteButtons() {
+  Widget _buildInviteButtons(InviteInfoResp inviteInfo) {
     return Container(
       margin: EdgeInsets.only(top: 16, bottom: 16, left: 20, right: 20),
       child: Row(
@@ -268,7 +258,7 @@ class _SharePageState extends State<SharePage> {
               flex: 15,
               child: ElevatedButton(
                 onPressed: () {
-                  onShare(context);
+                  _onShare(context, inviteInfo.inviteUrl ?? '');
                 },
                 style: ButtonStyle(
                     padding: MaterialStateProperty.all(
@@ -289,7 +279,9 @@ class _SharePageState extends State<SharePage> {
           Expanded(
               flex: 15,
               child: OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                  _saveQrCode();
+                },
                 style: ButtonStyle(
                     overlayColor: MaterialStateProperty.all(
                         R.color.share_download_btn_splash()),
@@ -312,7 +304,7 @@ class _SharePageState extends State<SharePage> {
     );
   }
 
-  Widget buildInviteRule() {
+  Widget _buildInviteRule() {
     return Container(
       padding: EdgeInsets.only(top: 16, left: 12, right: 12, bottom: 12),
       margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
@@ -513,6 +505,38 @@ class _SharePageState extends State<SharePage> {
     );
   }
 
-  Future<void> onShare(BuildContext context) async =>
-      await Share.share('# share text <3<3<3');
+  Future<void> _onShare(BuildContext context, String inviteUrl) async =>
+      await Share.share(inviteUrl);
+
+  Future<bool> _requestPermission(Permission permission) async {
+    if (await permission.isGranted) {
+      return true;
+    } else {
+      var result = await permission.request();
+      if (result == PermissionStatus.granted) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  Future<void> _saveQrCode() async {
+    try {
+      if (await _requestPermission(Permission.storage)) {
+        var boundary = globalKey.currentContext!.findRenderObject();
+        var image = await (boundary as RenderRepaintBoundary).toImage();
+        var byteData = await image.toByteData(format: ImageByteFormat.png);
+        var pngBytes = byteData?.buffer.asUint8List();
+        if (pngBytes != null) {
+          var now = DateTime.now();
+          var formattedDate = DateFormat('yyyyMMdd').format(now);
+          final result =
+              await ImageGallerySaver.saveImage(pngBytes, name: 'invite-code($formattedDate)');
+          print(result);
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 }

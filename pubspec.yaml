@@ -38,6 +38,9 @@ dependencies:
   flowder: ^0.2.0
   path_provider: ^2.0.2
   sn_progress_dialog: ^1.0.2
+  permission_handler: ^8.1.2
+  image_gallery_saver: ^1.6.9
+  image: ^3.0.2
   flutter_spinkit: ^5.0.0
   fluttertoast: ^8.0.7
 dev_dependencies:

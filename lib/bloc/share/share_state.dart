@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of 'share_bloc.dart';
 
 abstract class ShareState extends Equatable {
   const ShareState();
@@ -7,6 +7,12 @@ abstract class ShareState extends Equatable {
   List<Object> get props => [];
 }
 
-class ShareInitState extends ShareState {}
+class InitState extends ShareState {}
 
-class ShareLoadedState extends ShareState {}
+class LoadedState extends ShareState {
+  final InviteInfoResp result;
+  LoadedState(this.result) : super();
+
+  @override
+  List<Object> get props => [result];
+}

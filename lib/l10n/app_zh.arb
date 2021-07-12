@@ -124,6 +124,7 @@
   "share_earn_point_hint": "成功邀请 100 人, 累积获得 10000 积分",
   "share_invite_code_title": "我的邀请码",
   "share_copy_btn": "复制",
+  "share_copy_toast": "邀请码已复制",
   "share_invite_imm_btn": "立即邀请",
   "share_download_qr_code_btn": "下载二维码",
   "share_invite_rule_title": "-邀请攻略-",

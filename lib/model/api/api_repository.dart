@@ -10,13 +10,14 @@ import 'package:qfvpn/model/api/bean/user/UserCouponListResp.dart';
 import 'package:qfvpn/model/api/bean/feedback/detail_req.dart';
 import 'package:qfvpn/model/api/bean/feedback/detail_resp.dart';
 import 'package:qfvpn/model/api/bean/paging.dart';
+import 'package:qfvpn/model/api/bean/invite/invite_info_resp.dart';
 import 'package:qfvpn/model/api/bean/login/ChangePasswordReq.dart';
 import 'package:qfvpn/model/api/bean/login/RefreshTokenReq.dart';
 import 'package:qfvpn/model/api/bean/login/SendCodeReq.dart';
 import 'package:qfvpn/model/api/bean/login/login_req.dart';
 import 'package:qfvpn/model/api/bean/node/node_list_resp.dart';
-import 'package:qfvpn/model/api/bean/splash/version_req.dart';
 import 'package:qfvpn/model/api/bean/product/product_list_resp.dart';
+import 'package:qfvpn/model/api/bean/splash/version_req.dart';
 import 'package:qfvpn/model/api/bean/token.dart';
 import 'package:qfvpn/model/api/generate_api_result.dart';
 
@@ -31,9 +32,9 @@ import 'bean/login/SendCodeResp.dart';
 import 'bean/login/VerifyCodeReq.dart';
 import 'bean/login/register_req.dart';
 import 'bean/login/register_resp.dart';
-import 'bean/order/orders_list_resp.dart';
 import 'bean/order/order_detail_req.dart';
 import 'bean/order/order_detail_resp.dart';
+import 'bean/order/orders_list_resp.dart';
 import 'bean/splash/version_resp.dart';
 import 'bean/user/User.dart';
 
@@ -353,5 +354,16 @@ class ApiRepository {
     }, parseSuccessData: (response) {
       return OrderDetailResp.fromJson(response.data['data']);
     });
+  }
+
+  Future<ApiResult<InviteInfoResp>> fetchInviteInfo() async {
+    return GenerateApiResult.from<InviteInfoResp>(
+      apiCall: () async {
+        return await _dio.post('/api/invite/info');
+      },
+      parseSuccessData: (response) {
+        return InviteInfoResp.fromJson(response.data['data']);
+      },
+    );
   }
 }
