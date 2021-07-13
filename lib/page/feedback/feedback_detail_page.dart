@@ -20,7 +20,10 @@ class FeedbackDetailPage extends StatefulWidget {
 
 class _FeedbackDetailState extends State<FeedbackDetailPage> {
   late FeedbackDetailBloc _feedbackDetailBloc;
-  final textController = TextEditingController();
+  late var _feedbackId;
+  DetailResp? _detailResp;
+  final _textController = TextEditingController();
+  bool _submitBtnVisible = false;
 
   @override
   void initState() {
@@ -28,14 +31,14 @@ class _FeedbackDetailState extends State<FeedbackDetailPage> {
     _feedbackDetailBloc = BlocProvider.of<FeedbackDetailBloc>(context);
     Future.delayed(Duration.zero, () {
       dynamic obj = ModalRoute.of(context)!.settings.arguments;
-      var feedbackId = obj['feedbackId']; // 把接收到的參數存到變數
-      _feedbackDetailBloc.add(FetchDetailEvent(feedbackId));
+      _feedbackId = obj['feedbackId']; // 把接收到的參數存到變數
+      _feedbackDetailBloc.add(FetchDetailEvent(_feedbackId));
     });
   }
 
   @override
   void dispose() {
-    textController.dispose();
+    _textController.dispose();
     super.dispose();
   }
 
@@ -44,7 +47,24 @@ class _FeedbackDetailState extends State<FeedbackDetailPage> {
     return BlocListener<FeedbackDetailBloc, FeedbackDetailState>(
       listener: (context, state) {
         if (state is InitState) {
-        } else if (state is DetailLoadedState) {}
+          _showLoadingDialog();
+        } else if (state is LoadingState) {
+          _showLoadingDialog();
+        }  else if (state is LoadedState) {
+          Navigator.pop(context);
+        } else if (state is DetailLoadedState) {
+          _detailResp = state.result;
+        } else if (state is DetailErrorState) {
+          _showSnakeBar('Detail loaded error: ${state.error}');
+        } else if (state is CreateReplySuccessState) {
+          _showSnakeBar('Reply success.');
+        } else if (state is CreateReplyErrorState) {
+          _showSnakeBar('Reply error: ${state.error}');
+        } else if (state is TakeSurveySuccessState) {
+          _showSnakeBar('Take survey success.');
+        } else if (state is TakeSurveyErrorState) {
+          _showSnakeBar('Take survey error: ${state.error}');
+        }
       },
       child: BlocBuilder<FeedbackDetailBloc, FeedbackDetailState>(
           builder: (context, state) {
@@ -66,31 +86,26 @@ class _FeedbackDetailState extends State<FeedbackDetailPage> {
             backgroundColor: R.color.background_color(),
             centerTitle: true,
           ),
-          body: _buildBody(context, state),
+          body: _buildBody(),
         );
       }),
     );
   }
 
-  Widget _buildBody(BuildContext context, FeedbackDetailState state) {
-    if (state is InitState) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    } else if (state is DetailLoadedState) {
-      var item = state.result;
+  Widget _buildBody() {
+    if (_detailResp != null) {
       return ListView(
         children: [
-          _buildFeedbackItem(false, item),
+          _buildFeedbackItem(false, _detailResp!),
           SizedBox(height: 10),
-          _buildReplyList(item),
+          _buildReplyList(_detailResp!),
           SizedBox(height: 10),
-          _buildReplyWidget(item),
-          _buildSatisfactionWidget(item),
+          _buildReplyWidget(_detailResp!),
+          _buildSatisfactionWidget(_detailResp!),
         ],
       );
     } else {
-      return Center(child: Text('Unknown state'));
+      return Container();
     }
   }
 
@@ -128,7 +143,7 @@ class _FeedbackDetailState extends State<FeedbackDetailPage> {
     );
   }
 
-  Widget _buildImageList(List<dynamic> images) {
+  Widget _buildImageList(List<Attachment> images) {
     return Visibility(
       visible: images.isNotEmpty,
       child: Container(
@@ -149,7 +164,23 @@ class _FeedbackDetailState extends State<FeedbackDetailPage> {
     );
   }
 
-  Widget _buildImageItem(dynamic image) {
+  ///
+  /// 0. 原图
+  /// 什么都不加返回的就是原图地址，
+  ///
+  /// 1. 限制高度
+  /// 限制高度 200 Pixel
+  /// https://qfvpn.com/files/app-files/91f4d48343da45e361327daadf68c7f9.png?imageView2/0/h/200
+  ///
+  /// 2. 限制宽度
+  /// 限制宽度 200 Pixel
+  /// https://qfvpn.com/files/app-files/91f4d48343da45e361327daadf68c7f9.png?imageView2/0/w/200
+  ///
+  /// 3. 同时限制宽度和高度
+  /// 高度宽度设置限制为 200 x 200
+  /// https://qfvpn.com/files/app-files/91f4d48343da45e361327daadf68c7f9.png?imageView2/0/w/200/h/200
+  ///
+  Widget _buildImageItem(Attachment image) {
     return Container(
       height: 80,
       width: 80,
@@ -158,7 +189,7 @@ class _FeedbackDetailState extends State<FeedbackDetailPage> {
         borderRadius: BorderRadius.all(Radius.circular(8)),
         // fit: BoxFit.fill,
       ),
-      child: Image(image: R.image.img_earnpoint()),
+      child: Image.network('${image.url}?imageView2/0/w/200'),
     );
   }
 
@@ -206,7 +237,7 @@ class _FeedbackDetailState extends State<FeedbackDetailPage> {
 
   Widget _buildReplyTitle(Reply item) {
     return Visibility(
-      visible: true, //確認: 如何判斷是否為op
+      visible: item.type == 2, //確認: 如何判斷是否為op
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -236,41 +267,54 @@ class _FeedbackDetailState extends State<FeedbackDetailPage> {
         child: Row(
           children: [
             Expanded(
-                child: _buildSatisfactionItem(R.image.btn_notgood_n(),
-                    S.of(context).feedback_detail_not_satisfied, false)),
+                child: _buildSatisfactionItem(
+                    1,
+                    R.image.btn_notgood_n(),
+                    S.of(context).feedback_detail_not_satisfied,
+                    item.surveyScore == 1)),
             _buildDivider(),
             Expanded(
-                child: _buildSatisfactionItem(R.image.btn_soso_n(),
-                    S.of(context).feedback_detail_average, false)),
+                child: _buildSatisfactionItem(
+                    2,
+                    R.image.btn_soso_n(),
+                    S.of(context).feedback_detail_average,
+                    item.surveyScore == 2)),
             _buildDivider(),
             Expanded(
-                child: _buildSatisfactionItem(R.image.btn_sogood_n(),
-                    S.of(context).feedback_detail_satisfied, true)),
+                child: _buildSatisfactionItem(
+                    3,
+                    R.image.btn_sogood_n(),
+                    S.of(context).feedback_detail_satisfied,
+                    item.surveyScore == 3)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSatisfactionItem(ImageProvider ip, String s, bool isSelect) {
+  Widget _buildSatisfactionItem(
+      int index, ImageProvider ip, String s, bool isSelect) {
     var imgColor = isSelect
         ? R.color.feedback_satisfaction_select()
         : R.color.text_color_alpha30();
     var textColor = isSelect
         ? R.color.feedback_satisfaction_select()
         : R.color.text_color_alpha50();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Expanded(child: Image(image: ip, color: imgColor)),
-        SizedBox(height: 6),
-        Expanded(
-          child: Text(
-            s,
-            style: TextStyle(color: textColor, fontSize: 12),
+    return GestureDetector(
+      onTap: () => _onSurveyPressed(index),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(child: Image(image: ip, color: imgColor)),
+          SizedBox(height: 6),
+          Expanded(
+            child: Text(
+              s,
+              style: TextStyle(color: textColor, fontSize: 12),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -318,7 +362,7 @@ class _FeedbackDetailState extends State<FeedbackDetailPage> {
       child: Row(
         children: [
           Expanded(child: _buildTextField()),
-          _buildSubmitBtn(textController.text.length >= 2),
+          _buildSubmitBtn(_submitBtnVisible),
         ],
       ),
     );
@@ -331,7 +375,10 @@ class _FeedbackDetailState extends State<FeedbackDetailPage> {
         hintText: S.of(context).feedback_detail_reply_hint,
         hintStyle: TextStyle(color: R.color.text_color_alpha30(), fontSize: 14),
       ),
-      controller: textController,
+      onChanged: (text) => setState(() {
+        _submitBtnVisible = text.length >= 2;
+      }),
+      controller: _textController,
     );
   }
 
@@ -362,7 +409,45 @@ class _FeedbackDetailState extends State<FeedbackDetailPage> {
     );
   }
 
+  void _onSurveyPressed(int voteNumber) {
+    Fimber.d('@@voteNumber: $voteNumber');
+    _feedbackDetailBloc.add(TakeSurveyEvent(_feedbackId, voteNumber));
+  }
+
   void _onSubmitPressed() {
-    Fimber.d('@@input ${textController.text}');
+    Fimber.d('@@input: ${_textController.text}');
+    _feedbackDetailBloc
+        .add(CreateReplyEvent(_feedbackId, _textController.text, []));
+  }
+
+  void _showSnakeBar(String msg) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+          content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(msg),
+        ],
+      )));
+  }
+
+  void _showLoadingDialog() {
+    var alert = AlertDialog(
+      content: Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text('Loading...')),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

@@ -12,12 +12,14 @@ class InitState extends AddFeedbackState {}
 
 class LoadingState extends AddFeedbackState {}
 
+class LoadedState extends AddFeedbackState {}
+
 class CreateSuccessState extends AddFeedbackState {}
 
 class CreateErrorState extends AddFeedbackState {
   final String error;
 
-  CreateErrorState(this.error):super();
+  CreateErrorState(this.error) : super();
 
   @override
   List<Object> get props => [error];
@@ -26,7 +28,7 @@ class CreateErrorState extends AddFeedbackState {
 class CategoryListLoadedState extends AddFeedbackState {
   final CategoryListResp result;
 
-  CategoryListLoadedState(this.result):super();
+  CategoryListLoadedState(this.result) : super();
 
   @override
   List<Object> get props => [result];
@@ -35,7 +37,7 @@ class CategoryListLoadedState extends AddFeedbackState {
 class CategoryListErrorState extends AddFeedbackState {
   final String error;
 
-  CategoryListErrorState(this.error):super();
+  CategoryListErrorState(this.error) : super();
 
   @override
   List<Object> get props => [error];

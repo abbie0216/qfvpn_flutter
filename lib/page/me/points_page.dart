@@ -1,10 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:qfvpn/bloc/me/points/points_bloc.dart';
+import 'package:qfvpn/model/api/HttpErrorException.dart';
+import 'package:qfvpn/model/api/bean/points/PointsInfoResp.dart';
+import 'package:qfvpn/model/api/bean/points/PrizeListResp.dart';
+import 'package:qfvpn/page/ErrorCode.dart';
 import 'package:qfvpn/page/me/points_detail_page.dart';
 import 'package:qfvpn/page/setting/binding_page.dart';
 import 'package:qfvpn/page/share/share_page.dart';
+import 'package:sprintf/sprintf.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import '../../r.dart';
 import '../../s.dart';
@@ -19,17 +25,47 @@ class PointsPage extends StatefulWidget {
 class _PointsPageState extends State<PointsPage> {
   late PointsBloc _pointsBloc;
 
+  PointsInfoResp? pointsInfo;
+  List<Prize> prizeList = List.empty();
+
   @override
   void initState() {
     super.initState();
     _pointsBloc = BlocProvider.of<PointsBloc>(context);
+    _pointsBloc.add(FetchInfoEvent());
+    _pointsBloc.add(FetchPrizeListEvent());
+  }
+
+  void _showSnakeBar(String msg) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+          content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(msg),
+        ],
+      )));
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<PointsBloc, PointsState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is PrizeExchangeSuccess) {
+          _showSnakeBar(S.of(context).points_exchange_success);
+        } else if (state is PrizeExchangeFail) {
+          var msg = ErrorCode.of(context).getErrorMsg(state.error);
+          _showSnakeBar(msg);
+        }
+      },
       child: BlocBuilder<PointsBloc, PointsState>(builder: (context, state) {
+        if (state is PointsInfoState) {
+          pointsInfo = state.data;
+        } else if (state is PrizeListState) {
+          prizeList = state.data.items;
+        }
+
         return Scaffold(
           backgroundColor: R.color.background_color(),
           resizeToAvoidBottomInset: false,
@@ -63,392 +99,385 @@ class _PointsPageState extends State<PointsPage> {
   }
 
   Widget _buildContentView() {
-    return BlocListener<PointsBloc, PointsState>(
-        listener: (context, state) {},
-        child: BlocBuilder<PointsBloc, PointsState>(builder: (context, state) {
-          return SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  _buildCheckInRegion(),
-                  _buildTasksRegion(),
-                  Divider(height: 10, color: Colors.transparent),
-                  _buildPointsExchangeRegion(),
-                  Divider(height: 50, color: Colors.transparent)
-                ],
-              ));
-        }));
+    return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            _buildCheckInRegion(),
+            _buildTasksRegion(),
+            Divider(height: 10, color: Colors.transparent),
+            _buildPrizeListRegion(),
+            Divider(height: 50, color: Colors.transparent)
+          ],
+        ));
   }
 
   Widget _buildCheckInRegion() {
-    return BlocListener<PointsBloc, PointsState>(
-        listener: (context, state) {},
-        child: BlocBuilder<PointsBloc, PointsState>(builder: (context, state) {
-          return Padding(
-              padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
-              child: Column(children: [
-                Row(
-                  children: [
-                    Expanded(
-                        flex: 1,
-                        child: Column(children: [
-                          RichText(
-                              text: TextSpan(children: [
-                            TextSpan(
-                                text: '3',
-                                style: TextStyle(
-                                    fontSize: 40,
-                                    color: R.color
-                                        .text_blue_color()
-                                        .withAlpha(204))),
-                            TextSpan(
-                                text: S.of(context).day,
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: R.color.text_gray_color())),
-                          ])),
-                          Text(S.of(context).checked_in_continuously,
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: R.color.text_gray_color()))
-                        ])),
-                    Container(
-                      width: 1,
-                      color: R.color.divider_color(),
-                      height: 50,
-                    ),
-                    Expanded(
-                        flex: 1,
-                        child: GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(context, (PointsDetailPage).toString());
-                            },
-                            child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                // crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Column(children: [
-                                    Text('366',
-                                        style: TextStyle(
-                                            fontSize: 40,
-                                            color: R.color
-                                                .text_blue_color()
-                                                .withAlpha(204))),
-                                    Text(S.of(context).points,
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: R.color.text_gray_color()))
-                                  ]),
-                                  Image(image: R.image.btn_next_n())
-                                ])))
-                  ],
-                ),
-                Divider(height: 30, color: Colors.transparent),
-                _buildTimeLine(),
-                Divider(height: 30, color: Colors.transparent),
-                _checkInButton(enable: true, onPress: () {})
-              ]));
-        }));
+    var checkInData = pointsInfo?.tasks.signin;
+    var points = pointsInfo == null ? 0 : pointsInfo!.usablePoint;
+    return Padding(
+        padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+        child: Column(children: [
+          Row(
+            children: [
+              Expanded(
+                  flex: 1,
+                  child: Column(children: [
+                    RichText(
+                        text: TextSpan(children: [
+                      TextSpan(
+                          text:
+                              '${checkInData == null ? '' : checkInData.periodContinueDays}',
+                          style: TextStyle(
+                              fontSize: 40,
+                              color: R.color.text_blue_color().withAlpha(204))),
+                      TextSpan(
+                          text: S.of(context).day,
+                          style: TextStyle(
+                              fontSize: 12, color: R.color.text_gray_color())),
+                    ])),
+                    Text(S.of(context).checked_in_continuously,
+                        style: TextStyle(
+                            fontSize: 12, color: R.color.text_gray_color()))
+                  ])),
+              Container(
+                width: 1,
+                color: R.color.divider_color(),
+                height: 50,
+              ),
+              Expanded(
+                  flex: 1,
+                  child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, (PointsDetailPage).toString());
+                      },
+                      child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          // crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Column(children: [
+                              Text(points.toString(),
+                                  style: TextStyle(
+                                      fontSize: 40,
+                                      color: R.color
+                                          .text_blue_color()
+                                          .withAlpha(204))),
+                              Text(S.of(context).points,
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: R.color.text_gray_color()))
+                            ]),
+                            Image(image: R.image.btn_next_n())
+                          ])))
+            ],
+          ),
+          Divider(height: 30, color: Colors.transparent),
+          _buildTimeLine(),
+          Divider(height: 30, color: Colors.transparent),
+          _checkInButton(
+              enable: checkInData == null ? false : !checkInData.isTodaySignin,
+              onPress: () {
+                _pointsBloc.add(CheckInEvent());
+              })
+        ]));
   }
 
   Widget _buildTimeLine() {
-    var someList = <int>[1, 2, 3, 4, 5, 6, 7];
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: _createTimelineNode(someList),
-    );
-  }
-
-  List<Widget> _createTimelineNode(someList) {
-    return List<Widget>.generate(someList.length, (int index) {
-      var checked = index <= 3;
-      var nextChecked = index < 3;
-      if (index == 0) {
-        return Container(
-          constraints:
-              BoxConstraints(maxHeight: 60, minWidth: 40, maxWidth: 50),
-          child: TimelineTile(
-              isFirst: true,
-              axis: TimelineAxis.horizontal,
-              alignment: TimelineAlign.center,
-              startChild: Text(
-                '3.' + someList[index].toString(),
-                textAlign: TextAlign.center,
-                style:
-                    TextStyle(color: R.color.text_gray_color(), fontSize: 12),
-              ),
-              indicatorStyle: IndicatorStyle(
-                width: 24,
-                height: 24,
-                // padding: EdgeInsets.only(top: 16, bottom: 8),
-                drawGap: true,
-                indicator: checked
-                    ? Image(image: R.image.btn_radio_p())
-                    : Container(
-                        decoration: BoxDecoration(
+    var checkInData = pointsInfo?.tasks.signin;
+    return checkInData == null
+        ? Container()
+        : Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children:
+                List<Widget>.generate(checkInData.byDays.length, (int index) {
+              var checked = checkInData.byDays[index].isSignIn;
+              var nextChecked = index < checkInData.byDays.length - 1
+                  ? checkInData.byDays[index + 1].isSignIn
+                  : false;
+              // var checked = index <= 3;
+              // var nextChecked = index < 3;
+              if (index == 0) {
+                return Container(
+                  constraints:
+                      BoxConstraints(maxHeight: 60, minWidth: 40, maxWidth: 50),
+                  child: TimelineTile(
+                      isFirst: true,
+                      axis: TimelineAxis.horizontal,
+                      alignment: TimelineAlign.center,
+                      startChild: Text(
+                        checkInData.byDays[index].dayShort,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: R.color.text_gray_color(), fontSize: 12),
+                      ),
+                      indicatorStyle: IndicatorStyle(
+                        width: 24,
+                        height: 24,
+                        // padding: EdgeInsets.only(top: 16, bottom: 8),
+                        drawGap: true,
+                        indicator: checked
+                            ? Image(image: R.image.btn_radio_p())
+                            : Container(
+                                decoration: BoxDecoration(
+                                  color: checked
+                                      ? R.color.timeline_checked_color()
+                                      : R.color.timeline_base_color(),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    '+${checkInData.byDays[index].point}',
+                                    style: TextStyle(
+                                      color: R.color.text_gray_color(),
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                      ),
+                      afterLineStyle: LineStyle(
+                          color: nextChecked
+                              ? R.color.timeline_checked_color()
+                              : R.color.timeline_base_color(),
+                          thickness: 2)),
+                );
+              } else if (index == checkInData.byDays.length - 1) {
+                return Container(
+                  constraints:
+                      BoxConstraints(maxHeight: 60, minWidth: 40, maxWidth: 50),
+                  child: TimelineTile(
+                      isLast: true,
+                      axis: TimelineAxis.horizontal,
+                      alignment: TimelineAlign.center,
+                      startChild: Text(
+                        checkInData.byDays[index].dayShort,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: R.color.text_gray_color(), fontSize: 12),
+                      ),
+                      indicatorStyle: IndicatorStyle(
+                        width: 24,
+                        height: 24,
+                        // padding: EdgeInsets.only(top: 16, bottom: 8),
+                        drawGap: true,
+                        indicator: checked
+                            ? Image(image: R.image.btn_radio_p())
+                            : Container(
+                                decoration: BoxDecoration(
+                                  color: checked
+                                      ? R.color.timeline_checked_color()
+                                      : R.color.timeline_base_color(),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    '+${checkInData.byDays[index].point}',
+                                    style: TextStyle(
+                                      color: R.color.text_gray_color(),
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                      ),
+                      // afterLineStyle: LineStyle(
+                      //     color: R.color.timeline_base_color(),
+                      //     thickness: 2),
+                      beforeLineStyle: LineStyle(
                           color: checked
                               ? R.color.timeline_checked_color()
                               : R.color.timeline_base_color(),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Center(
-                          child: Text(
-                            '+' + someList[index].toString(),
-                            style: TextStyle(
-                              color: R.color.text_gray_color(),
-                              fontSize: 10,
-                            ),
-                          ),
-                        ),
+                          thickness: 2)),
+                );
+              } else {
+                return Container(
+                  constraints:
+                      BoxConstraints(maxHeight: 60, minWidth: 40, maxWidth: 50),
+                  child: TimelineTile(
+                      axis: TimelineAxis.horizontal,
+                      alignment: TimelineAlign.center,
+                      startChild: Text(
+                        checkInData.byDays[index].dayShort,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: R.color.text_gray_color(), fontSize: 12),
                       ),
-              ),
-              afterLineStyle: LineStyle(
-                  color: nextChecked
-                      ? R.color.timeline_checked_color()
-                      : R.color.timeline_base_color(),
-                  thickness: 2)),
-        );
-      } else if (index == someList.length - 1) {
-        return Container(
-          constraints:
-              BoxConstraints(maxHeight: 60, minWidth: 40, maxWidth: 50),
-          child: TimelineTile(
-              isLast: true,
-              axis: TimelineAxis.horizontal,
-              alignment: TimelineAlign.center,
-              startChild: Text(
-                '3.' + someList[index].toString(),
-                textAlign: TextAlign.center,
-                style:
-                    TextStyle(color: R.color.text_gray_color(), fontSize: 12),
-              ),
-              indicatorStyle: IndicatorStyle(
-                width: 24,
-                height: 24,
-                // padding: EdgeInsets.only(top: 16, bottom: 8),
-                drawGap: true,
-                indicator: checked
-                    ? Image(image: R.image.btn_radio_p())
-                    : Container(
-                        decoration: BoxDecoration(
+                      indicatorStyle: IndicatorStyle(
+                        width: 24,
+                        height: 24,
+                        // padding: EdgeInsets.only(top: 16, bottom: 8),
+                        drawGap: true,
+                        indicator: checked
+                            ? Image(image: R.image.btn_radio_p())
+                            : Container(
+                                // margin: EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: checked
+                                      ? R.color.timeline_checked_color()
+                                      : R.color.timeline_base_color(),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    '+${checkInData.byDays[index].point}',
+                                    style: TextStyle(
+                                      color: R.color.text_gray_color(),
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                      ),
+                      afterLineStyle: LineStyle(
+                          color: nextChecked
+                              ? R.color.timeline_checked_color()
+                              : R.color.timeline_base_color(),
+                          thickness: 2),
+                      beforeLineStyle: LineStyle(
                           color: checked
                               ? R.color.timeline_checked_color()
                               : R.color.timeline_base_color(),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Center(
-                          child: Text(
-                            '+' + someList[index].toString(),
-                            style: TextStyle(
-                              color: R.color.text_gray_color(),
-                              fontSize: 10,
-                            ),
-                          ),
-                        ),
-                      ),
-              ),
-              // afterLineStyle: LineStyle(
-              //     color: R.color.timeline_base_color(),
-              //     thickness: 2),
-              beforeLineStyle: LineStyle(
-                  color: checked
-                      ? R.color.timeline_checked_color()
-                      : R.color.timeline_base_color(),
-                  thickness: 2)),
-        );
-      } else {
-        return Container(
-          constraints:
-              BoxConstraints(maxHeight: 60, minWidth: 40, maxWidth: 50),
-          child: TimelineTile(
-              axis: TimelineAxis.horizontal,
-              alignment: TimelineAlign.center,
-              startChild: Text(
-                '3.' + someList[index].toString(),
-                textAlign: TextAlign.center,
-                style:
-                    TextStyle(color: R.color.text_gray_color(), fontSize: 12),
-              ),
-              indicatorStyle: IndicatorStyle(
-                width: 24,
-                height: 24,
-                // padding: EdgeInsets.only(top: 16, bottom: 8),
-                drawGap: true,
-                indicator: checked
-                    ? Image(image: R.image.btn_radio_p())
-                    : Container(
-                        // margin: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: checked
-                              ? R.color.timeline_checked_color()
-                              : R.color.timeline_base_color(),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Center(
-                          child: Text(
-                            '+' + someList[index].toString(),
-                            style: TextStyle(
-                              color: R.color.text_gray_color(),
-                              fontSize: 10,
-                            ),
-                          ),
-                        ),
-                      ),
-              ),
-              afterLineStyle: LineStyle(
-                  color: nextChecked
-                      ? R.color.timeline_checked_color()
-                      : R.color.timeline_base_color(),
-                  thickness: 2),
-              beforeLineStyle: LineStyle(
-                  color: checked
-                      ? R.color.timeline_checked_color()
-                      : R.color.timeline_base_color(),
-                  thickness: 2)),
-        );
-      }
-    });
+                          thickness: 2)),
+                );
+              }
+            }),
+          );
   }
 
   Widget _buildTasksRegion() {
-    return BlocListener<PointsBloc, PointsState>(
-        listener: (context, state) {},
-        child: BlocBuilder<PointsBloc, PointsState>(builder: (context, state) {
-          return Container(
-              padding: EdgeInsets.all(16),
-              width: double.infinity,
-              color: Colors.white,
-              child: Column(
-                children: [
-                  Text(S.of(context).points_task_title,
-                      style: TextStyle(
-                          color: R.color.text_gray_color(),
-                          fontWeight: FontWeight.bold)),
-                  Divider(height: 10, color: Colors.transparent),
-                  Row(
-                    children: [
-                      Expanded(
-                          flex: 1,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Image(
-                                  width: 40,
-                                  height: 40,
-                                  image: R.image.ico_mail_1(),
-                                  fit: BoxFit.fill),
-                              Divider(height: 10, color: Colors.transparent),
-                              Text(
-                                S.of(context).points_task_mail_msg,
-                                style: TextStyle(
-                                    fontSize: 10,
-                                    color: R.color.text_gray_color()),
-                              ),
-                              Divider(height: 10, color: Colors.transparent),
-                              _bindingButton(
-                                  enable: true,
-                                  onPress: () {
-                                    Navigator.pushNamed(
-                                        context, (BindingPage).toString());
-                                  })
-                            ],
-                          )),
-                      Expanded(
-                          flex: 1,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Image(
-                                  width: 40,
-                                  height: 40,
-                                  image: R.image.ico_handshake_1(),
-                                  fit: BoxFit.fill),
-                              Divider(height: 10, color: Colors.transparent),
-                              Text(
-                                S.of(context).points_task_invite_msg,
-                                style: TextStyle(
-                                    fontSize: 10,
-                                    color: R.color.text_gray_color()),
-                              ),
-                              Divider(height: 10, color: Colors.transparent),
-                              TextButton(
-                                style: TextButton.styleFrom(
-                                  minimumSize: Size(130, 36),
-                                  backgroundColor: R.color.btn_blue_color(),
-                                  elevation: 2.0,
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(22)),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  Navigator.pushNamed(
-                                      context, (SharePage).toString());
-                                },
-                                child: Text(S.of(context).to_invite,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 14)),
-                              )
-                            ],
-                          ))
-                    ],
-                  )
-                ],
-              ));
-        }));
+    var emailTasks = pointsInfo?.tasks.bindEmail;
+    return Container(
+        padding: EdgeInsets.all(16),
+        width: double.infinity,
+        color: Colors.white,
+        child: Column(
+          children: [
+            Text(S.of(context).points_task_title,
+                style: TextStyle(
+                    color: R.color.text_gray_color(),
+                    fontWeight: FontWeight.bold)),
+            Divider(height: 10, color: Colors.transparent),
+            Row(
+              children: [
+                Expanded(
+                    flex: 1,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image(
+                            width: 40,
+                            height: 40,
+                            image: R.image.ico_mail_1(),
+                            fit: BoxFit.fill),
+                        Divider(height: 10, color: Colors.transparent),
+                        Text(
+                          sprintf(S.of(context).points_task_mail_msg,
+                              [emailTasks == null ? 0 : emailTasks.point]),
+                          style: TextStyle(
+                              fontSize: 10, color: R.color.text_gray_color()),
+                        ),
+                        Divider(height: 10, color: Colors.transparent),
+                        _bindingButton(
+                            enable:
+                                emailTasks == null ? true : !emailTasks.isBind,
+                            onPress: () {
+                              Navigator.pushNamed(
+                                  context, (BindingPage).toString());
+                            })
+                      ],
+                    )),
+                Expanded(
+                    flex: 1,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image(
+                            width: 40,
+                            height: 40,
+                            image: R.image.ico_handshake_1(),
+                            fit: BoxFit.fill),
+                        Divider(height: 10, color: Colors.transparent),
+                        Text(
+                          S.of(context).points_task_invite_msg,
+                          style: TextStyle(
+                              fontSize: 10, color: R.color.text_gray_color()),
+                        ),
+                        Divider(height: 10, color: Colors.transparent),
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            minimumSize: Size(130, 36),
+                            backgroundColor: R.color.btn_blue_color(),
+                            elevation: 2.0,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(22)),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, (SharePage).toString());
+                          },
+                          child: Text(S.of(context).to_invite,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14)),
+                        )
+                      ],
+                    ))
+              ],
+            )
+          ],
+        ));
   }
 
-  Widget _buildPointsExchangeRegion() {
-    return BlocListener<PointsBloc, PointsState>(
-        listener: (context, state) {},
-        child: BlocBuilder<PointsBloc, PointsState>(builder: (context, state) {
-          return Container(
-              padding: EdgeInsets.all(16),
-              width: double.infinity,
-              color: Colors.white,
-              child: Column(
-                children: [
-                  Text(S.of(context).points_exchange_title,
-                      style: TextStyle(
-                          color: R.color.text_gray_color(),
-                          fontWeight: FontWeight.bold)),
-                  Divider(height: 10, color: Colors.transparent),
-                  ListView.separated(
-                    itemCount: 4,
-                    //for test
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    physics: const ClampingScrollPhysics(),
-                    padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-                    itemBuilder: (BuildContext context, int index) {
-                      return _buildItem(index);
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return Divider(
-                        height: 32,
-                        thickness: 1.0,
-                        color: R.color.background_color(),
-                      );
-                    },
-                  )
-                ],
-              ));
-        }));
+  Widget _buildPrizeListRegion() {
+    var items = prizeList;
+    return Container(
+        padding: EdgeInsets.all(16),
+        width: double.infinity,
+        color: Colors.white,
+        child: Column(
+          children: [
+            Text(S.of(context).points_exchange_title,
+                style: TextStyle(
+                    color: R.color.text_gray_color(),
+                    fontWeight: FontWeight.bold)),
+            Divider(height: 10, color: Colors.transparent),
+            ListView.separated(
+              itemCount: items.length,
+              //for test
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              physics: const ClampingScrollPhysics(),
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+              itemBuilder: (BuildContext context, int index) {
+                return _buildItem(index, items[index]);
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return Divider(
+                  height: 32,
+                  thickness: 1.0,
+                  color: R.color.background_color(),
+                );
+              },
+            )
+          ],
+        ));
   }
 
-  Widget _buildItem(index) {
+  Widget _buildItem(index, Prize prize) {
     return GestureDetector(
         onTap: () {},
         child: Row(
           // mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('VIP 1 天'),
+            Text(prize.name),
             Align(
                 alignment: Alignment.centerRight,
                 child: OutlinedButton(
@@ -458,8 +487,11 @@ class _PointsPageState extends State<PointsPage> {
                         borderRadius: BorderRadius.all(Radius.circular(22)),
                       ),
                       side: BorderSide(color: R.color.btn_blue_color())),
-                  onPressed: () {},
-                  child: Text('10 积分兑换',
+                  onPressed: () {
+                    _pointsBloc.add(PrizeExchangeEvent(prize.prizeId));
+                  },
+                  child: Text(
+                      sprintf(S.of(context).points_exchange_btn, [prize.point]),
                       style: TextStyle(
                           color: R.color.text_blue_color(), fontSize: 14)),
                 ))

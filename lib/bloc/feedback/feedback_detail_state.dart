@@ -9,6 +9,8 @@ abstract class FeedbackDetailState extends Equatable {
 }
 
 class InitState extends FeedbackDetailState {}
+class LoadingState extends FeedbackDetailState {}
+class LoadedState extends FeedbackDetailState {}
 
 class DetailLoadedState extends FeedbackDetailState {
   final DetailResp result;

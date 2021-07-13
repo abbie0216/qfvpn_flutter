@@ -93,9 +93,11 @@
   "check_in_already": "今日已签到",
   "points_task_title": "积分任务",
 
-  "points_task_mail_msg": "升级帐号绑定邮箱，积分+1",
+  "points_task_mail_msg": "升级帐号绑定邮箱，积分+%d",
   "points_task_invite_msg": "按实际发放不限次数",
   "points_exchange_title": "积分兑换",
+  "points_exchange_btn": "%d 积分兑换",
+  "points_exchange_success": "兑换成功",
   "to_invite": "去邀请",
   "points_detail_title": "积分明细",
 
@@ -232,6 +234,8 @@
   "add_feedback_typed": "已输入",
   "add_feedback_upload_hint": "上传图片（最多3张）",
   "add_feedback_submit": "提交",
+  "add_feedback_type_error": "请选择反馈类型",
+  "add_feedback_content_error": "请描述你要反馈的问题",
   "feedback_detail_title": "反馈详情",
   "feedback_detail_not_satisfied": "不满意",
   "feedback_detail_average": "一般",
@@ -241,5 +245,7 @@
 
   "error_pw_too_short": "密码长度必须在6-15字符之间",
   "error_user_already_exists": "用户已经存在",
+  "error_point_not_enough": "积分不足",
+
   "error_unknown": "不可预期的错误"
 }

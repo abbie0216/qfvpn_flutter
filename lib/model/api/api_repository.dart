@@ -16,6 +16,8 @@ import 'package:qfvpn/model/api/bean/login/SendCodeReq.dart';
 import 'package:qfvpn/model/api/bean/login/login_req.dart';
 import 'package:qfvpn/model/api/bean/node/node_list_resp.dart';
 import 'package:qfvpn/model/api/bean/paging.dart';
+import 'package:qfvpn/model/api/bean/points/PointsInfoResp.dart';
+import 'package:qfvpn/model/api/bean/points/PrizeExchangeReq.dart';
 import 'package:qfvpn/model/api/bean/product/product_list_resp.dart';
 import 'package:qfvpn/model/api/bean/splash/version_req.dart';
 import 'package:qfvpn/model/api/bean/token.dart';
@@ -36,6 +38,8 @@ import 'bean/login/register_resp.dart';
 import 'bean/order/order_detail_req.dart';
 import 'bean/order/order_detail_resp.dart';
 import 'bean/order/orders_list_resp.dart';
+import 'bean/points/PointsInfoResp.dart';
+import 'bean/points/PrizeListResp.dart';
 import 'bean/splash/version_resp.dart';
 import 'bean/user/User.dart';
 
@@ -302,8 +306,7 @@ class ApiRepository {
         ? '/api/feedbackReply/uploadAttachment'
         : '/api/feedback/uploadAttachment';
     try {
-      var response =
-          await _dio.post(path, data: formData);
+      var response = await _dio.post(path, data: formData);
       return ApiResult.success(
           UploadAttachmentResp.fromJson(response.data['data']));
     } catch (error) {
@@ -380,4 +383,48 @@ class ApiRepository {
     );
   }
 
+  Future<ApiResult<PointsInfoResp>> fetchPointsInfo() async {
+    return GenerateApiResult.from<PointsInfoResp>(
+      apiCall: () async {
+        return await _dio.post('/api/point/info');
+      },
+      parseSuccessData: (response) {
+        return PointsInfoResp.fromJson(response.data['data']);
+      },
+    );
+  }
+
+  Future<ApiResult<PrizeListResp>> fetchPrizeList() async {
+    return GenerateApiResult.from<PrizeListResp>(
+      apiCall: () async {
+        return await _dio.post('/api/point/prizeList');
+      },
+      parseSuccessData: (response) {
+        return PrizeListResp.fromJson(response.data['data']);
+      },
+    );
+  }
+
+  Future<ApiResult<bool>> prizeExchange(PrizeExchangeReq req) async {
+    return GenerateApiResult.from<bool>(
+      apiCall: () async {
+        return await _dio.post('/api/point/prizeExchange',
+            data: json.encode(req.toJson()));
+      },
+      parseSuccessData: (response) {
+        return true;
+      },
+    );
+  }
+
+  Future<ApiResult<bool>> checkIn() async {
+    return GenerateApiResult.from<bool>(
+      apiCall: () async {
+        return await _dio.post('/api/point/task/signin');
+      },
+      parseSuccessData: (response) {
+        return true;
+      },
+    );
+  }
 }
