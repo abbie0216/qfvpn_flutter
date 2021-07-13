@@ -224,7 +224,7 @@ class _MePageState extends State<MePage> {
                     context,
                     MaterialPageRoute(builder: (context) => CouponPage()),
                   ).then((value) {
-                    if (value is Coupons) {
+                    if (value is Coupon) {
                       Fimber.d('select coupon ${value.title}');
                       widget.goToMainPage(1);
                     }

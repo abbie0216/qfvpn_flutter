@@ -12,12 +12,10 @@ import 'package:qfvpn/page/me/news_detail_page.dart';
 import 'package:qfvpn/page/me/news_page.dart';
 import 'package:qfvpn/page/me/points_detail_page.dart';
 import 'package:qfvpn/page/me/points_page.dart';
-import 'package:qfvpn/page/pay/pay_page.dart';
 import 'package:qfvpn/page/setting/binding_page.dart';
 import 'package:qfvpn/page/setting/pw_change_page.dart';
 import 'package:qfvpn/page/setting/setting_page.dart';
 import 'package:qfvpn/page/share/share_page.dart';
-import 'package:qfvpn/page/sharedetail/share_detail_page.dart';
 import 'package:qfvpn/page/splash/splash_page.dart';
 import 'package:qfvpn/page/vip/order_history_page.dart';
 
@@ -36,7 +34,6 @@ final Map<String, WidgetBuilder> routes = {
   (PointsPage).toString(): (context) => PointsPage(),
   (PointsDetailPage).toString(): (context) => PointsDetailPage(),
   (SharePage).toString(): (context) => SharePage(),
-  (ShareDetailPage).toString(): (context) => ShareDetailPage(),
   (FeedbackListPage).toString(): (context) => FeedbackListPage(),
   (OrderHistoryPage).toString(): (context) => OrderHistoryPage(),
   (AddFeedbackPage).toString(): (context) => AddFeedbackPage(),

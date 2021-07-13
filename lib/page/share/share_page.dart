@@ -53,20 +53,25 @@ class _SharePageState extends State<SharePage> {
                       },
                     ),
                     actions: [
-                      TextButton(
-                          style: ButtonStyle(
-                              splashFactory: NoSplash.splashFactory,
-                              padding: MaterialStateProperty.all(
-                                  EdgeInsets.only(left: 16, right: 16))),
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed((ShareDetailPage).toString());
-                          },
-                          child: Text(
-                            S.of(context).share_invite_detail_btn,
-                            style: TextStyle(
-                                color: R.color.share_invite_detail_btn_text()),
-                          ))
+                      state is LoadedState
+                          ? TextButton(
+                              style: ButtonStyle(
+                                  splashFactory: NoSplash.splashFactory,
+                                  padding: MaterialStateProperty.all(
+                                      EdgeInsets.only(left: 16, right: 16))),
+                              onPressed: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return ShareDetailPage(state.result);
+                                }));
+                              },
+                              child: Text(
+                                S.of(context).share_invite_detail_btn,
+                                style: TextStyle(
+                                    color:
+                                        R.color.share_invite_detail_btn_text()),
+                              ))
+                          : Container()
                     ],
                   ),
                   body: SafeArea(
@@ -530,8 +535,8 @@ class _SharePageState extends State<SharePage> {
         if (pngBytes != null) {
           var now = DateTime.now();
           var formattedDate = DateFormat('yyyyMMdd').format(now);
-          final result =
-              await ImageGallerySaver.saveImage(pngBytes, name: 'invite-code($formattedDate)');
+          final result = await ImageGallerySaver.saveImage(pngBytes,
+              name: 'invite-code($formattedDate)');
           print(result);
         }
       }

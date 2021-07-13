@@ -1,7 +1,7 @@
 import 'package:qfvpn/model/api/bean/product/product_list_resp.dart';
 
 class UserCouponListResp {
-  List<Coupons>? coupons;
+  List<Coupon>? coupons;
   int pageNo;
   int pageSize;
   int totalCount;
@@ -17,7 +17,7 @@ class UserCouponListResp {
   factory UserCouponListResp.fromJson(Map<String, dynamic> json) {
     return UserCouponListResp(
       coupons: json['items'] != null
-          ? (json['items'] as List).map((i) => Coupons.fromJson(i)).toList()
+          ? (json['items'] as List).map((i) => Coupon.fromJson(i)).toList()
           : null,
       pageNo: json['pageNo'],
       pageSize: json['pageSize'],

@@ -27,7 +27,7 @@ class VipPage extends StatefulWidget {
 class _VipPageState extends State<VipPage> {
   late VipBloc _vipBloc;
   Items? _product;
-  Coupons? _coupons;
+  Coupon? _coupons;
   var userID = '-';
   var vip_endAt = '';
   var isVipExpired = false;
@@ -294,7 +294,7 @@ class _VipPageState extends State<VipPage> {
     );
   }
 
-  void _setSelectedProduct(Items product, Coupons? coupons) {
+  void _setSelectedProduct(Items product, Coupon? coupons) {
     _product = product;
     _coupons = coupons;
   }

@@ -7,8 +7,8 @@ import '../../r.dart';
 import '../../s.dart';
 
 class CouponSelector extends StatefulWidget {
-  final List<Coupons> coupons;
-  final Coupons? selectedCoupon;
+  final List<Coupon> coupons;
+  final Coupon? selectedCoupon;
 
   CouponSelector(this.coupons, this.selectedCoupon);
 
@@ -17,7 +17,7 @@ class CouponSelector extends StatefulWidget {
 }
 
 class _CouponSelectorState extends State<CouponSelector> {
-  Coupons? _selectedCoupon;
+  Coupon? _selectedCoupon;
 
   @override
   void initState() {
@@ -81,7 +81,7 @@ class _CouponSelectorState extends State<CouponSelector> {
     );
   }
 
-  Widget _buildListItem(context, Coupons coupon) {
+  Widget _buildListItem(context, Coupon coupon) {
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -179,7 +179,7 @@ class _CouponSelectorState extends State<CouponSelector> {
     );
   }
 
-  String _buildValidTimeText(Coupons coupon) {
+  String _buildValidTimeText(Coupon coupon) {
     var dateFormat = DateFormat('yyyy/MM/dd');
     var startTime = DateFormat('yyyy-MM-ddTHH:mm:ssZ')
         .parse(coupon.validStartAt ?? '', true);
@@ -188,7 +188,7 @@ class _CouponSelectorState extends State<CouponSelector> {
     return '${dateFormat.format(startTime)}-${dateFormat.format(endTime)}';
   }
 
-  Widget _buildUseBtn(Coupons coupons) {
+  Widget _buildUseBtn(Coupon coupons) {
     return ElevatedButton(
         onPressed: () {
           setState(() {
@@ -210,7 +210,7 @@ class _CouponSelectorState extends State<CouponSelector> {
         ));
   }
 
-  Widget _buildAlreadyUseBtn(Coupons coupons) {
+  Widget _buildAlreadyUseBtn(Coupon coupons) {
     return OutlinedButton(
         onPressed: () {
           setState(() {

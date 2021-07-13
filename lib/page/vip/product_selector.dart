@@ -10,7 +10,7 @@ import '../../r.dart';
 import '../../s.dart';
 
 class ProductSelector extends StatefulWidget {
-  final void Function(Items product, Coupons? coupons) setSelectedProduct;
+  final void Function(Items product, Coupon? coupons) setSelectedProduct;
 
   ProductSelector(this.setSelectedProduct);
 
@@ -21,7 +21,7 @@ class ProductSelector extends StatefulWidget {
 class _ProductSelectorState extends State<ProductSelector> {
   late ProductSelectorBloc _productSelectorBloc;
   Items? _selectedProduct;
-  Coupons? _selectedCoupon;
+  Coupon? _selectedCoupon;
 
   @override
   void initState() {
@@ -126,7 +126,7 @@ class _ProductSelectorState extends State<ProductSelector> {
                 padding: EdgeInsets.only(left: 8, right: 5),
                 child: Text(
                   sprintf(S.of(context).vip_product_title,
-                      [product.itemName, product.price]),
+                      [product.itemName, product.price??0]),
                   overflow: TextOverflow.fade,
                   style: TextStyle(
                       fontSize: 14,
@@ -137,7 +137,7 @@ class _ProductSelectorState extends State<ProductSelector> {
               Expanded(
                   child: Text(
                 sprintf(S.of(context).vip_product_month_price,
-                    [product.monthPrice]),
+                    [product.monthPrice??0]),
                 overflow: TextOverflow.fade,
                 style: TextStyle(
                     fontSize: 12,
@@ -311,7 +311,7 @@ class _ProductSelectorState extends State<ProductSelector> {
     );
   }
 
-  void _showVipCouponSelector(List<Coupons>? coupons) {
+  void _showVipCouponSelector(List<Coupon>? coupons) {
     if (coupons?.isNotEmpty == true) {
       showMaterialModalBottomSheet(
           enableDrag: false,
@@ -319,7 +319,7 @@ class _ProductSelectorState extends State<ProductSelector> {
           backgroundColor: Colors.transparent,
           builder: (context) =>
               CouponSelector(coupons!, _selectedCoupon)).then((result) {
-        if ((result as Coupons?)?.userCouponId != _selectedCoupon?.userCouponId) {
+        if ((result as Coupon?)?.userCouponId != _selectedCoupon?.userCouponId) {
           setState(() {
             _selectedCoupon = result;
           });

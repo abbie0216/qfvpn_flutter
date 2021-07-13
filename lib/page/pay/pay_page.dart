@@ -12,7 +12,7 @@ import '../../s.dart';
 
 class PayPage extends StatefulWidget {
   final Items? product;
-  final Coupons? coupon;
+  final Coupon? coupon;
 
   PayPage(this.product, this.coupon);
 
@@ -360,13 +360,13 @@ class _PayPageState extends State<PayPage> {
     if (widget.product?.coupons?.isEmpty == true) {
       return S.of(context).pay_info_coupon_not_available;
     } else {
-      return '-¥${widget.coupon?.reduceAmount??'0'}';
+      return '-¥${widget.coupon?.reduceAmount??0}';
     }
   }
 
   String _getTotalAmountText() {
-    var productPrice = double.parse(widget.product?.price??'0');
-    var reduceAmount = double.parse(widget.coupon?.reduceAmount??'0');
+    var productPrice = widget.product?.price??0.0;
+    var reduceAmount = widget.coupon?.reduceAmount??0.0;
     var totalAmount = productPrice - reduceAmount;
     return sprintf('¥%.2f',[totalAmount]);
   }

@@ -5,20 +5,20 @@
 /// totalPage : 0
 
 class InviteListResp {
-  List<Items>? _items;
+  List<InviteItem>? _items;
   int? _totalCount;
   int? _pageSize;
   int? _pageNo;
   int? _totalPage;
 
-  List<Items>? get items => _items;
+  List<InviteItem>? get items => _items;
   int? get totalCount => _totalCount;
   int? get pageSize => _pageSize;
   int? get pageNo => _pageNo;
   int? get totalPage => _totalPage;
 
   InviteListResp({
-      List<Items>? items, 
+      List<InviteItem>? items,
       int? totalCount, 
       int? pageSize, 
       int? pageNo, 
@@ -34,7 +34,7 @@ class InviteListResp {
     if (json['items'] != null) {
       _items = [];
       json['items'].forEach((v) {
-        _items?.add(Items.fromJson(v));
+        _items?.add(InviteItem.fromJson(v));
       });
     }
     _totalCount = json['totalCount'];
@@ -61,17 +61,17 @@ class InviteListResp {
 /// email : "string"
 /// point : 0
 
-class Items {
-  String? _inviteAt;
+class InviteItem {
+  DateTime? _inviteAt;
   String? _email;
   int? _point;
 
-  String? get inviteAt => _inviteAt;
+  DateTime? get inviteAt => _inviteAt;
   String? get email => _email;
   int? get point => _point;
 
-  Items({
-      String? inviteAt, 
+  InviteItem({
+      DateTime? inviteAt,
       String? email, 
       int? point}){
     _inviteAt = inviteAt;
@@ -79,8 +79,8 @@ class Items {
     _point = point;
 }
 
-  Items.fromJson(dynamic json) {
-    _inviteAt = json['inviteAt'];
+  InviteItem.fromJson(dynamic json) {
+    _inviteAt = DateTime.parse(json['inviteAt']);
     _email = json['email'];
     _point = json['point'];
   }

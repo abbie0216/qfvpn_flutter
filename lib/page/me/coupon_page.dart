@@ -22,7 +22,7 @@ class _CouponPageState extends State<CouponPage> {
   late CouponBloc _couponBloc;
 
   var _pageKey;
-  final PagingController<int, Coupons> _pagingController =
+  final PagingController<int, Coupon> _pagingController =
   PagingController(firstPageKey: 1);
 
   @override
@@ -93,11 +93,11 @@ class _CouponPageState extends State<CouponPage> {
                 Future.sync(
                       () => _pagingController.refresh(),
                 ),
-            child: PagedListView<int, Coupons>.separated(
+            child: PagedListView<int, Coupon>.separated(
               physics: BouncingScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
               pagingController: _pagingController,
-              builderDelegate: PagedChildBuilderDelegate<Coupons>(
+              builderDelegate: PagedChildBuilderDelegate<Coupon>(
                 itemBuilder: (context, item, index) =>
                     _buildItem(item, index),
                 noItemsFoundIndicatorBuilder: (_) =>
@@ -114,7 +114,7 @@ class _CouponPageState extends State<CouponPage> {
         }));
   }
 
-  Widget _buildItem(Coupons item, int index) {
+  Widget _buildItem(Coupon item, int index) {
     return BlocBuilder<CouponBloc, CouponState>(builder: (context, state) {
       Fimber.d('build item index: $index');
       var used = item.status != 0;

@@ -5,20 +5,21 @@ import 'package:dio/dio.dart';
 import 'package:flutter_fimber/flutter_fimber.dart';
 import 'package:qfvpn/model/api/bean/feedback/category_list_resp.dart';
 import 'package:qfvpn/model/api/bean/feedback/create_feedback_req.dart';
-import 'package:qfvpn/model/api/bean/feedback/take_survey_req.dart';
-import 'package:qfvpn/model/api/bean/user/UserCouponListResp.dart';
 import 'package:qfvpn/model/api/bean/feedback/detail_req.dart';
 import 'package:qfvpn/model/api/bean/feedback/detail_resp.dart';
-import 'package:qfvpn/model/api/bean/paging.dart';
+import 'package:qfvpn/model/api/bean/feedback/take_survey_req.dart';
 import 'package:qfvpn/model/api/bean/invite/invite_info_resp.dart';
+import 'package:qfvpn/model/api/bean/invite/invite_list_resp.dart';
 import 'package:qfvpn/model/api/bean/login/ChangePasswordReq.dart';
 import 'package:qfvpn/model/api/bean/login/RefreshTokenReq.dart';
 import 'package:qfvpn/model/api/bean/login/SendCodeReq.dart';
 import 'package:qfvpn/model/api/bean/login/login_req.dart';
 import 'package:qfvpn/model/api/bean/node/node_list_resp.dart';
+import 'package:qfvpn/model/api/bean/paging.dart';
 import 'package:qfvpn/model/api/bean/product/product_list_resp.dart';
 import 'package:qfvpn/model/api/bean/splash/version_req.dart';
 import 'package:qfvpn/model/api/bean/token.dart';
+import 'package:qfvpn/model/api/bean/user/UserCouponListResp.dart';
 import 'package:qfvpn/model/api/generate_api_result.dart';
 
 import '../pref.dart';
@@ -366,4 +367,17 @@ class ApiRepository {
       },
     );
   }
+
+  Future<ApiResult<InviteListResp>> fetchInviteList(Paging paging) async {
+    return GenerateApiResult.from<InviteListResp>(
+      apiCall: () async {
+        return await _dio.post('/api/invite/list',
+            data: json.encode(paging.toJson()));
+      },
+      parseSuccessData: (response) {
+        return InviteListResp.fromJson(response.data['data']);
+      },
+    );
+  }
+
 }
