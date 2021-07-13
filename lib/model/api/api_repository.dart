@@ -38,6 +38,7 @@ import 'bean/login/register_resp.dart';
 import 'bean/order/order_detail_req.dart';
 import 'bean/order/order_detail_resp.dart';
 import 'bean/order/orders_list_resp.dart';
+import 'bean/points/PointsDetailResp.dart';
 import 'bean/points/PointsInfoResp.dart';
 import 'bean/points/PrizeListResp.dart';
 import 'bean/splash/version_resp.dart';
@@ -424,6 +425,18 @@ class ApiRepository {
       },
       parseSuccessData: (response) {
         return true;
+      },
+    );
+  }
+
+  Future<ApiResult<PointsDetailResp>> fetchPointsDetails(Paging req) async {
+    return GenerateApiResult.from<PointsDetailResp>(
+      apiCall: () async {
+        return await _dio.post('/api/point/transList',
+            data: json.encode(req.toJson()));
+      },
+      parseSuccessData: (response) {
+        return PointsDetailResp.fromJson(response.data['data']);
       },
     );
   }

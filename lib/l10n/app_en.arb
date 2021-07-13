@@ -4,6 +4,7 @@
   "app_name": "赤兔加速器",
   "news": "new",
   "go": "Go",
+  "today": "今日",
 
   "alert_update_notification_title" : "更新通知",
   "alert_force_update_btn" : "强制升级",
