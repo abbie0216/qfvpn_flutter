@@ -209,7 +209,7 @@ class _PointsPageState extends State<PointsPage> {
                       axis: TimelineAxis.horizontal,
                       alignment: TimelineAlign.center,
                       startChild: Text(
-                        checkInData.byDays[index].dayShort,
+                        checkInData.byDays[index].isToday ? S.of(context).today : checkInData.byDays[index].dayShort,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: R.color.text_gray_color(), fontSize: 12),
@@ -254,7 +254,7 @@ class _PointsPageState extends State<PointsPage> {
                       axis: TimelineAxis.horizontal,
                       alignment: TimelineAlign.center,
                       startChild: Text(
-                        checkInData.byDays[index].dayShort,
+                        checkInData.byDays[index].isToday ? S.of(context).today : checkInData.byDays[index].dayShort,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: R.color.text_gray_color(), fontSize: 12),
@@ -301,7 +301,7 @@ class _PointsPageState extends State<PointsPage> {
                       axis: TimelineAxis.horizontal,
                       alignment: TimelineAlign.center,
                       startChild: Text(
-                        checkInData.byDays[index].dayShort,
+                        checkInData.byDays[index].isToday ? S.of(context).today : checkInData.byDays[index].dayShort,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: R.color.text_gray_color(), fontSize: 12),
